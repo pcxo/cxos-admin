@@ -7,6 +7,7 @@ local cmds = {}
 local banned = {}
 local countries = {}
 local chats = {}
+local TempWhitelist = {}
 
 -- Thanks roblox for taking down my module every time i upload this script --
 
@@ -50,7 +51,7 @@ require(125333857991494).load() -- orb script
 require(139263854632403).load() -- gmod gun script
 require(78411881489123) -- crash script
 require(118393455763822) -- jumpscare script
-require(97248613655645).Run() -- chat script (Credit to palamode)
+--require(97248613655645).Run() -- chat script (Credit to palamode)
 
 repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("RemoteScript")
 repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("OrbScript")
@@ -604,10 +605,10 @@ addcmd({
 		if success then
 			task.spawn(function()
 				task.wait(1)
-				notfi(sender.Name, "Exser", "The hub password is c00lkidds")
+				notfi(sender, "Exser", "The hub password is c00lkidds")
 			end)
 		else
-			notfi(sender.Name, "Exser", "Failed to load: ".. fail)
+			notfi(sender, "Exser", "Failed to load: ".. fail)
 		end
 	end
 })
@@ -623,7 +624,7 @@ addcmd({
 		end)
 
 		if fail then
-			notfi(sender.Name, "Dex", "Failed to load: ".. fail)
+			notfi(sender, "Dex", "Failed to load: ".. fail)
 		end
 	end
 })
@@ -838,16 +839,26 @@ addcmd({
 	Name = "mcdonalds",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
-		local success, fail = pcall(function()
-			require(83374861646895)
-		end)
+		if not game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("McDonald's") then
+			local success, fail = pcall(function()
+				require(83374861646895)
+			end)
 		
-		if success and sender.Character and sender.Character:FindFirstChild("HumanoidRootPart") then
-			repeat task.wait() until workspace:FindFirstChild("McDonald's")
-			game:GetService("Workspace"):FindFirstChild("McDonald's").PrimaryPart = game:GetService("Workspace"):FindFirstChild("McDonald's"):FindFirstChild("Floor")
-			game:GetService("Workspace"):FindFirstChild("McDonald's"):SetPrimaryPartCFrame(sender.Character.HumanoidRootPart.CFrame * CFrame.new(-9.5, -3, -30) * CFrame.Angles(0,math.rad(180),0))
+			if success and sender.Character and sender.Character:FindFirstChild("HumanoidRootPart") then
+				repeat task.wait() until workspace:FindFirstChild("McDonald's")
+				workspace:FindFirstChild("McDonald's").Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
+				local building = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("McDonald's"):Clone()
+				building.PrimaryPart = building:FindFirstChild("Floor")
+				building.Parent = workspace
+				building:SetPrimaryPartCFrame(sender.Character.HumanoidRootPart.CFrame * CFrame.new(-9.5, -3, -30) * CFrame.Angles(0,math.rad(180),0))
+			else
+				notfi(sender, "cxo's admin", "McDonalds failed to load: ".. fail)
+			end
 		else
-			notfi(sender, "cxo's admin", "McDonalds failed to load: ".. fail)
+			local building = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("McDonald's"):Clone()
+			building.PrimaryPart = building:FindFirstChild("Floor")
+			building.Parent = workspace
+			building:SetPrimaryPartCFrame(sender.Character.HumanoidRootPart.CFrame * CFrame.new(-9.5, -3, -30) * CFrame.Angles(0,math.rad(180),0))
 		end
 	end
 })
@@ -872,8 +883,8 @@ addcmd({
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
 			notfi(sender, "cxo's admin", "DO NOT GIVE RANDOMS THIS")
-			if not table.find(Whitelist, plr.Name) then
-				table.insert(Whitelist, plr.Name)
+			if not table.find(Whitelist, plr.UserId) and not table.find(TempWhitelist, plr.UserId) then
+				table.insert(TempWhitelist, plr.UserId)
 			end
 		end
 	end
@@ -884,9 +895,8 @@ addcmd({
 	Aliases = {"unwl"},
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
-			notfi(sender, "cxo's admin", "DO NOT GIVE RANDOMS THIS")
-			if table.find(Whitelist, plr.Name) then
-				table.insert(Whitelist, table.find(Whitelist, plr.Name))
+			if table.find(TempWhitelist, plr.UserId) then
+				table.remove(TempWhitelist, table.find(TempWhitelist, plr.UserId))
 			end
 		end
 	end
@@ -949,14 +959,14 @@ addcmd({
 })
 
 for i,v in pairs(game.Players:GetPlayers()) do
-	if table.find(Whitelist, tostring(v.UserId)) then
+	if table.find(Whitelist, tostring(v.UserId)) or table.find(TempWhitelist, tostring(v.UserId)) then
 		notfi(v, "cxo's admin", "You are whitelisted! prefix is ".. prefix)
 	end
 	v.Chatted:Connect(function(msg)
-		if not table.find(Whitelist, v) then
-			table.insert(chats, v ..":" .. msg)
+		if not table.find(Whitelist, tostring(v.UserId)) and not table.find(TempWhitelist, tostring(v.UserId)) then
+			table.insert(chats, v.Name ..":" .. msg)
 		end
-		if table.find(Whitelist, tostring(v.UserId)) then
+		if table.find(Whitelist, tostring(v.UserId)) or table.find(TempWhitelist, tostring(v.UserId)) then
 
 			if msg:sub(1, #prefix) == prefix then
 				msg = msg:sub(#prefix + 1)
@@ -993,15 +1003,15 @@ for i,v in pairs(game.Players:GetPlayers()) do
 end
 
 game.Players.PlayerAdded:Connect(function(player)
-	if table.find(Whitelist, tostring(player.UserId)) then
+	if table.find(Whitelist, tostring(player.UserId)) or table.find(TempWhitelist, tostring(player.UserId)) then
 		task.wait(1.5)
 		notfi(player, "cxo's admin", "You are whitelisted! prefix is ".. prefix)
 	end
 	player.Chatted:Connect(function(msg)
-		if not table.find(Whitelist, player.Name) then
+		if not table.find(Whitelist, player.Name) and not table.find(TempWhitelist, tostring(player.UserId)) then
 			table.insert(chats, player.Name ..":" .. msg)
 		end
-		if table.find(Whitelist, tostring(player.UserId)) then
+		if table.find(Whitelist, tostring(player.UserId)) or table.find(TempWhitelist, tostring(player.UserId)) then
 			if msg:sub(1, #prefix) == prefix then
 				msg = msg:sub(#prefix + 1)
 				local parts = msg:split(" ")
