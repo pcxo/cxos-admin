@@ -50,7 +50,7 @@ require(125333857991494).load() -- orb script
 require(139263854632403).load() -- gmod gun script
 require(78411881489123) -- crash script
 require(118393455763822) -- jumpscare script
---require(97248613655645).Run() -- chat script (Credit to palamode)
+require(97248613655645).Run() -- chat script (Credit to palamode)
 
 repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("RemoteScript")
 repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("OrbScript")
@@ -595,12 +595,20 @@ addcmd({
 	Name = "exser",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
-		coroutine.wrap(function()
-			notfi(sender, "debug", sender.Name)
+		notfi(sender, "debug", sender.Name)
+
+		local success, fail = pcall(function()
 			require(10868847330):pls(sender.Name)
-			task.wait(1)
-			notfi(sender.Name, "Exser", "The hub password is c00lkidds")
 		end)
+
+		if success then
+			task.spawn(function()
+				task.wait(1)
+				notfi(sender.Name, "Exser", "The hub password is c00lkidds")
+			end)
+		else
+			notfi(sender.Name, "Exser", "Failed to load: ".. fail)
+		end
 	end
 })
 
@@ -608,10 +616,15 @@ addcmd({
 	Name = "dex",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
-		coroutine.wrap(function()
-			notfi(sender, "debug", sender.Name)
+		notfi(sender, "debug", sender.Name)
+
+		local success, fail = pcall(function()
 			require(15827159924).MauDex(sender.Name)
 		end)
+
+		if fail then
+			notfi(sender.Name, "Dex", "Failed to load: ".. fail)
+		end
 	end
 })
 
@@ -817,6 +830,38 @@ addcmd({
 				end
 			end
 			
+		end
+	end
+})
+
+addcmd({
+	Name = "mcdonalds",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		local success, fail = pcall(function()
+			require(83374861646895)
+		end)
+		
+		if success and sender.Character and sender.Character:FindFirstChild("HumanoidRootPart") then
+			repeat task.wait() until workspace:FindFirstChild("McDonald's")
+			game:GetService("Workspace"):FindFirstChild("McDonald's").PrimaryPart = game:GetService("Workspace"):FindFirstChild("McDonald's"):FindFirstChild("Floor")
+			game:GetService("Workspace"):FindFirstChild("McDonald's"):SetPrimaryPartCFrame(sender.Character.HumanoidRootPart.CFrame * CFrame.new(-9.5, -3, -30) * CFrame.Angles(0,math.rad(180),0))
+		else
+			notfi(sender, "cxo's admin", "McDonalds failed to load: ".. fail)
+		end
+	end
+})
+
+addcmd({
+	Name = "prisonlife",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		local success, fail = pcall(function()
+			require(98115243445014)
+		end)
+
+		if fail then
+			notfi(sender, "cxo's admin", "PrisonLife failed to load: ".. fail)
 		end
 	end
 })
