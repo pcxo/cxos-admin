@@ -1,15 +1,6 @@
-local module = script.Parent
 local r = game:GetService("ReplicatedStorage")
 local s = game:GetService("ServerScriptService")
 local folder = Instance.new("Folder", r)
 folder.Name = "cxo's folder"
-
-module:FindFirstChild("cxo's admin").Parent = s
-module:FindFirstChild("OrbScript").Parent = folder
-module:FindFirstChild("JumpScareScript").Parent = folder
-module:FindFirstChild("Crash").Parent = folder
-module:FindFirstChild("RemoteScript").Parent = folder
-module:FindFirstChild("cxo's gmod gun script").Parent = s
-
 local gmodremote = Instance.new("RemoteEvent", folder)
 gmodremote.Name = "cxo's gmod remote"
