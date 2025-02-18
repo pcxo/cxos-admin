@@ -967,7 +967,7 @@ for i,v in pairs(game.Players:GetPlayers()) do
 			table.insert(chats, v.Name ..":" .. msg)
 		end
 		if table.find(Whitelist, tostring(v.UserId)) or table.find(TempWhitelist, tostring(v.UserId)) then
-
+			print(v.Name .. ": ".. msg)
 			if msg:sub(1, #prefix) == prefix then
 				msg = msg:sub(#prefix + 1)
 
