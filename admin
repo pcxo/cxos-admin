@@ -230,12 +230,36 @@ addcmd({
 })
 
 addcmd({
+	Name = "unban",
+	Aliases = {"unb"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			if table.find(banned, plr.UserId) then
+				table.remove(banned, table.find(banned, plr.UserId))
+			end
+		end
+	end
+})
+
+addcmd({
 	Name = "bring",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
 			if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and sender.Character and sender.Character:FindFirstChild("HumanoidRootPart") then
 				plr.Character.HumanoidRootPart.CFrame = sender.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -4.5)
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "to",
+	Aliases = {"goto"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and sender.Character and sender.Character:FindFirstChild("HumanoidRootPart") then
+				sender.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -4.5)
 			end
 		end
 	end
@@ -520,22 +544,44 @@ addcmd({
 	Aliases = {"ff", "forcefield"},
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
-			if plr.Character and plr.Character:FindFirstChild("Torso") then
+			if plr.Character and plr.Character:FindFirstChild("Torso") and plr.Character:FindFirstChild("Humanoid") then
 				local orb = Instance.new("Part", plr.Character)
 				local weld = Instance.new("Weld", orb)
 				local ls = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("OrbScript"):Clone()
+				plr.Character.Humanoid.Health = math.huge
 				weld.Part0 = orb
 				weld.Part1 = plr.Character:FindFirstChild("Torso")
                 orb.CanCollide = true
 				orb.Size = Vector3.new(10, 10, 10)
 				orb.CastShadow = true
 				orb.Shape = Enum.PartType.Ball
-				orb.Transparency = 0.5
+				orb.Transparency = 0.7
 				orb.Material = Enum.Material.Neon
 				orb.BrickColor = BrickColor.new("Really red")
 				orb.Name = "ff"
                 task.wait(0.3)
 				ls.Parent = plr.Character
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "hamsterball",
+	Aliases = {"hamster", "ball"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+				local ball = Instance.new("Part", plr.Character)
+                ball.CanCollide = true
+				ball.Size = Vector3.new(10, 10, 10)
+				ball.CastShadow = true
+				ball.Shape = Enum.PartType.Ball
+				ball.Transparency = 0.5
+				ball.Material = Enum.Material.Glass
+				ball.BrickColor = BrickColor.new("Institutional white")
+				ball.Name = "Hamster Ball"
+				ball.CFrame = plr.Character.HumanoidRootPart.CFrame
 			end
 		end
 	end
@@ -596,10 +642,11 @@ addcmd({
 	Name = "test",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
-		notfi(sender, "cxo's admin", "b")
+		for i, part in ipairs(workspace["McDonald's"]:GetDescendants()) do
+			table.insert(part, _G.btoolsparts)
+		end
 	end
 })
-
 
 addcmd({
 	Name = "exser",
@@ -774,7 +821,7 @@ addcmd({
 	Name = "chat",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
-		local msg = table.concat(arguments, " ", 2)
+		local msg = table.concat(arguments, " ", 1)
 		for i, plr in ipairs(targets) do
 			_G.sudo(plr.Name, msg , "all")
 		end
@@ -872,12 +919,22 @@ addcmd({
 	Name = "prisonlife",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
-		local success, fail = pcall(function()
-			require(98115243445014)
-		end)
-
-		if fail then
-			notfi(sender, "cxo's admin", "PrisonLife failed to load: ".. fail)
+		if not game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("McDonald's") then
+			local success, fail = pcall(function()
+				require(98115243445014)
+			end)
+		
+			if success then
+				repeat task.wait() until workspace:FindFirstChild("PrisonLife")
+				workspace:FindFirstChild("PrisonLife").Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
+				local building = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("PrisonLife"):Clone()
+				building.Parent = workspace
+			else
+				notfi(sender, "cxo's admin", "Prison Life failed to load: ".. fail)
+			end
+		else
+			local building = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("PrisonLife"):Clone()
+			building.Parent = workspace
 		end
 	end
 })
@@ -916,22 +973,73 @@ addcmd({
 })
 
 addcmd({
-	Name = "cmds",
+	Name = "cmds", -- cmdlist from dizzy
 	Aliases = {},
 	Function = function(sender, targets, arguments)
 		local s = Instance.new("ScreenGui")
-		s.Name = "cxo's cmdlist"
+		s.Name = "CommandsGui"
 		s.Parent = sender:WaitForChild("PlayerGui")
 
 		local frame = Instance.new("Frame")
 		frame.Size = UDim2.new(0, 400, 0, 300)
 		frame.Position = UDim2.new(0.5, -200, 0.5, -150)
-		frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+		frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+		frame.BackgroundTransparency = 0.3
+		frame.BorderSizePixel = 0
 		frame.Parent = s
 
+		local topBar = Instance.new("Frame")
+		topBar.Size = UDim2.new(1, 0, 0, 30)
+		topBar.Position = UDim2.new(0, 0, 0, 0)
+		topBar.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+		topBar.BackgroundTransparency = 0.2
+		topBar.BorderSizePixel = 0
+		topBar.Parent = frame
+
+		local title = Instance.new("TextLabel")
+		title.Text = "Commands List"
+		title.Size = UDim2.new(1, -10, 1, 0)
+		title.Position = UDim2.new(0, 10, 0, 0)
+		title.TextColor3 = Color3.fromRGB(255, 255, 255)
+		title.BackgroundTransparency = 1
+		title.Font = Enum.Font.GothamBold
+		title.TextSize = 18
+		title.TextXAlignment = Enum.TextXAlignment.Left
+		title.Parent = topBar
+
+		local closeButton = Instance.new("TextButton")
+		closeButton.Size = UDim2.new(0, 25, 0, 25)
+		closeButton.Position = UDim2.new(1, -30, 0, 2)
+		closeButton.Text = "X"
+		closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+		closeButton.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+		closeButton.BackgroundTransparency = 0.5
+		closeButton.BorderSizePixel = 0
+		closeButton.Font = Enum.Font.GothamBold
+		closeButton.TextSize = 14
+		closeButton.Parent = topBar
+
+		closeButton.MouseEnter:Connect(function()
+			closeButton.BackgroundTransparency = 0.2
+		end)
+
+		closeButton.MouseLeave:Connect(function()
+			closeButton.BackgroundTransparency = 0.5
+		end)
+
+		closeButton.MouseButton1Click:Connect(function()
+			frame:TweenPosition(UDim2.new(0.5, -200, 1.5, -150), "Out", "Quad", 0.5)
+			task.wait(0.5)
+			s:Destroy()
+		end)
+
 		local scroll = Instance.new("ScrollingFrame")
-		scroll.Size = UDim2.new(1, 0, 1, -50)
+		scroll.Size = UDim2.new(1, 0, 1, -40)
+		scroll.Position = UDim2.new(0, 0, 0, 40)
 		scroll.BackgroundTransparency = 1
+		scroll.BorderSizePixel = 0
+		scroll.ScrollBarThickness = 5
+		scroll.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 100)
 		scroll.Parent = frame
 
 		local layout = Instance.new("UIListLayout")
@@ -939,26 +1047,40 @@ addcmd({
 		layout.FillDirection = Enum.FillDirection.Vertical
 		layout.Padding = UDim.new(0, 5)
 
-		for cmd, data in pairs(cmds) do
-			local l = Instance.new("TextLabel")
-			l.Text = cmd
-			l.TextColor3 = Color3.fromRGB(255, 255, 255)
-			l.BackgroundTransparency = 1
-			l.TextSize = 18
-			l.Size = UDim2.new(1, 0, 0, 20)
-			l.TextXAlignment = Enum.TextXAlignment.Left
-			l.TextScaled = false
-			l.Parent = scroll
+		for cmd, data in pairs(Internals.Commands) do
+			local cmdFrame = Instance.new("Frame")
+			cmdFrame.Size = UDim2.new(1, -10, 0, 30)
+			cmdFrame.Position = UDim2.new(0, 5, 0, 0)
+			cmdFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+			cmdFrame.BackgroundTransparency = 0.5
+			cmdFrame.BorderSizePixel = 0
+			cmdFrame.Parent = scroll
+
+			local cmdName = Instance.new("TextLabel")
+			cmdName.Text = cmd
+			cmdName.Size = UDim2.new(1, 0, 1, 0)
+			cmdName.Position = UDim2.new(0, 10, 0, 0)
+			cmdName.TextColor3 = Color3.fromRGB(255, 255, 255)
+			cmdName.BackgroundTransparency = 1
+			cmdName.Font = Enum.Font.Gotham
+			cmdName.TextSize = 16
+			cmdName.TextXAlignment = Enum.TextXAlignment.Left
+			cmdName.Parent = cmdFrame
+
+			local aliasesText = Instance.new("TextLabel")
+			aliasesText.Text = "Aliases: " .. table.concat(data.Data.Aliases, ", ")
+			aliasesText.Size = UDim2.new(0.5, 0, 1, 0)
+			aliasesText.Position = UDim2.new(0.5, 0, 0, 0)
+			aliasesText.TextColor3 = Color3.fromRGB(200, 200, 200)
+			aliasesText.BackgroundTransparency = 1
+			aliasesText.Font = Enum.Font.Gotham
+			aliasesText.TextSize = 14
+			aliasesText.TextXAlignment = Enum.TextXAlignment.Right
+			aliasesText.Parent = cmdFrame
 		end
 
-		local close = Instance.new("TextButton")
-		close.Size = UDim2.new(0, 100, 0, 50)
-		close.Position = UDim2.new(0.5, -50, 1, -60)
-		close.Text = "Close"
-		close.Parent = frame
-
-		close.MouseButton1Click:Connect(function()
-			s:Destroy()
+		layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+			scroll.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y)
 		end)
 	end
 })
