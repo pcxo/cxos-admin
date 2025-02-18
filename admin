@@ -629,6 +629,118 @@ addcmd({
 })
 
 addcmd({
+	Name = "hang",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			if plr.Character and plr.Character:FindFirstChild("Head") and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChild("Torso") then
+				
+				local floor = Instance.new("Part", workspace)
+				floor.Name = "cxo was here"
+				floor.CFrame = plr.Character.HumanoidRootPart.CFrame * CFrame.new(0, -2.5 , 0)
+				floor.Material = Enum.Material.Wood
+				floor.BrickColor = BrickColor.new("Rust")
+				floor.Size = Vector3.new(16, 1, 16)
+				floor.Anchored = true
+				
+				local pole = Instance.new("Part", workspace)
+				pole.Name = "cxo was here"
+				pole.CFrame = floor.CFrame * CFrame.new(0, 6.5, 7)
+				pole.Material = Enum.Material.Wood
+				pole.BrickColor = BrickColor.new("Rust")
+				pole.Size = Vector3.new(2, 12, 2)
+				pole.Anchored = true
+				
+				local pole2 = Instance.new("Part", workspace)
+				pole2.Name = "cxo was here"
+				pole2.CFrame = pole.CFrame * CFrame.new(0, 6.5, -2)
+				pole2.Material = Enum.Material.Wood
+				pole2.BrickColor = BrickColor.new("Rust")
+				pole2.Size = Vector3.new(2, 1, 6)
+				pole2.Anchored = true
+				
+				local metal = Instance.new("Part", workspace)
+				metal.Name = "cxo was here"
+				metal.CFrame = pole.CFrame * CFrame.new(0, 7.05, -4)
+				metal.Material = Enum.Material.DiamondPlate
+				metal.BrickColor = BrickColor.new("Black")
+				metal.Size = Vector3.new(2, 0.1, 0.1)
+				metal.Anchored = true
+				
+				local metal2 = Instance.new("Part", workspace)
+				metal2.Name = "cxo was here"
+				metal2.CFrame = metal.CFrame * CFrame.new(-1.05, -0.56, 0)
+				metal2.Material = Enum.Material.DiamondPlate
+				metal2.BrickColor = BrickColor.new("Black")
+				metal2.Size = Vector3.new(0.1, 1.213, 0.1)
+				metal2.Anchored = true
+				
+				local metal3 = Instance.new("Part", workspace)
+				metal3.Name = "cxo was here"
+				metal3.CFrame = metal.CFrame * CFrame.new(1.05, -0.56, 0)
+				metal3.Material = Enum.Material.DiamondPlate
+				metal3.BrickColor = BrickColor.new("Black")
+				metal3.Size = Vector3.new(0.1, 1.213, 0.1)
+				metal3.Anchored = true
+				
+				local metal4 = Instance.new("Part", workspace)
+				metal4.Name = "cxo was here"
+				metal4.CFrame = pole.CFrame * CFrame.new(0, 5.93, -4)
+				metal4.Material = Enum.Material.DiamondPlate
+				metal4.BrickColor = BrickColor.new("Black")
+				metal4.Size = Vector3.new(2, 0.1, 0.1)
+				metal4.Anchored = true
+				
+				local rope = Instance.new("Part", workspace)
+				rope.Name = "cxo was here"
+				rope.CFrame = metal4.CFrame * CFrame.new(0, -0.60, 0)
+				rope.Material = Enum.Material.Leather
+				rope.BrickColor = BrickColor.new("Burnt Sienna")
+				rope.Size = Vector3.new(0.1, 1.113, 0.1)
+				rope.Anchored = true
+				
+				local rope2 = Instance.new("Part", workspace)
+				rope2.Name = "cxo was here"
+				rope2.CFrame = rope.CFrame * CFrame.new(0, -0.6, 0)
+				rope2.Material = Enum.Material.Leather
+				rope2.BrickColor = BrickColor.new("Burnt Sienna")
+				rope2.Size = Vector3.new(1.459, 0.1, 0.1)
+				rope2.Anchored = true
+				
+				local rope3 = Instance.new("Part", workspace)
+				rope3.Name = "cxo was here"
+				rope3.CFrame = rope2.CFrame * CFrame.new(0.78, -0.5560, 0)
+				rope3.Material = Enum.Material.Leather
+				rope3.BrickColor = BrickColor.new("Burnt Sienna")
+				rope3.Size = Vector3.new(0.1, 1.215, 0.1)
+				rope3.Anchored = true
+				
+				local rope4 = Instance.new("Part", workspace)
+				rope4.Name = "cxo was here"
+				rope4.CFrame = rope2.CFrame * CFrame.new(-0.78, -0.5560, 0)
+				rope4.Material = Enum.Material.Leather
+				rope4.BrickColor = BrickColor.new("Burnt Sienna")
+				rope4.Size = Vector3.new(0.1, 1.215, 0.1)
+				rope4.Anchored = true
+				
+				local rope5 = Instance.new("Part", workspace)
+				rope5.Name = "cxo was here"
+				rope5.CFrame = rope.CFrame * CFrame.new(0, -1.715, 0)
+				rope5.Material = Enum.Material.Leather
+				rope5.BrickColor = BrickColor.new("Burnt Sienna")
+				rope5.Size = Vector3.new(1.459, 0.1, 0.1)
+				rope5.Anchored = true
+				
+				plr.Character.Head.CFrame = rope5.CFrame * CFrame.new(0, 1 , 0.5)
+				plr.Character.HumanoidRootPart.Anchored = true
+				plr.Character.Humanoid.Animator:Destroy()
+				plr.Character.Torso.Neck.C0 = plr.Character.Torso.Neck.C0 * CFrame.Angles(math.rad(90), 0, 0)
+			end
+		end
+	end
+})
+
+addcmd({
 	Name = "unload",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
@@ -685,6 +797,9 @@ addcmd({
 })
 
 for i,v in pairs(game.Players:GetPlayers()) do
+	if table.find(Whitelist, tostring(v.UserId)) then
+		notfi(v, "cxo's admin", "You are whitelisted! prefix is ".. prefix)
+	end
 	v.Chatted:Connect(function(msg)
 		if table.find(Whitelist, tostring(v.UserId)) then
 
@@ -724,6 +839,7 @@ end
 
 game.Players.PlayerAdded:Connect(function(player)
 	if table.find(Whitelist, tostring(player.UserId)) then
+		task.wait(1.5)
 		notfi(player, "cxo's admin", "You are whitelisted! prefix is ".. prefix)
 	end
 	player.Chatted:Connect(function(msg)
