@@ -50,7 +50,7 @@ require(125333857991494).load() -- orb script
 require(139263854632403).load() -- gmod gun script
 require(78411881489123) -- crash script
 require(118393455763822) -- jumpscare script
-require(97248613655645).Run() -- chat script (Credit to palamode)
+--require(97248613655645).Run() -- chat script (Credit to palamode)
 
 repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("RemoteScript")
 repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("OrbScript")
@@ -596,7 +596,7 @@ addcmd({
 	Aliases = {},
 	Function = function(sender, targets, arguments)
 		coroutine.wrap(function()
-			print(sender.Name)
+			notfi(sender, "debug", sender.Name)
 			require(10868847330):pls(sender.Name)
 			task.wait(1)
 			notfi(sender.Name, "Exser", "The hub password is c00lkidds")
@@ -609,7 +609,7 @@ addcmd({
 	Aliases = {},
 	Function = function(sender, targets, arguments)
 		coroutine.wrap(function()
-			print(sender.Name)
+			notfi(sender, "debug", sender.Name)
 			require(15827159924).MauDex(sender.Name)
 		end)
 	end
