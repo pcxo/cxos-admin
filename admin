@@ -506,9 +506,10 @@ addcmd({
 			if plr.Character and plr.Character:FindFirstChild("Torso") then
 				local orb = Instance.new("Part", plr.Character)
 				local weld = Instance.new("Weld", orb)
-				local ls = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("OrbScript")
+				local ls = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("OrbScript"):Clone()
 				weld.Part0 = orb
 				weld.Part1 = plr.Character:FindFirstChild("Torso")
+                orb.CanCollide = true
 				orb.Size = Vector3.new(10, 10, 10)
 				orb.CastShadow = true
 				orb.Shape = Enum.PartType.Ball
@@ -516,7 +517,7 @@ addcmd({
 				orb.Material = Enum.Material.Neon
 				orb.BrickColor = BrickColor.new("Really red")
 				orb.Name = "ff"
-				orb.CanCollide = true
+                task.wait(0.3)
 				ls.Parent = plr.Character
 			end
 		end
@@ -564,7 +565,7 @@ addcmd({
 					gmod.Parent = plr.Backpack
 				end
 				gmod:WaitForChild("RemoteScript"):Destroy()
-				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("RemoteScript").Parent = gmod
+				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("RemoteScript"):Clone().Parent = gmod
 				if not game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("cxo's gmod remote") then
 					local gmodremote = Instance.new("RemoteEvent", game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"))
 					gmodremote.Name = "cxo's gmod remote"
