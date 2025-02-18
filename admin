@@ -40,16 +40,23 @@ else
 	print("Error fetching file: " .. result)
 end
 
+-- LOCAL REQUIRES --
+
 require(125333857991494).load() -- orb script
 require(139263854632403).load() -- gmod gun script
+require(78411881489123) -- crash script
+require(118393455763822) -- jumpscare script
 
 repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("RemoteScript")
 repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("OrbScript")
 repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
+repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("Crash")
+repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("JumpScareScript")
 
 game:GetService("ReplicatedStorage").RemoteScript.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
 game:GetService("ReplicatedStorage").OrbScript.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
-
+game:GetService("ReplicatedStorage").Crash.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
+game:GetService("ReplicatedStorage").JumpScareScript.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
 
 local success, result = pcall(function()
 	return game:GetService("HttpService"):GetAsync("http://country.io/names.json")
