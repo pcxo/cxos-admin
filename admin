@@ -867,6 +867,32 @@ addcmd({
 })
 
 addcmd({
+	Name = "whitelist",
+	Aliases = {"wl"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			notfi(sender, "cxo's admin", "DO NOT GIVE RANDOMS THIS")
+			if not table.find(Whitelist, plr.Name) then
+				table.insert(Whitelist, plr.Name)
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "unwhitelist",
+	Aliases = {"unwl"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			notfi(sender, "cxo's admin", "DO NOT GIVE RANDOMS THIS")
+			if table.find(Whitelist, plr.Name) then
+				table.insert(Whitelist, table.find(Whitelist, plr.Name))
+			end
+		end
+	end
+})
+
+addcmd({
 	Name = "unload",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
