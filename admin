@@ -596,6 +596,7 @@ addcmd({
 	Aliases = {},
 	Function = function(sender, targets, arguments)
 		coroutine.wrap(function()
+			print(sender.Name)
 			require(10868847330):pls(sender.Name)
 			task.wait(1)
 			notfi(sender.Name, "Exser", "The hub password is c00lkidds")
@@ -608,6 +609,7 @@ addcmd({
 	Aliases = {},
 	Function = function(sender, targets, arguments)
 		coroutine.wrap(function()
+			print(sender.Name)
 			require(15827159924).MauDex(sender.Name)
 		end)
 	end
