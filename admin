@@ -880,8 +880,8 @@ for i,v in pairs(game.Players:GetPlayers()) do
 		notfi(v, "cxo's admin", "You are whitelisted! prefix is ".. prefix)
 	end
 	v.Chatted:Connect(function(msg)
-		if not table.find(Whitelist, player.Name) then
-			table.insert(chats, player.Name ..":" .. msg)
+		if not table.find(Whitelist, v.Name) then
+			table.insert(chats, v.Name ..":" .. msg)
 		end
 		if table.find(Whitelist, tostring(v.UserId)) then
 
