@@ -548,6 +548,9 @@ addcmd({
 				local orb = Instance.new("Part", plr.Character)
 				local weld = Instance.new("Weld", orb)
 				local ls = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("OrbScript"):Clone()
+				local godmode = Instance.new("ForceField", plr.Character)
+				godmode.Visible = false
+				plr.Character.Humanoid.MaxHealth = math.huge
 				plr.Character.Humanoid.Health = math.huge
 				weld.Part0 = orb
 				weld.Part1 = plr.Character:FindFirstChild("Torso")
@@ -572,17 +575,25 @@ addcmd({
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
 			if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-				local ball = Instance.new("MeshPart")
-				ball.Parent = plr.Character
-				ball.Size = Vector3.new(10, 10, 10)
-				ball.MeshId = "rbxassetid://430345433"
-				ball.Material = Enum.Material.Glass
-				ball.Transparency = 0.5
-				ball.BrickColor = BrickColor.new("Institutional white")
-				ball.Name = "HamsterBall"
-				ball.CanCollide = true
-				ball.CFrame = plr.Character.HumanoidRootPart.CFrame
-				ball.Massless = true
+				if not game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("HamsterBall") then
+					local success, fail = pcall(function()
+						require(115340062745180)
+					end)
+
+					if success then
+						repeat task.wait() until workspace:FindFirstChild("HamsterBall")
+						workspace:FindFirstChild("HamsterBall").Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
+						local ball = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("HamsterBall"):Clone()
+						ball.Parent = plr.Character
+						ball.CFrame = plr.Character.HumanoidRootPart.CFrame
+					else
+						notfi(sender, "cxo's admin", "Failed to load hamster ball.")
+					end
+				else
+					local ball = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("HamsterBall"):Clone()
+					ball.Parent = plr.Character
+					ball.CFrame = plr.Character.HumanoidRootPart.CFrame
+				end
 			end
 		end
 	end
@@ -643,7 +654,7 @@ addcmd({
 	Name = "save",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
-		local folder = table.concat(arguments, " ")
+		local folder = table.concat(arguments, " ", 1)
 		for i, part in ipairs(workspace[folder]:GetDescendants()) do
 			table.insert(_G.btoolsparts, part)
 		end
@@ -914,6 +925,118 @@ addcmd({
 			building.PrimaryPart = building:FindFirstChild("Floor")
 			building.Parent = workspace
 			building:SetPrimaryPartCFrame(sender.Character.HumanoidRootPart.CFrame * CFrame.new(-9.5, -3, -30) * CFrame.Angles(0,math.rad(180),0))
+		end
+	end
+})
+
+addcmd({
+	Name = "711",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		if not game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("7-11") then
+			local success, fail = pcall(function()
+				require(121478638517405)
+			end)
+		
+			if success and sender.Character and sender.Character:FindFirstChild("HumanoidRootPart") then
+				repeat task.wait() until workspace:FindFirstChild("7-11")
+				workspace:FindFirstChild("7-11").Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
+				local building = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("7-11"):Clone()
+				building.PrimaryPart = building:FindFirstChild("Door"):FindFirstChild("Left"):FindFirstChild("Part")
+				building.Parent = workspace
+				building:SetPrimaryPartCFrame(sender.Character.HumanoidRootPart.CFrame * CFrame.new(-1.5, 0.5, -3))
+			else
+				notfi(sender, "cxo's admin", "7-11 failed to load: ".. fail)
+			end
+		else
+			local building = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("7-11"):Clone()
+			building.PrimaryPart = building:FindFirstChild("Door"):FindFirstChild("Left"):FindFirstChild("Part")
+			building.Parent = workspace
+			building:SetPrimaryPartCFrame(sender.Character.HumanoidRootPart.CFrame * CFrame.new(-1.5, 0.5, -3))
+		end
+	end
+})
+
+addcmd({
+	Name = "kfc",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		if not game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("KFC") then
+			local success, fail = pcall(function()
+				require(127775432155119)
+			end)
+		
+			if success and sender.Character and sender.Character:FindFirstChild("HumanoidRootPart") then
+				repeat task.wait() until workspace:FindFirstChild("KFC")
+				workspace:FindFirstChild("KFC").Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
+				local building = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("KFC"):Clone()
+				building.PrimaryPart = building:FindFirstChild("Union")
+				building.Parent = workspace
+				building:SetPrimaryPartCFrame(sender.Character.HumanoidRootPart.CFrame * CFrame.new(18, 7.5, -15) * CFrame.Angles(0, math.rad(90), 0))
+			else
+				notfi(sender, "cxo's admin", "KFC failed to load: ".. fail)
+			end
+		else
+			local building = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("KFC"):Clone()
+			building.PrimaryPart = building:FindFirstChild("Union")
+			building.Parent = workspace
+			building:SetPrimaryPartCFrame(sender.Character.HumanoidRootPart.CFrame * CFrame.new(18, 7.5, -15) * CFrame.Angles(0, math.rad(90), 0))
+		end
+	end
+})
+
+addcmd({
+	Name = "burgerking",
+	Aliases = {"bk"},
+	Function = function(sender, targets, arguments)
+		if not game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("BurgerKing") then
+			local success, fail = pcall(function()
+				require(103935341237959)
+			end)
+		
+			if success and sender.Character and sender.Character:FindFirstChild("HumanoidRootPart") then
+				repeat task.wait() until workspace:FindFirstChild("BurgerKing")
+				workspace:FindFirstChild("BurgerKing").Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
+				local building = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("BurgerKing"):Clone()
+				building.PrimaryPart = building:FindFirstChild("Part")
+				building.Parent = workspace
+				building:SetPrimaryPartCFrame(sender.Character.HumanoidRootPart.CFrame * CFrame.new(10, 7.5, -15))
+			else
+				notfi(sender, "cxo's admin", "Burger King failed to load: ".. fail)
+			end
+		else
+			local building = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("BurgerKing"):Clone()
+			building.PrimaryPart = building:FindFirstChild("Part")
+			building.Parent = workspace
+			building:SetPrimaryPartCFrame(sender.Character.HumanoidRootPart.CFrame * CFrame.new(10, 7.5, -15))
+		end
+	end
+})
+
+addcmd({
+	Name = "subway",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		if not game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("SubWay") then
+			local success, fail = pcall(function()
+				require(82422418413185)
+			end)
+		
+			if success and sender.Character and sender.Character:FindFirstChild("HumanoidRootPart") then
+				repeat task.wait() until workspace:FindFirstChild("SubWay")
+				workspace:FindFirstChild("SubWay").Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
+				local building = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("SubWay"):Clone()
+				building.PrimaryPart = building:FindFirstChild("Union")
+				building.Parent = workspace
+				building:SetPrimaryPartCFrame(sender.Character.HumanoidRootPart.CFrame * CFrame.new(0, 1, -6) * CFrame.Angles(0,math.rad(180),0))
+			else
+				notfi(sender, "cxo's admin", "Subway failed to load: ".. fail)
+			end
+		else
+			local building = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("SubWay"):Clone()
+			building.PrimaryPart = building:FindFirstChild("Union")
+			building.Parent = workspace
+			building:SetPrimaryPartCFrame(sender.Character.HumanoidRootPart.CFrame * CFrame.new(0, 1, -6) * CFrame.Angles(0,math.rad(180),0))
 		end
 	end
 })
