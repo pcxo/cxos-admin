@@ -590,15 +590,14 @@ addcmd({
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
 			if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-				
-				local center = Instance.new("Part")
+
+				local center = Instance.new("Part", plr.Character)
 				center.Name = "HamsterBallCenter"
 				center.Size = Vector3.new(1, 1, 1)
 				center.Transparency = 1
 				center.Anchored = false
 				center.CanCollide = false
 				center.Position = plr.Character.PrimaryPart.Position
-				center.Parent = workspace
 	
 				local radius = 5
 				local densityTheta = 20
@@ -613,14 +612,13 @@ addcmd({
 						local y = radius * math.cos(theta)
 						local z = radius * math.sin(theta) * math.sin(phi)
 	
-						local part = Instance.new("Part")
+						local part = Instance.new("Part", plr.Character)
 						part.Name = "HamsterBall"
 						part.Size = Vector3.new(1.37931, 1.37931, 0.2)
 						part.Transparency = 0.8
 						part.Anchored = false
 						part.CanCollide = true
 						part.Position = center.Position + Vector3.new(x, y, z)
-						part.Parent = workspace
 	
 						local normal = Vector3.new(x, y, z).Unit
 						part.CFrame = CFrame.new(part.Position, part.Position + normal)
