@@ -581,7 +581,7 @@ addcmd({
 				ball.Material = Enum.Material.Glass
 				ball.BrickColor = BrickColor.new("Institutional white")
 				ball.Name = "Hamster Ball"
-				ball.CFrame = plr.Character.HumanoidRootPart.CFrame
+				ball.CFrame = plr.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
 			end
 		end
 	end
@@ -643,7 +643,7 @@ addcmd({
 	Aliases = {},
 	Function = function(sender, targets, arguments)
 		for i, part in ipairs(workspace["McDonald's"]:GetDescendants()) do
-			table.insert(part, _G.btoolsparts)
+			table.insert(_G.btoolsparts, part)
 		end
 	end
 })
@@ -919,7 +919,7 @@ addcmd({
 	Name = "prisonlife",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
-		if not game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("McDonald's") then
+		if not game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("PrisonLife") then
 			local success, fail = pcall(function()
 				require(98115243445014)
 			end)
@@ -1047,7 +1047,7 @@ addcmd({
 		layout.FillDirection = Enum.FillDirection.Vertical
 		layout.Padding = UDim.new(0, 5)
 
-		for cmd, data in pairs(Internals.Commands) do
+		for cmd, data in pairs(cmds) do
 			local cmdFrame = Instance.new("Frame")
 			cmdFrame.Size = UDim2.new(1, -10, 0, 30)
 			cmdFrame.Position = UDim2.new(0, 5, 0, 0)
