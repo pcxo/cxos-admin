@@ -640,12 +640,14 @@ addcmd({
 })
 
 addcmd({
-	Name = "test",
+	Name = "save",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
-		for i, part in ipairs(workspace["McDonald's"]:GetDescendants()) do
+		local folder = table.concat(arguments, " ")
+		for i, part in ipairs(workspace[folder]:GetDescendants()) do
 			table.insert(_G.btoolsparts, part)
 		end
+		notfi(sender, "cxo's admin", "Say buildsave to save it!")
 	end
 })
 
