@@ -572,16 +572,17 @@ addcmd({
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
 			if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-				local ball = Instance.new("Part", plr.Character)
-                ball.CanCollide = true
+				local ball = Instance.new("MeshPart")
+				ball.Parent = plr.Character
 				ball.Size = Vector3.new(10, 10, 10)
-				ball.CastShadow = true
-				ball.Shape = Enum.PartType.Ball
-				ball.Transparency = 0.5
+				ball.MeshId = "rbxassetid://430345433"
 				ball.Material = Enum.Material.Glass
+				ball.Transparency = 0.5
 				ball.BrickColor = BrickColor.new("Institutional white")
-				ball.Name = "Hamster Ball"
-				ball.CFrame = plr.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
+				ball.Name = "HamsterBall"
+				ball.CanCollide = true
+				ball.CFrame = plr.Character.HumanoidRootPart.CFrame
+				ball.Massless = true
 			end
 		end
 	end
