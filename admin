@@ -629,6 +629,7 @@ addcmd({
 						weld.Parent = center
 					end
 				end
+				center.Position = plr.Character.PrimaryPart.Position
 			end
 		end
 	end
@@ -689,11 +690,17 @@ addcmd({
 	Name = "save",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
-		local folder = table.concat(arguments, " ", 1)
-		for i, part in ipairs(workspace[folder]:GetDescendants()) do
-			table.insert(_G.btoolsparts, part)
+		local b = table.concat(arguments, " ")
+		print(b)
+		local folder = workspace:FindFirstChild(b)
+		if folder then
+			for i, part in ipairs(folder:GetDescendants()) do
+				table.insert(_G.btoolsparts, part)
+			end
+			notfi(sender, "cxo's admin", "Say buildsave to save it!")
+		else
+			notfi(sender, "cxo's admin", "Invalid name! | ".. b)
 		end
-		notfi(sender, "cxo's admin", "Say buildsave to save it!")
 	end
 })
 
