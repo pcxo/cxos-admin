@@ -47,9 +47,9 @@ end
 
 -- LOCAL REQUIRES --
 
-require(125333857991494).load() -- orb script
+require(126332046537913) -- orb script
 require(139263854632403).load() -- gmod gun script
-require(78411881489123) -- crash script
+require(114690429107613) -- crash script
 require(118393455763822) -- jumpscare script
 --require(97248613655645).Run() -- chat script (Credit to palamode)
 
