@@ -159,49 +159,82 @@ local function addcmd(data)
 	}
 end
 
-function notfi(plr, title, message, duration)
+function notfi(plr, title, message, duration) -- Anotha dizzy ui
 	coroutine.wrap(function()
-		local s = plr:FindFirstChild("PlayerGui"):FindFirstChild("NotificationsGui")
 
-		if not s then
-			s = Instance.new("ScreenGui")
-			s.Name = "NotificationsGui"
-			s.Parent = plr:FindFirstChild("PlayerGui")
-		end
+		local s = Instance.new("ScreenGui")
+		s.Name = "NotificationsGui"
+		s.Parent = plr:FindFirstChild("PlayerGui")
 
 		local n = Instance.new("Frame")
-		n.Size = UDim2.new(0, 300, 0, 80)
-		n.Position = UDim2.new(1, -320, 1, -100)
-		n.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-		n.BackgroundTransparency = 0.2
+		n.Size = UDim2.new(0, 300, 0, 150)
+		n.Position = UDim2.new(1, 10, 1, -160)
+		n.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+		n.BackgroundTransparency = 0.3
 		n.BorderSizePixel = 0
 		n.Parent = s
 
+		local tb = Instance.new("Frame")
+		tb.Size = UDim2.new(1, 0, 0, 30)
+		tb.Position = UDim2.new(0, 0, 0, 0)
+		tb.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+		tb.BackgroundTransparency = 0.2
+		tb.BorderSizePixel = 0
+		tb.Parent = n
+
+		local close = Instance.new("TextButton")
+		close.Size = UDim2.new(0, 25, 0, 25)
+		close.Position = UDim2.new(1, -30, 0, 2)
+		close.Text = "X"
+		close.TextColor3 = Color3.fromRGB(255, 255, 255)
+		close.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+		close.BackgroundTransparency = 0.5
+		close.BorderSizePixel = 0
+		close.Font = Enum.Font.GothamBold
+		close.TextSize = 14
+		close.Parent = tb
+
+		close.MouseEnter:Connect(function()
+			close.BackgroundTransparency = 0.2
+		end)
+
+		close.MouseLeave:Connect(function()
+			close.BackgroundTransparency = 0.5
+		end)
+
+		close.MouseButton1Click:Connect(function()
+			n:TweenPosition(UDim2.new(1, 10, 1, -160), "Out", "Quad", 0.5)
+			task.wait(0.5)
+			n:Destroy()
+		end)
+
 		local t = Instance.new("TextLabel")
 		t.Text = title
-		t.Size = UDim2.new(1, 0, 0.3, 0)
+		t.Size = UDim2.new(1, -10, 0, 25)
+		t.Position = UDim2.new(0, 10, 0, 35)
 		t.TextColor3 = Color3.fromRGB(255, 255, 255)
 		t.BackgroundTransparency = 1
 		t.Font = Enum.Font.GothamBold
-		t.TextScaled = true
+		t.TextSize = 18
+		t.TextXAlignment = Enum.TextXAlignment.Left
 		t.Parent = n
 
 		local m = Instance.new("TextLabel")
 		m.Text = message
-		m.Size = UDim2.new(1, 0, 0.7, 0)
-		m.Position = UDim2.new(0, 0, 0.3, 0)
+		m.Size = UDim2.new(1, -10, 1, -70)
+		m.Position = UDim2.new(0, 10, 0, 65)
 		m.TextColor3 = Color3.fromRGB(200, 200, 200)
 		m.BackgroundTransparency = 1
 		m.Font = Enum.Font.Gotham
-		m.TextScaled = true
+		m.TextSize = 14
+		m.TextXAlignment = Enum.TextXAlignment.Left
+		m.TextYAlignment = Enum.TextYAlignment.Top
+		m.TextWrapped = true
 		m.Parent = n
 
-		n.Position = UDim2.new(1, 10, 1, -100)
-		n:TweenPosition(UDim2.new(1, -320, 1, -100), "Out", "Quad", 0.5)
-
+		n:TweenPosition(UDim2.new(1, -310, 1, -160), "Out", "Quad", 0.5)
 		task.wait(duration or 5)
-		n:TweenPosition(UDim2.new(1, 10, 1, -100), "Out", "Quad", 0.5)
-
+		n:TweenPosition(UDim2.new(1, 10, 1, -160), "Out", "Quad", 0.5)
 		task.wait(0.5)
 		n:Destroy()
 	end)()
@@ -778,7 +811,7 @@ addcmd({
 	Name = "gmod",
 	Aliases = {"gravitygun"},
 	Function = function(sender, targets, arguments)
-		
+
 		if #targets ~= 1 then
 			notfi(sender, "cxo's admin", "Too many targets!")
 		end
