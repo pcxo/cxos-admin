@@ -17,6 +17,7 @@ local chats = {}
 local TempWhitelist = {}
 local locked = false
 local connected
+local guiactive = false
 
 -- Thanks roblox for taking down my module every time i upload this script --
 
@@ -74,15 +75,6 @@ else
 	require(126332046537913) -- orb script
 	repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("OrbScript")
 	game:GetService("ReplicatedStorage").OrbScript.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
-end
-
-if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("Crash") then
-	local clonedcrash = game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("Crash"):Clone()
-	clonedcrash.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
-else
-	require(114690429107613) -- crash script
-	repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("Crash")
-	game:GetService("ReplicatedStorage").Crash.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
 end
 
 local success, result = pcall(function()
@@ -271,16 +263,16 @@ addcmd({
 })
 
 addcmd({
-    Name = "ban",
-    Aliases = {"b"},
-    Function = function(sender, targets, arguments)
-        for i, plr in ipairs(targets) do
-            plr:Kick("cxo's admin | You have been banned.")
-            if not banned[plr.UserId] then
-                banned[plr.UserId] = plr.Name
-            end
-        end
-    end
+	Name = "ban",
+	Aliases = {"b"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			plr:Kick("cxo's admin | You have been banned.")
+			if not banned[plr.UserId] then
+				banned[plr.UserId] = plr.Name
+			end
+		end
+	end
 })
 
 addcmd({
@@ -384,7 +376,7 @@ addcmd({
 
 			unbanb.MouseButton1Click:Connect(function()
 				banned[userID] = nil
-				banFrame:Destroy()
+				bframe:Destroy()
 			end)
 		end
 
@@ -592,7 +584,7 @@ addcmd({
 			local sgui = Instance.new("ScreenGui", plr.PlayerGui)
 			local clyde = Instance.new("ImageLabel", sgui)
 			local jss = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("JumpScareScript"):Clone()
-			
+
 			clyde.Size = UDim2.new(1, 0, 1, 0)
 			clyde.Position = UDim2.new(0, 0, 0, 0)
 			clyde.BackgroundColor3 = Color3.new(0, 0, 0)
@@ -674,16 +666,16 @@ addcmd({
 			local success, gear = pcall(function()
 				return game:GetService("InsertService"):LoadAsset(10468797)
 			end)
-			
+
 			if success and gear then
 				local banhammer = gear:FindFirstChildOfClass("Tool")
 				if banhammer then
 					banhammer.Parent = plr.Backpack
 				end
-				
+
 				local sound = Instance.new("Sound", workspace)
 				sound.SoundId = "http://www.roblox.com/asset/?id=10730819"
-				
+
 				banhammer.Handle.Touched:Connect(function(person)
 					local playuh = person.Parent
 					local playuhn = playuh.Name
@@ -717,7 +709,7 @@ addcmd({
 				weld.Part0 = orb
 				weld.Part1 = plr.Character:FindFirstChild("Torso")
 
-                orb.CanCollide = true
+				orb.CanCollide = true
 				orb.CastShadow = true
 				orb.Size = Vector3.new(10, 10, 10)
 				orb.Shape = Enum.PartType.Ball
@@ -726,7 +718,7 @@ addcmd({
 				orb.BrickColor = BrickColor.new("Really red")
 				orb.Name = "ff"
 
-				repeat task.wait() until orb.CanCollide == true
+				repeat task.wait(0.2) until orb.CanCollide == true
 				ls.Parent = plr.Character
 			end
 		end
@@ -775,20 +767,20 @@ addcmd({
 				center.Anchored = false
 				center.CanCollide = false
 				center.Position = plr.Character.PrimaryPart.Position
-	
+
 				local radius = 5
 				local densityTheta = 20
 				local densityPhi = 40
-	
+
 				for i = 0, densityTheta do
 					local theta = math.pi * (i / densityTheta)
 					for j = 0, densityPhi - 1 do
 						local phi = 2 * math.pi * (j / densityPhi)
-	
+
 						local x = radius * math.sin(theta) * math.cos(phi)
 						local y = radius * math.cos(theta)
 						local z = radius * math.sin(theta) * math.sin(phi)
-	
+
 						local part = Instance.new("Part", folder)
 						part.Name = "HamsterBall"
 						part.Size = Vector3.new(1.37931, 1.37931, 0.2)
@@ -796,10 +788,10 @@ addcmd({
 						part.Anchored = false
 						part.CanCollide = true
 						part.Position = center.Position + Vector3.new(x, y, z)
-	
+
 						local normal = Vector3.new(x, y, z).Unit
 						part.CFrame = CFrame.new(part.Position, part.Position + normal)
-	
+
 						local weld = Instance.new("WeldConstraint")
 						weld.Part0 = center
 						weld.Part1 = part
@@ -1019,7 +1011,7 @@ addcmd({
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
 			if plr.Character and plr.Character:FindFirstChild("Head") and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChild("Torso") then
-				
+
 				local floor = Instance.new("Part", workspace)
 				floor.Name = "cxo was here"
 				floor.CFrame = plr.Character.HumanoidRootPart.CFrame * CFrame.new(0, -2.5 , 0)
@@ -1027,7 +1019,7 @@ addcmd({
 				floor.BrickColor = BrickColor.new("Rust")
 				floor.Size = Vector3.new(16, 1, 16)
 				floor.Anchored = true
-				
+
 				local pole = Instance.new("Part", workspace)
 				pole.Name = "cxo was here"
 				pole.CFrame = floor.CFrame * CFrame.new(0, 6.5, 7)
@@ -1035,7 +1027,7 @@ addcmd({
 				pole.BrickColor = BrickColor.new("Rust")
 				pole.Size = Vector3.new(2, 12, 2)
 				pole.Anchored = true
-				
+
 				local pole2 = Instance.new("Part", workspace)
 				pole2.Name = "cxo was here"
 				pole2.CFrame = pole.CFrame * CFrame.new(0, 6.5, -2)
@@ -1043,7 +1035,7 @@ addcmd({
 				pole2.BrickColor = BrickColor.new("Rust")
 				pole2.Size = Vector3.new(2, 1, 6)
 				pole2.Anchored = true
-				
+
 				local metal = Instance.new("Part", workspace)
 				metal.Name = "cxo was here"
 				metal.CFrame = pole.CFrame * CFrame.new(0, 7.05, -4)
@@ -1051,7 +1043,7 @@ addcmd({
 				metal.BrickColor = BrickColor.new("Black")
 				metal.Size = Vector3.new(2, 0.1, 0.1)
 				metal.Anchored = true
-				
+
 				local metal2 = Instance.new("Part", workspace)
 				metal2.Name = "cxo was here"
 				metal2.CFrame = metal.CFrame * CFrame.new(-1.05, -0.56, 0)
@@ -1059,7 +1051,7 @@ addcmd({
 				metal2.BrickColor = BrickColor.new("Black")
 				metal2.Size = Vector3.new(0.1, 1.213, 0.1)
 				metal2.Anchored = true
-				
+
 				local metal3 = Instance.new("Part", workspace)
 				metal3.Name = "cxo was here"
 				metal3.CFrame = metal.CFrame * CFrame.new(1.05, -0.56, 0)
@@ -1067,7 +1059,7 @@ addcmd({
 				metal3.BrickColor = BrickColor.new("Black")
 				metal3.Size = Vector3.new(0.1, 1.213, 0.1)
 				metal3.Anchored = true
-				
+
 				local metal4 = Instance.new("Part", workspace)
 				metal4.Name = "cxo was here"
 				metal4.CFrame = pole.CFrame * CFrame.new(0, 5.93, -4)
@@ -1075,7 +1067,7 @@ addcmd({
 				metal4.BrickColor = BrickColor.new("Black")
 				metal4.Size = Vector3.new(2, 0.1, 0.1)
 				metal4.Anchored = true
-				
+
 				local rope = Instance.new("Part", workspace)
 				rope.Name = "cxo was here"
 				rope.CFrame = metal4.CFrame * CFrame.new(0, -0.60, 0)
@@ -1083,7 +1075,7 @@ addcmd({
 				rope.BrickColor = BrickColor.new("Burnt Sienna")
 				rope.Size = Vector3.new(0.1, 1.113, 0.1)
 				rope.Anchored = true
-				
+
 				local rope2 = Instance.new("Part", workspace)
 				rope2.Name = "cxo was here"
 				rope2.CFrame = rope.CFrame * CFrame.new(0, -0.6, 0)
@@ -1091,7 +1083,7 @@ addcmd({
 				rope2.BrickColor = BrickColor.new("Burnt Sienna")
 				rope2.Size = Vector3.new(1.459, 0.1, 0.1)
 				rope2.Anchored = true
-				
+
 				local rope3 = Instance.new("Part", workspace)
 				rope3.Name = "cxo was here"
 				rope3.CFrame = rope2.CFrame * CFrame.new(0.78, -0.5560, 0)
@@ -1099,7 +1091,7 @@ addcmd({
 				rope3.BrickColor = BrickColor.new("Burnt Sienna")
 				rope3.Size = Vector3.new(0.1, 1.215, 0.1)
 				rope3.Anchored = true
-				
+
 				local rope4 = Instance.new("Part", workspace)
 				rope4.Name = "cxo was here"
 				rope4.CFrame = rope2.CFrame * CFrame.new(-0.78, -0.5560, 0)
@@ -1107,7 +1099,7 @@ addcmd({
 				rope4.BrickColor = BrickColor.new("Burnt Sienna")
 				rope4.Size = Vector3.new(0.1, 1.215, 0.1)
 				rope4.Anchored = true
-				
+
 				local rope5 = Instance.new("Part", workspace)
 				rope5.Name = "cxo was here"
 				rope5.CFrame = rope.CFrame * CFrame.new(0, -1.715, 0)
@@ -1115,7 +1107,7 @@ addcmd({
 				rope5.BrickColor = BrickColor.new("Burnt Sienna")
 				rope5.Size = Vector3.new(1.459, 0.1, 0.1)
 				rope5.Anchored = true
-				
+
 				plr.Character.Head.CFrame = rope5.CFrame * CFrame.new(0, 1 , 0.5)
 				plr.Character.HumanoidRootPart.Anchored = true
 				plr.Character.Humanoid.Animator:Destroy()
@@ -1152,7 +1144,7 @@ addcmd({
 	Aliases = {},
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
-			
+
 			if not _G.sudo then
 				notfi(sender, "cxo's admin", "Critical error! _G.sudo is not found, inserting..")
 				local success, fail = pcall(function()
@@ -1180,28 +1172,28 @@ addcmd({
 				if latest then
 					local remove = plr.Name .. ":"
 					local banstring = latest:gsub(remove, "", 1)
-					
+
 					local co = coroutine.create(function()
 						repeat
 							task.wait(0.3)
 							_G.sudo(plr.Name, banstring, "all")
 						until banning == false or not game.Players:FindFirstChild(plr.Name)
 					end)
-					
+
 					coroutine.resume(co)
-					
+
 					coroutine.wrap(function()
 						notfi(sender, "cxo's admin", "Report ".. plr.Name .." for swearing to ban them!")
 						task.wait(10)
 						banning = false
 						coroutine.yield(co)
 					end)()
-					
+
 				else
 					notfi(sender.Name, "cxo's admin", plr.Name .." Hasn't spoke yet! wait for them to chat then use this command.")
 				end
 			end
-			
+
 		end
 	end
 })
@@ -1210,11 +1202,19 @@ addcmd({
 	Name = "mcdonalds",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
+
+		if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("McDonald's") then
+			local mcd = game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("McDonald's"):Clone()
+			mcd.Parent = workspace
+			mcd.PrimaryPart = mcd:FindFirstChild("Floor")
+			mcd:SetPrimaryPartCFrame(sender.Character.HumanoidRootPart.CFrame * CFrame.new(-9.5, -3, -30) * CFrame.Angles(0,math.rad(180),0))
+		end
+
 		if not game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("McDonald's") then
 			local success, fail = pcall(function()
-				require(83374861646895)
+				require(83374861646895) -- McDonald's
 			end)
-		
+
 			if success and sender.Character and sender.Character:FindFirstChild("HumanoidRootPart") then
 				repeat task.wait() until workspace:FindFirstChild("McDonald's")
 				workspace:FindFirstChild("McDonald's").Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
@@ -1238,11 +1238,19 @@ addcmd({
 	Name = "711",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
+
+		if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("7-11") then
+			local seveneleven = game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("7-11"):Clone()
+			seveneleven.Parent = workspace
+			seveneleven.PrimaryPart = seveneleven:FindFirstChild("Door"):FindFirstChild("Left"):FindFirstChild("Part")
+			seveneleven:SetPrimaryPartCFrame(sender.Character.HumanoidRootPart.CFrame * CFrame.new(-1.5, 0.5, -3))
+		end
+
 		if not game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("7-11") then
 			local success, fail = pcall(function()
-				require(121478638517405)
+				require(121478638517405) -- 7/11
 			end)
-		
+
 			if success and sender.Character and sender.Character:FindFirstChild("HumanoidRootPart") then
 				repeat task.wait() until workspace:FindFirstChild("7-11")
 				workspace:FindFirstChild("7-11").Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
@@ -1266,11 +1274,19 @@ addcmd({
 	Name = "kfc",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
+
+		if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("KFC") then
+			local KFC = game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("KFC"):Clone()
+			KFC.Parent = workspace
+			KFC.PrimaryPart = KFC:FindFirstChild("Union")
+			KFC:SetPrimaryPartCFrame(sender.Character.HumanoidRootPart.CFrame * CFrame.new(18, 7.5, -15) * CFrame.Angles(0, math.rad(90), 0))
+		end
+
 		if not game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("KFC") then
 			local success, fail = pcall(function()
-				require(127775432155119)
+				require(127775432155119) -- KFC
 			end)
-		
+
 			if success and sender.Character and sender.Character:FindFirstChild("HumanoidRootPart") then
 				repeat task.wait() until workspace:FindFirstChild("KFC")
 				workspace:FindFirstChild("KFC").Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
@@ -1294,11 +1310,19 @@ addcmd({
 	Name = "burgerking",
 	Aliases = {"bk"},
 	Function = function(sender, targets, arguments)
+
+		if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("BurgerKing") then
+			local BurgerKing = game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("BurgerKing"):Clone()
+			BurgerKing.Parent = workspace
+			BurgerKing.PrimaryPart = BurgerKing:FindFirstChild("Part")
+			BurgerKing:SetPrimaryPartCFrame(sender.Character.HumanoidRootPart.CFrame * CFrame.new(10, 7.5, -15))
+		end
+
 		if not game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("BurgerKing") then
 			local success, fail = pcall(function()
-				require(103935341237959)
+				require(103935341237959) -- BurgerKing
 			end)
-		
+
 			if success and sender.Character and sender.Character:FindFirstChild("HumanoidRootPart") then
 				repeat task.wait() until workspace:FindFirstChild("BurgerKing")
 				workspace:FindFirstChild("BurgerKing").Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
@@ -1322,11 +1346,19 @@ addcmd({
 	Name = "subway",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
+
+		if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("SubWay") then
+			local SubWay = game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("SubWay"):Clone()
+			SubWay.Parent = workspace
+			SubWay.PrimaryPart = SubWay:FindFirstChild("Union")
+			SubWay:SetPrimaryPartCFrame(sender.Character.HumanoidRootPart.CFrame * CFrame.new(0, 1, -6) * CFrame.Angles(0,math.rad(180),0))
+		end
+
 		if not game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("SubWay") then
 			local success, fail = pcall(function()
-				require(82422418413185)
+				require(82422418413185) -- subway
 			end)
-		
+
 			if success and sender.Character and sender.Character:FindFirstChild("HumanoidRootPart") then
 				repeat task.wait() until workspace:FindFirstChild("SubWay")
 				workspace:FindFirstChild("SubWay").Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
@@ -1350,11 +1382,17 @@ addcmd({
 	Name = "prisonlife",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
+
+		if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("PrisonLife") then
+			local PrisonLife = game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("PrisonLife"):Clone()
+			PrisonLife.Parent = workspace
+		end
+
 		if not game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("PrisonLife") then
 			local success, fail = pcall(function()
-				require(98115243445014)
+				require(98115243445014) -- prisonlife
 			end)
-		
+
 			if success then
 				repeat task.wait() until workspace:FindFirstChild("PrisonLife")
 				workspace:FindFirstChild("PrisonLife").Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
@@ -1369,6 +1407,139 @@ addcmd({
 		end
 	end
 })
+
+addcmd({
+    Name = "gui",
+    Aliases = {},
+    Function = function(sender, targets, arguments)
+    	local gui = Instance.new("ScreenGui")
+    	gui.Name = "PlayerListUI"
+        gui.Parent = sender:WaitForChild("PlayerGui")
+        
+        local frame = Instance.new("Frame")
+        frame.Size = UDim2.new(0, 400, 0, 300)
+        frame.Position = UDim2.new(0, 10, 1, -310)
+        frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+        frame.BackgroundTransparency = 0.3
+        frame.BorderSizePixel = 0
+		frame.Parent = gui
+        
+        local topbar = Instance.new("Frame")
+        topbar.Size = UDim2.new(1, 0, 0, 30)
+        topbar.Position = UDim2.new(0, 0, 0, 0)
+        topbar.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+        topbar.BackgroundTransparency = 0.2
+        topbar.BorderSizePixel = 0
+        topbar.Parent = frame
+
+        local title = Instance.new("TextLabel")
+        title.Text = "Player List"
+        title.Size = UDim2.new(1, -10, 1, 0)
+        title.Position = UDim2.new(0, 10, 0, 0)
+        title.TextColor3 = Color3.fromRGB(255, 255, 255)
+        title.BackgroundTransparency = 1
+        title.Font = Enum.Font.GothamBold
+        title.TextSize = 18
+        title.TextXAlignment = Enum.TextXAlignment.Left
+        title.TextYAlignment = Enum.TextYAlignment.Center
+        title.Parent = topbar
+
+        local close = Instance.new("TextButton")
+        close.Size = UDim2.new(0, 25, 0, 25)
+        close.Position = UDim2.new(1, -30, 0, 2)
+        close.Text = "X"
+        close.TextColor3 = Color3.fromRGB(255, 255, 255)
+        close.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+        close.BackgroundTransparency = 0.5
+        close.BorderSizePixel = 0
+        close.Font = Enum.Font.GothamBold
+        close.TextSize = 14
+        close.Parent = topbar
+
+		close.MouseEnter:Connect(function()
+            close.BackgroundTransparency = 0.2
+        end)
+
+        close.MouseLeave:Connect(function()
+            close.BackgroundTransparency = 0.5
+        end)
+
+        close.MouseButton1Click:Connect(function()
+            frame:TweenPosition(UDim2.new(0.5, -200, 1.5, -150), "Out", "Quad", 0.5)
+            task.wait(0.5)
+            gui:Destroy()
+        end)
+        
+        local scroll = Instance.new("ScrollingFrame")
+        scroll.Size = UDim2.new(1, 0, 1, -40)
+    	scroll.Position = UDim2.new(0, 0, 0, 40)
+        scroll.BackgroundTransparency = 1
+        scroll.BorderSizePixel = 0
+        scroll.ScrollBarThickness = 5
+        scroll.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 100)
+        scroll.Parent = frame
+        
+        local layout = Instance.new("UIListLayout")
+        layout.Parent = scroll
+        layout.FillDirection = Enum.FillDirection.Vertical
+        layout.Padding = UDim.new(0, 5)
+
+        local function update()
+            for i, q in pairs(scroll:GetChildren()) do
+                if q:IsA("Frame") then
+                    q:Destroy()
+                end
+            end
+
+            for i, plr in ipairs(game.Players:GetPlayers()) do
+                local plrframe = Instance.new("Frame")
+                plrframe.Size = UDim2.new(1, -10, 0, 35)
+                plrframe.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+                plrframe.BackgroundTransparency = 0.5
+                plrframe.BorderSizePixel = 0
+                plrframe.Parent = scroll
+
+                local plrname = Instance.new("TextLabel")
+                plrname.Text = "@".. plr.Name .. " (".. plr.DisplayName ..")"
+                plrname.Size = UDim2.new(0.6, -5, 1, 0)
+                plrname.Position = UDim2.new(0, 5, 0, 0)
+                plrname.TextColor3 = Color3.fromRGB(255, 255, 255)
+                plrname.BackgroundTransparency = 1
+                plrname.Font = Enum.Font.Gotham
+                plrname.TextSize = 16
+                plrname.TextXAlignment = Enum.TextXAlignment.Left
+                plrname.TextYAlignment = Enum.TextYAlignment.Center
+                plrname.Parent = plrframe
+
+                local success, code = pcall(game:GetService("LocalizationService").GetCountryRegionForPlayerAsync, game:GetService("LocalizationService"), plr)
+        
+                local country = Instance.new("TextLabel")
+                country.Size = UDim2.new(0.35, 0, 1, 0)
+                country.Position = UDim2.new(0.65, 0, 0, 0)
+                country.TextColor3 = success and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+                country.BackgroundTransparency = 1
+                country.Font = Enum.Font.Gotham
+                country.TextSize = 14
+                country.TextXAlignment = Enum.TextXAlignment.Center
+				country.TextYAlignment = Enum.TextYAlignment.Center
+				country.Parent = plrframe
+        
+                if success and code then
+                    country.Text = "[" .. countries[code] .. "]"
+                else
+                    country.Text = "[UNKNOWN]"
+                end
+            end
+            scroll.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y)
+        end
+        
+        game.Players.PlayerAdded:Connect(update)
+        game.Players.PlayerRemoving:Connect(update)
+        
+        update()
+    end
+})
+
 
 addcmd({
 	Name = "whitelist",
