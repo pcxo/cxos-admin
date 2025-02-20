@@ -8,6 +8,7 @@ local banned = {}
 local countries = {}
 local chats = {}
 local TempWhitelist = {}
+local locked = false
 
 -- Thanks roblox for taking down my module every time i upload this script --
 
@@ -211,33 +212,133 @@ addcmd({
 	Aliases = {"k"},
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
-			plr:Kick("You have been kicked 😹")
+			plr:Kick("cxo's admin | You have been kicked 😹")
 		end
 	end
 })
 
 addcmd({
-	Name = "ban",
-	Aliases = {"b"},
-	Function = function(sender, targets, arguments)
-		for i, plr in ipairs(targets) do
-			plr:Kick("You have been banned.")
-			if not table.find(banned, plr.UserId) then
-				table.insert(banned, plr.UserId)
-			end
-		end
-	end
+    Name = "ban",
+    Aliases = {"b"},
+    Function = function(sender, targets, arguments)
+        for i, plr in ipairs(targets) do
+            plr:Kick("cxo's admin | You have been banned.")
+            if not banned[plr.UserId] then
+                banned[plr.UserId] = plr.Name
+            end
+        end
+    end
 })
 
 addcmd({
-	Name = "unban",
-	Aliases = {"unb"},
+	Name = "unban", -- dizzys gui again
+	Aliases = {"unb", "banlist", "bans"},
 	Function = function(sender, targets, arguments)
-		for i, plr in ipairs(targets) do
-			if table.find(banned, plr.UserId) then
-				table.remove(banned, table.find(banned, plr.UserId))
-			end
+
+		local s = Instance.new("ScreenGui")
+		s.Name = "BanListGui"
+		s.Parent = sender:WaitForChild("PlayerGui")
+
+		local frame = Instance.new("Frame")
+		frame.Size = UDim2.new(0, 400, 0, 300)
+		frame.Position = UDim2.new(0.5, -200, 0.5, -150)
+		frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+		frame.BackgroundTransparency = 0.3
+		frame.BorderSizePixel = 0
+		frame.Parent = s
+
+		local topBar = Instance.new("Frame")
+		topBar.Size = UDim2.new(1, 0, 0, 30)
+		topBar.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+		topBar.BackgroundTransparency = 0.2
+		topBar.BorderSizePixel = 0
+		topBar.Parent = frame
+
+		local title = Instance.new("TextLabel")
+		title.Text = "Ban List"
+		title.Size = UDim2.new(1, -10, 1, 0)
+		title.Position = UDim2.new(0, 10, 0, 0)
+		title.TextColor3 = Color3.fromRGB(255, 255, 255)
+		title.BackgroundTransparency = 1
+		title.Font = Enum.Font.GothamBold
+		title.TextSize = 18
+		title.TextXAlignment = Enum.TextXAlignment.Left
+		title.Parent = topBar
+
+		local closeButton = Instance.new("TextButton")
+		closeButton.Size = UDim2.new(0, 25, 0, 25)
+		closeButton.Position = UDim2.new(1, -30, 0, 2)
+		closeButton.Text = "X"
+		closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+		closeButton.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+		closeButton.BackgroundTransparency = 0.5
+		closeButton.BorderSizePixel = 0
+		closeButton.Font = Enum.Font.GothamBold
+		closeButton.TextSize = 14
+		closeButton.Parent = topBar
+
+		closeButton.MouseButton1Click:Connect(function()
+			frame:TweenPosition(UDim2.new(0.5, -200, 1.5, -150), "Out", "Quad", 0.5)
+			task.wait(0.5)
+			s:Destroy()
+		end)
+
+		local scroll = Instance.new("ScrollingFrame")
+		scroll.Size = UDim2.new(1, 0, 1, -40)
+		scroll.Position = UDim2.new(0, 0, 0, 40)
+		scroll.BackgroundTransparency = 1
+		scroll.BorderSizePixel = 0
+		scroll.ScrollBarThickness = 5
+		scroll.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 100)
+		scroll.Parent = frame
+
+		local layout = Instance.new("UIListLayout")
+		layout.Parent = scroll
+		layout.FillDirection = Enum.FillDirection.Vertical
+		layout.Padding = UDim.new(0, 5)
+
+		for uid, user in pairs(banned) do
+			local bframe = Instance.new("Frame")
+			bframe.Size = UDim2.new(1, -10, 0, 30)
+			bframe.Position = UDim2.new(0, 5, 0, 0)
+			bframe.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+			bframe.BackgroundTransparency = 0.5
+			bframe.BorderSizePixel = 0
+			bframe.Parent = scroll
+
+			local blabel = Instance.new("TextLabel")
+			blabel.Text = user .. " | " .. tostring(uid)
+			blabel.Size = UDim2.new(0.7, 0, 1, 0)
+			blabel.Position = UDim2.new(0, 10, 0, 0)
+			blabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+			blabel.BackgroundTransparency = 1
+			blabel.Font = Enum.Font.Gotham
+			blabel.TextSize = 16
+			blabel.TextXAlignment = Enum.TextXAlignment.Left
+			blabel.Parent = bframe
+
+			local unbanb = Instance.new("TextButton")
+			unbanb.Text = "Unban"
+			unbanb.Size = UDim2.new(0.25, 0, 1, 0)
+			unbanb.Position = UDim2.new(0.75, 0, 0, 0)
+			unbanb.TextColor3 = Color3.fromRGB(255, 255, 255)
+			unbanb.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
+			unbanb.BackgroundTransparency = 0.2
+			unbanb.BorderSizePixel = 0
+			unbanb.Font = Enum.Font.GothamBold
+			unbanb.TextSize = 14
+			unbanb.Parent = bframe
+
+			unbanb.MouseButton1Click:Connect(function()
+				banned[userID] = nil
+				banFrame:Destroy()
+			end)
 		end
+
+		layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+			scroll.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y)
+		end)
+
 	end
 })
 
@@ -325,6 +426,11 @@ addcmd({ -- Requested by punchy39, he gave da code
 	Name = "jork",
 	Aliases = {"j"},
 	Function = function(sender, targets, arguments)
+
+		if #targets ~= 1 then
+			notfi(sender, "cxo's admin", "Too many targets!")
+		end
+
 		for i, plr in ipairs(targets) do
 			if plr.Character and plr.Character:FindFirstChild("Humanoid") then
 				local anim1 = Instance.new("Animation")
@@ -588,6 +694,11 @@ addcmd({
 	Name = "hamsterball", -- punchy gave a better ball so Credit 2 him
 	Aliases = {"hamster", "ball"},
 	Function = function(sender, targets, arguments)
+
+		if #targets ~= 1 then
+			notfi(sender, "cxo's admin", "Too many targets!")
+		end
+
 		for i, plr in ipairs(targets) do
 			if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
 
@@ -597,7 +708,6 @@ addcmd({
 				center.Transparency = 1
 				center.Anchored = false
 				center.CanCollide = false
-				center.Position = plr.Character.PrimaryPart.Position
 	
 				local radius = 5
 				local densityTheta = 20
@@ -629,7 +739,10 @@ addcmd({
 						weld.Parent = center
 					end
 				end
-				center.Position = plr.Character.PrimaryPart.Position
+				task.spawn(function()
+					task.wait(2.5)
+					center.Position = plr.Character.PrimaryPart.Position
+				end)
 			end
 		end
 	end
@@ -665,6 +778,11 @@ addcmd({
 	Name = "gmod",
 	Aliases = {"gravitygun"},
 	Function = function(sender, targets, arguments)
+		
+		if #targets ~= 1 then
+			notfi(sender, "cxo's admin", "Too many targets!")
+		end
+
 		for i, plr in ipairs(targets) do
 			local success, gear = pcall(function()
 				return game:GetService("InsertService"):LoadAsset(2136443074)
@@ -690,16 +808,70 @@ addcmd({
 	Name = "save",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
-		local b = table.concat(arguments, " ")
-		print(b)
-		local folder = workspace:FindFirstChild(b)
-		if folder then
-			for i, part in ipairs(folder:GetDescendants()) do
-				table.insert(_G.btoolsparts, part)
+		local slot = table.concat(arguments, " ", 1) -- slot 0 = "buildsave" (kohls) slot 1 - 10 = "buildsave/1+" (p299)
+		local saving = table.concat(arguments, " ", 2)
+		local parts = {}
+
+		if #targets ~= 1 then
+			notfi(sender, "cxo's admin", "Too many targets!")
+		end
+
+		for i, plr in ipairs(targets) do
+			local folder = workspace:FindFirstChild(saving)
+			if folder then
+				for i, part in ipairs(folder:GetDescendants()) do
+					table.insert(_G.btoolsparts, part)
+				end
+				if tonumber(slot) == 0 then
+					local bss = game:GetService("DataStoreService"):GetDataStore("BuildSaveSystem")
+					for l, m in ipairs(workspace:GetDescendants()) do
+						if m:IsA("BasePart") and (m.Name == "Part" or m.Name == "CornerWedge" or m.Name == "Wedge" or m.Name == "Truss") and table.find(_G.btoolsparts, m) then
+							table.insert(parts, {
+								Name = tostring(m.Name),
+								CFrame = tostring(m.CFrame),
+								Size = c(m.Size),
+								Color = f(m.Color),
+								Material = m.Material.Name,
+								Anchored = m.Anchored,
+								CanCollide = m.CanCollide
+							})
+						end
+					end
+					local success, fail = pcall(function()
+						bss:SetAsync(plr.UserId, parts)
+					end)
+					if success then
+						notfi(sender, "cxo's admin", "Saved to slot ".. slot .. "!")
+					else
+						notfi(sender, "cxo's admin", "Failed to save: ".. fail)
+					end
+				elseif tonumber(slot) > 0 then
+					local bss = game:GetService("DataStoreService"):GetDataStore("Person299BuildSaveSystem" .. tonumber(slot))
+					for l, m in ipairs(workspace:GetDescendants()) do
+						if m:IsA("BasePart") and (m.Name == "Part" or m.Name == "CornerWedge" or m.Name == "Wedge" or m.Name == "Truss") and table.find(_G.btoolsparts, m) then
+							table.insert(parts, {
+								Name = tostring(m.Name),
+								CFrame = tostring(m.CFrame),
+								Size = c(m.Size),
+								Color = f(m.Color),
+								Material = m.Material.Name,
+								Anchored = m.Anchored,
+								CanCollide = m.CanCollide
+							})
+						end
+					end
+					local success, fail = pcall(function()
+						bss:SetAsync(plr.UserId, parts)
+					end)
+					if success then
+						notfi(sender, "cxo's admin", "Saved to slot ".. slot .. "!")
+					else
+						notfi(sender, "cxo's admin", "Failed to save: ".. fail)
+					end
+				end
+			else
+				notfi(sender, "cxo's admin", "Invalid name! | ".. saving)
 			end
-			notfi(sender, "cxo's admin", "Say buildsave to save it!")
-		else
-			notfi(sender, "cxo's admin", "Invalid name! | ".. b)
 		end
 	end
 })
@@ -869,6 +1041,17 @@ addcmd({
 				plr.Character.Humanoid.Animator:Destroy()
 				plr.Character.Torso.Neck.C0 = plr.Character.Torso.Neck.C0 * CFrame.Angles(math.rad(90), 0, 0)
 			end
+		end
+	end
+})
+
+addcmd({
+	Name = "serverlock",
+	Aliases = {"slock"},
+	Function = function(sender, targets, arguments)
+		notfi(sender, "cxo's admin", "the server has been locked.")
+		if locked ~= true then
+			locked = true
 		end
 	end
 })
@@ -1254,13 +1437,17 @@ addcmd({
 })
 
 for i,v in pairs(game.Players:GetPlayers()) do
+
 	if table.find(Whitelist, tostring(v.UserId)) or table.find(TempWhitelist, v.UserId) then
 		notfi(v, "cxo's admin", "You are whitelisted! prefix is ".. prefix)
 	end
+
 	v.Chatted:Connect(function(msg)
+
 		if not table.find(Whitelist, tostring(v.UserId)) and not table.find(TempWhitelist, v.UserId) then
 			table.insert(chats, v.Name ..":" .. msg)
 		end
+
 		if table.find(Whitelist, tostring(v.UserId)) or table.find(TempWhitelist, v.UserId) then
 			print(v.Name .. ": ".. msg)
 			if msg:sub(1, #prefix) == prefix then
@@ -1298,14 +1485,26 @@ for i,v in pairs(game.Players:GetPlayers()) do
 end
 
 game.Players.PlayerAdded:Connect(function(player)
+
 	if table.find(Whitelist, tostring(player.UserId)) or table.find(TempWhitelist, player.UserId) then
 		task.wait(1.5)
 		notfi(player, "cxo's admin", "You are whitelisted! prefix is ".. prefix)
 	end
+
+	if locked == true and not table.find(Whitelist, tostring(player.UserId)) and not table.find(TempWhitelist, player.UserId) then
+		player:Kick("cxo's admin | this server is locked")
+	end
+
+	if banned[player.UserId] then
+		player:Kick("cxo's admin | you are banned from this server")
+	end
+
 	player.Chatted:Connect(function(msg)
+
 		if not table.find(Whitelist, player.Name) and not table.find(TempWhitelist, player.UserId) then
 			table.insert(chats, player.Name ..":" .. msg)
 		end
+
 		if table.find(Whitelist, tostring(player.UserId)) or table.find(TempWhitelist, player.UserId) then
 			if msg:sub(1, #prefix) == prefix then
 				msg = msg:sub(#prefix + 1)
