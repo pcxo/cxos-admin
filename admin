@@ -1,6 +1,13 @@
 -- copy anything you want from here i dont care --
 -- this was all made by cxo --
 
+--[[
+
+	IF YOU USE /SAVE TO OVERRIDE PEOPLES BUILDS YOU WILL BE BANNED FROM THIS SCRIPT AND POSSIBLY THIS GAME.
+	THE ONLY ACCEPTION IS IF THEY HAVE AN NSFW / CRASH / LAG BUILD. BY USING THIS SCRIPT YOU AGREE TO THESE TERMS.
+
+]]
+
 local cxoURL = "https://raw.githubusercontent.com/pcxo/whitelisted/main/users"
 local prefix = "/"
 local cmds = {}
@@ -741,7 +748,7 @@ addcmd({
 				center.Transparency = 1
 				center.Anchored = false
 				center.CanCollide = false
-				center.Position = Vector3.new(0, 30000, 0)
+				center.Position = Vector3.new(0, 3000, 0)
 	
 				local radius = 5
 				local densityTheta = 20
@@ -850,8 +857,23 @@ addcmd({
 			notfi(sender, "cxo's admin", "Too many targets!")
 		end
 
+		local function c(d)
+			return {
+				x = d.X,
+				y = d.Y,
+				z = d.Z
+			}
+		end
+
+		local function f(g)
+			return {
+				r = g.R,
+				g = g.G,
+				b = g.B
+			}
+		end
+
 		for i, plr in ipairs(targets) do
-			notfi(sender, "cxo's admin", "using this to ruin players saves will get you banned from this script.", 3)
 			local folder = workspace:FindFirstChild(saving)
 			if folder then
 				for i, part in ipairs(folder:GetDescendants()) do
