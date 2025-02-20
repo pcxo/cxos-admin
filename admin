@@ -215,7 +215,7 @@ function notfi(plr, title, message, duration) -- Anotha dizzy ui
 		t.TextColor3 = Color3.fromRGB(255, 255, 255)
 		t.BackgroundTransparency = 1
 		t.Font = Enum.Font.GothamBold
-		t.TextSize = 18
+		t.TextSize = 25
 		t.TextXAlignment = Enum.TextXAlignment.Left
 		t.Parent = n
 
@@ -226,7 +226,7 @@ function notfi(plr, title, message, duration) -- Anotha dizzy ui
 		m.TextColor3 = Color3.fromRGB(200, 200, 200)
 		m.BackgroundTransparency = 1
 		m.Font = Enum.Font.Gotham
-		m.TextSize = 14
+		m.TextSize = 18
 		m.TextXAlignment = Enum.TextXAlignment.Left
 		m.TextYAlignment = Enum.TextYAlignment.Top
 		m.TextWrapped = true
@@ -741,6 +741,7 @@ addcmd({
 				center.Transparency = 1
 				center.Anchored = false
 				center.CanCollide = false
+				center.Position = Vector3.new(0, 30000, 0)
 	
 				local radius = 5
 				local densityTheta = 20
@@ -774,7 +775,7 @@ addcmd({
 				end
 				task.spawn(function()
 					task.wait(2.5)
-					center.Position = plr.Character.PrimaryPart.Position
+					center.Position = plr.Character.HumanoidRootPart.Position
 				end)
 			end
 		end
@@ -839,9 +840,9 @@ addcmd({
 
 addcmd({
 	Name = "save",
-	Aliases = {},
+	Aliases = {"buildsave"},
 	Function = function(sender, targets, arguments)
-		local slot = table.concat(arguments, " ", 1) -- slot 0 = "buildsave" (kohls) slot 1 - 10 = "buildsave/1+" (p299)
+		local slot = arguments[1] -- slot 0 = "buildsave" (kohls) slot 1 - 10 = "buildsave/1+" (p299)
 		local saving = table.concat(arguments, " ", 2)
 		local parts = {}
 
@@ -850,6 +851,7 @@ addcmd({
 		end
 
 		for i, plr in ipairs(targets) do
+			notfi(sender, "cxo's admin", "using this to ruin players saves will get you banned from this script.", 3)
 			local folder = workspace:FindFirstChild(saving)
 			if folder then
 				for i, part in ipairs(folder:GetDescendants()) do
