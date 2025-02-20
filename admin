@@ -384,7 +384,7 @@ addcmd({
 			unbanb.Parent = bframe
 
 			unbanb.MouseButton1Click:Connect(function()
-				banned[userID] = nil
+				banned[uid] = nil
 				bframe:Destroy()
 			end)
 		end
@@ -1517,6 +1517,7 @@ addcmd({
                 plrname.BackgroundTransparency = 1
                 plrname.Font = Enum.Font.Gotham
                 plrname.TextSize = 16
+				plrname.TextScaled = true
                 plrname.TextXAlignment = Enum.TextXAlignment.Left
                 plrname.TextYAlignment = Enum.TextYAlignment.Center
                 plrname.Parent = plrframe
