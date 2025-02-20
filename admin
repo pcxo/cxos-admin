@@ -1226,6 +1226,29 @@ addcmd({
 })
 
 addcmd({
+	Name = "loadsudo",
+	Aliases = {"loadgsudo"},
+	Function = function(sender, targets, arguments)
+		if not _G.sudo then
+			local success, fail = pcall(function()
+				require(97248613655645).Run()
+			end)
+			task.spawn(function()
+				task.wait(5)
+				if not success then
+					notfi(sender, "cxo's admin", "Failed to insert _G.sudo: " .. fail)
+					return
+				else
+					notfi(sender, "cxo's admin", "_G.sudo has been inserted.", 2)
+				end
+			end)
+		else
+			notfi(sender, "cxo's admin", "Sudo is already loaded!")
+		end
+	end
+})
+
+addcmd({
 	Name = "mcdonalds",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
