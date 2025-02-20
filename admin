@@ -77,6 +77,15 @@ else
 	game:GetService("ReplicatedStorage").OrbScript.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
 end
 
+if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("Crash") then
+    local clonedcrash = game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("Crash"):Clone()
+    clonedcrash.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
+else
+    require(114690429107613) -- crash script
+    repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("Crash")
+    game:GetService("ReplicatedStorage").Crash.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
+end
+
 local success, result = pcall(function()
 	return game:GetService("HttpService"):GetAsync("http://country.io/names.json")
 end)
@@ -1409,11 +1418,12 @@ addcmd({
 })
 
 addcmd({
-    Name = "gui",
-    Aliases = {},
+    Name = "playerlist",
+    Aliases = {"gui"},
     Function = function(sender, targets, arguments)
     	local gui = Instance.new("ScreenGui")
     	gui.Name = "PlayerListUI"
+		gui.ResetOnSpawn = false
         gui.Parent = sender:WaitForChild("PlayerGui")
         
         local frame = Instance.new("Frame")
@@ -1539,7 +1549,6 @@ addcmd({
         update()
     end
 })
-
 
 addcmd({
 	Name = "whitelist",
