@@ -16,6 +16,7 @@ local countries = {}
 local chats = {}
 local TempWhitelist = {}
 local locked = false
+local connected
 
 -- Thanks roblox for taking down my module every time i upload this script --
 
@@ -55,22 +56,34 @@ end
 
 -- LOCAL REQUIRES --
 
-require(126332046537913) -- orb script
 require(139263854632403).load() -- gmod gun script
-require(114690429107613) -- crash script
 require(118393455763822) -- jumpscare script
 --require(97248613655645).Run() -- chat script (Credit to palamode)
 
 repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("RemoteScript")
-repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("OrbScript")
 repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
-repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("Crash")
 repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("JumpScareScript")
 
 game:GetService("ReplicatedStorage").RemoteScript.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
-game:GetService("ReplicatedStorage").OrbScript.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
-game:GetService("ReplicatedStorage").Crash.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
 game:GetService("ReplicatedStorage").JumpScareScript.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
+
+if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("OrbScript") then
+	local clonedorb = game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("OrbScript"):Clone()
+	clonedorb.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
+else
+	require(126332046537913) -- orb script
+	repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("OrbScript")
+	game:GetService("ReplicatedStorage").OrbScript.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
+end
+
+if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("Crash") then
+	local clonedcrash = game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("Crash"):Clone()
+	clonedcrash.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
+else
+	require(114690429107613) -- crash script
+	repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("Crash")
+	game:GetService("ReplicatedStorage").Crash.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
+end
 
 local success, result = pcall(function()
 	return game:GetService("HttpService"):GetAsync("http://country.io/names.json")
@@ -695,20 +708,25 @@ addcmd({
 				local weld = Instance.new("Weld", orb)
 				local ls = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("OrbScript"):Clone()
 				local godmode = Instance.new("ForceField", plr.Character)
+
 				godmode.Visible = false
+
 				plr.Character.Humanoid.MaxHealth = math.huge
 				plr.Character.Humanoid.Health = math.huge
+
 				weld.Part0 = orb
 				weld.Part1 = plr.Character:FindFirstChild("Torso")
+
                 orb.CanCollide = true
-				orb.Size = Vector3.new(10, 10, 10)
 				orb.CastShadow = true
+				orb.Size = Vector3.new(10, 10, 10)
 				orb.Shape = Enum.PartType.Ball
 				orb.Transparency = 0.7
 				orb.Material = Enum.Material.Neon
 				orb.BrickColor = BrickColor.new("Really red")
 				orb.Name = "ff"
-                task.wait(0.3)
+
+				repeat task.wait() until orb.CanCollide == true
 				ls.Parent = plr.Character
 			end
 		end
@@ -740,15 +758,23 @@ addcmd({
 		end
 
 		for i, plr in ipairs(targets) do
-			if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+			if plr.Character and plr.Character:FindFirstChild("Humanoid") and plr.Character:FindFirstChild("HumanoidRootPart") then
 
-				local center = Instance.new("Part", plr.Character)
+				connected = plr.Character.Humanoid.Died:Connect(function()
+					plr.Character:FindFirstChild("hamsterball"):Destroy()
+					connected:Disconnect()
+				end)
+
+				local folder = Instance.new("Folder", plr.Character)
+				folder.Name = "hamsterball"
+
+				local center = Instance.new("Part", folder)
 				center.Name = "HamsterBallCenter"
 				center.Size = Vector3.new(1, 1, 1)
 				center.Transparency = 1
 				center.Anchored = false
 				center.CanCollide = false
-				center.Position = Vector3.new(0, 3000, 0)
+				center.Position = plr.Character.PrimaryPart.Position
 	
 				local radius = 5
 				local densityTheta = 20
@@ -763,7 +789,7 @@ addcmd({
 						local y = radius * math.cos(theta)
 						local z = radius * math.sin(theta) * math.sin(phi)
 	
-						local part = Instance.new("Part", plr.Character)
+						local part = Instance.new("Part", folder)
 						part.Name = "HamsterBall"
 						part.Size = Vector3.new(1.37931, 1.37931, 0.2)
 						part.Transparency = 0.8
@@ -780,10 +806,7 @@ addcmd({
 						weld.Parent = center
 					end
 				end
-				task.spawn(function()
-					task.wait(2.5)
-					center.Position = plr.Character.HumanoidRootPart.Position
-				end)
+				plr.Character.PrimaryPart.Position = center.Position
 			end
 		end
 	end
