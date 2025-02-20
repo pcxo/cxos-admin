@@ -265,8 +265,14 @@ addcmd({
 	Name = "kick",
 	Aliases = {"k"},
 	Function = function(sender, targets, arguments)
+		local reason = table.concat(arguments, " ", 1)
+
+		if reason == "" or reason == " " then
+			reason = "No reason provided."
+		end
+
 		for i, plr in ipairs(targets) do
-			plr:Kick("cxo's admin | You have been kicked 😹")
+			plr:Kick("[KICKED] by cxo's admin | Reason: ".. reason)
 		end
 	end
 })
@@ -275,8 +281,14 @@ addcmd({
 	Name = "ban",
 	Aliases = {"b"},
 	Function = function(sender, targets, arguments)
+		local reason = table.concat(arguments, " ", 1)
+
+		if reason == "" or reason == " " then
+			reason = "No reason provided."
+		end
+
 		for i, plr in ipairs(targets) do
-			plr:Kick("cxo's admin | You have been banned.")
+			plr:Kick("[BANNED] by cxo's admin | Reason: ".. reason)
 			if not banned[plr.UserId] then
 				banned[plr.UserId] = plr.Name
 			end
@@ -576,11 +588,17 @@ addcmd({
 	Name = "shutdown",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
+		local reason = table.concat(arguments, " ", 1)
+
+		if reason == "" or reason == " " then
+			reason = "No reason provided."
+		end
+
 		for i,v in pairs(game.Players:GetPlayers()) do
-			v:Kick("[SHUTDOWN]")
+			v:Kick("[SHUTDOWN] by cxo's admin | Reason: ".. reason)
 		end
 		game.Players.ChildAdded:Connect(function(cxo)
-			cxo:Kick("[SHUTDOWN]")
+			v:Kick("[SHUTDOWN] by cxo's admin | Reason: ".. reason)
 		end)
 	end
 })
