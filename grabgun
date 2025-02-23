@@ -3,7 +3,6 @@
 local Player = game:GetService("Players"):FindFirstChild(_G.GunMan)   --<=== Replace With Your Name
 local Mouse,mouse,UserInputService,ContextActionService
 do
-	script.Parent = Player.Character
 	local CAS = {Actions={}}
 	local Event = Instance.new("RemoteEvent")
 	Event.Name = "UserInput_Event"
@@ -66,7 +65,6 @@ end
 local plr = game.Players[_G.GunMan]
 local plrg = plr.PlayerGui
 local char = plr.Character
-script.Parent = char
 local ra = char["Right Arm"]
 local la = char["Left Arm"]
 local rl = char["Right Leg"]
@@ -133,17 +131,17 @@ info("Press X to unequip the gun.",1)
 wait(2)
 info("Press M for control list",1)
 end))
-ArtificialHB = Instance.new("BindableEvent", script)
+--[[ArtificialHB = Instance.new("BindableEvent", script)
 ArtificialHB.Name = "Heartbeat"
  
 script:WaitForChild("Heartbeat")
- 
+ ]]
 frame = 1 / 60
 tf = 0
 allowframeloss = false
 tossremainder = false
 lastframe = tick()
-script.Heartbeat:Fire()
+--[[script.Heartbeat:Fire()
  
 game:GetService("RunService").Heartbeat:connect(function(s, p)
     tf = tf + s
@@ -163,7 +161,7 @@ game:GetService("RunService").Heartbeat:connect(function(s, p)
             tf = tf - frame * math.floor(tf / frame)
         end
     end
-end)
+end)]]
  
 function swait(num)
     if num == 0 or num == nil then
