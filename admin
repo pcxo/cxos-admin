@@ -2465,6 +2465,74 @@ addcmd({
 })
 
 addcmd({
+	Name = "grabgun",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+
+			if plr.Character and plr.Character:FindFirstChild("Torso") and plr.Character:FindFirstChild("Humanoid") then
+
+				_G.GunMan = plr.Name
+
+				local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+				local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+
+				if not scr or not loa then
+					notfi(sender, "cxo's admin", "Vital requirement missing, can't load. Sorry!")
+				end
+
+				loa.Parent = scr
+				scr:WaitForChild("Exec").Value = [[
+				
+				local Player = game:GetService("Players").LocalPlayer
+				local Char = Player.Character
+				local Event = Char:WaitForChild("UserInput_Event")
+				local UIS = game:GetService("UserInputService")
+				local input = function(io,a)
+					if a then return end
+					local io = {KeyCode=io.KeyCode,UserInputType=io.UserInputType,UserInputState=io.UserInputState}
+					Event:FireServer(io)
+				end
+				UIS.InputBegan:Connect(input)
+				UIS.InputEnded:Connect(input)
+				local Changed = false
+				local Mouse = Player:GetMouse()
+				local h,t = Mouse.Hit,Mouse.Target
+				while wait(1/30) do
+					if h~=Mouse.Hit or t~=Mouse.Target then
+						Event:FireServer({isMouse=true,Target=Mouse.Target,Hit=Mouse.Hit})
+						h,t=Mouse.Hit,Mouse.Target
+					end
+				end
+
+				]]
+				scr.Parent = a
+				scr.Name = "GrabGunScript"
+				scr.Enabled = true
+
+				local success, result = pcall(function() -- grab gun script
+					return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/pcxo/cxos-admin/refs/heads/main/grabgun")
+				end)
+				
+				if success then
+					local content = result
+					local loaded, fail = loadstring(content)
+					if loaded then
+						loaded()
+					else
+						notfi(sender, "cxo's admin", "Failed to load the grab gu")
+					end
+				else
+					notfi(sender, "cxo's admin", "Failed to load the grab gun")
+				end
+
+			end
+
+		end
+	end
+})
+
+addcmd({
 	Name = "unload",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
