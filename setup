@@ -1,0 +1,6 @@
+local r = game:GetService("ReplicatedStorage")
+local s = game:GetService("ServerScriptService")
+local folder = Instance.new("Folder", r)
+folder.Name = "cxo's folder"
+local gmodremote = Instance.new("RemoteEvent", folder)
+gmodremote.Name = "cxo's gmod remote"
