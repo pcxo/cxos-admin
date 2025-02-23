@@ -1,0 +1,1345 @@
+-- not made by me --
+
+local Player = game:GetService("Players"):FindFirstChild(_G.GunMan)   --<=== Replace With Your Name
+local Mouse,mouse,UserInputService,ContextActionService
+do
+	script.Parent = Player.Character
+	local CAS = {Actions={}}
+	local Event = Instance.new("RemoteEvent")
+	Event.Name = "UserInput_Event"
+	Event.Parent = Player.Character
+	local fakeEvent = function()
+		local t = {_fakeEvent=true}
+		t.Connect = function(self,f)self.Function=f end
+		t.connect = t.Connect
+		return t
+	end
+    local m = {Target=nil,Hit=CFrame.new(),KeyUp=fakeEvent(),KeyDown=fakeEvent(),Button1Up=fakeEvent(),Button1Down=fakeEvent()}
+	local UIS = {InputBegan=fakeEvent(),InputEnded=fakeEvent()}
+	function CAS:BindAction(name,fun,touch,...)
+		CAS.Actions[name] = {Name=name,Function=fun,Keys={...}}
+	end
+	function CAS:UnbindAction(name)
+		CAS.Actions[name] = nil
+	end
+	local function te(self,ev,...)
+		local t = m[ev]
+		if t and t._fakeEvent and t.Function then
+			t.Function(...)
+		end
+	end
+	m.TrigEvent = te
+	UIS.TrigEvent = te
+	Event.OnServerEvent:Connect(function(plr,io)
+	    if plr~=Player then return end
+		if io.isMouse then
+			m.Target = io.Target
+			m.Hit = io.Hit
+		elseif io.UserInputType == Enum.UserInputType.MouseButton1 then
+	        if io.UserInputState == Enum.UserInputState.Begin then
+				m:TrigEvent("Button1Down")
+			else
+				m:TrigEvent("Button1Up")
+			end
+		else
+			for n,t in pairs(CAS.Actions) do
+				for _,k in pairs(t.Keys) do
+					if k==io.KeyCode then
+						t.Function(t.Name,io.UserInputState,io)
+					end
+				end
+			end
+	        if io.UserInputState == Enum.UserInputState.Begin then
+	            m:TrigEvent("KeyDown",io.KeyCode.Name:lower())
+				UIS:TrigEvent("InputBegan",io,false)
+			else
+				m:TrigEvent("KeyUp",io.KeyCode.Name:lower())
+				UIS:TrigEvent("InputEnded",io,false)
+	        end
+	    end
+	end)
+	Mouse,mouse,UserInputService,ContextActionService = m,m,UIS,CAS
+end
+---------Replace All "LocalPlayer" with [Player.Name]
+--Remove "Mouse =" or "local mouse =" at the start.
+--Grab Gun v1
+local plr = game.Players[_G.GunMan]
+local plrg = plr.PlayerGui
+local char = plr.Character
+script.Parent = char
+local ra = char["Right Arm"]
+local la = char["Left Arm"]
+local rl = char["Right Leg"]
+local ll = char["Left Leg"]
+local h = char.Head
+local t = char.Torso
+local anim = "idle"
+local mode = "shoot"
+local killmode = "kill"
+local rad = math.rad
+function info(text,timebeforefade)
+	coroutine.resume(coroutine.create(function()
+	local pos = {.001,.002,.003,.004,.005}
+	local mpos = {-.001,-.002,-.003,-.004,-.005}
+	local sc = Instance.new("ScreenGui",plrg)
+	local tex = Instance.new("TextLabel",sc) tex.Rotation = math.random(-5,5) tex.Position = UDim2.new(.5,0,.05,0) tex.Size = UDim2.new(0,0,.15,0) tex.TextScaled = true tex.BackgroundTransparency = 1 tex.TextTransparency = 1 tex.BackgroundColor3 = Color3.fromRGB(40,40,40) tex.BorderSizePixel = 0 tex.TextColor3 = Color3.fromRGB(255,255,255) tex.Text = text
+	for i = 1,20 do
+		tex.Size = tex.Size + UDim2.new(.025,0,0,0)
+		tex.Rotation = math.random(-5,5)
+		tex.TextColor3 = Color3.fromRGB(math.random(0,255),math.random(0,255),math.random(0,255))
+		tex.Position = tex.Position - UDim2.new(.0125,0,0,0)
+		tex.Position = tex.Position +- UDim2.new(0,math.random(-10,10),0,math.random(-10,10))
+		tex.BackgroundColor3 = Color3.fromRGB(math.random(0,60),math.random(0,60),math.random(0,60))
+		tex.BackgroundTransparency = tex.BackgroundTransparency -.05
+		swait()
+	end
+	for i = 1,10 do
+		tex.Rotation = math.random(-5,5)
+		tex.TextColor3 = Color3.fromRGB(math.random(0,255),math.random(0,255),math.random(0,255))
+		tex.Position = tex.Position +- UDim2.new(0,math.random(-10,10),0,math.random(-10,10))
+		tex.BackgroundColor3 = Color3.fromRGB(math.random(0,60),math.random(0,60),math.random(0,60))
+		tex.TextTransparency = tex.TextTransparency -.1
+		swait()
+	end
+	tex.BackgroundColor3 = Color3.fromRGB(40,40,40)
+	tex.TextColor3 = Color3.fromRGB(255,255,255)
+	wait(timebeforefade)
+	for i = 1,10 do
+		tex.Rotation = math.random(-5,5)
+		tex.TextColor3 = Color3.fromRGB(math.random(0,255),math.random(0,255),math.random(0,255))
+		tex.Position = tex.Position +- UDim2.new(0,math.random(-10,10),0,math.random(-10,10))
+		tex.BackgroundColor3 = Color3.fromRGB(math.random(0,60),math.random(0,60),math.random(0,60))
+		tex.TextTransparency = tex.TextTransparency +.1
+		swait()
+	end
+	for i = 1,20 do
+		tex.Size = tex.Size - UDim2.new(.025,0,0,0)
+		tex.Rotation = math.random(-5,5)
+		tex.TextColor3 = Color3.fromRGB(math.random(0,255),math.random(0,255),math.random(0,255))
+		tex.Position = tex.Position +- UDim2.new(0,math.random(-10,10),0,math.random(-10,10))
+		tex.BackgroundColor3 = Color3.fromRGB(math.random(0,30),math.random(0,60),math.random(0,60))
+		tex.Position = tex.Position + UDim2.new(.0125,0,0,0)
+		tex.BackgroundTransparency = tex.BackgroundTransparency +.05
+		swait()
+	end
+	tex:Destroy()
+	end))
+end
+coroutine.resume(coroutine.create(function()
+wait(1)
+info("Press Z to equip the gun.",1)
+wait(2)
+info("Press X to unequip the gun.",1)
+wait(2)
+info("Press M for control list",1)
+end))
+ArtificialHB = Instance.new("BindableEvent", script)
+ArtificialHB.Name = "Heartbeat"
+ 
+script:WaitForChild("Heartbeat")
+ 
+frame = 1 / 60
+tf = 0
+allowframeloss = false
+tossremainder = false
+lastframe = tick()
+script.Heartbeat:Fire()
+ 
+game:GetService("RunService").Heartbeat:connect(function(s, p)
+    tf = tf + s
+    if tf >= frame then
+        if allowframeloss then
+            script.Heartbeat:Fire()
+            lastframe = tick()
+        else
+            for i = 1, math.floor(tf / frame) do
+                script.Heartbeat:Fire()
+            end
+            lastframe = tick()
+        end
+        if tossremainder then
+            tf = 0
+        else
+            tf = tf - frame * math.floor(tf / frame)
+        end
+    end
+end)
+ 
+function swait(num)
+    if num == 0 or num == nil then
+        ArtificialHB.Event:wait()
+    else
+        for i = 0, num do
+            ArtificialHB.Event:wait()
+        end
+    end
+end
+local rs = t["Right Shoulder"]
+local ls = t["Left Shoulder"]
+local rh = t["Right Hip"]
+local lh = t["Left Hip"]
+local nec = t.Neck
+local rut = char.HumanoidRootPart
+local rutj = rut.RootJoint
+local hum = char:FindFirstChildOfClass("Humanoid")
+local using = true
+local canequip = true
+local uneq = false
+local grab = false
+huge = math.huge
+local ammo = 7
+char.Animate.idle.Animation2:Destroy()
+--arm joint parts_
+local tpr = Instance.new("Part",t) tpr.Size = Vector3.new(.1,.1,.1) tpr.CanCollide = false tpr.Transparency = 1
+local tpl = Instance.new("Part",t) tpl.Size = Vector3.new(.1,.1,.1) tpl.CanCollide = false tpl.Transparency = 1
+local tprw = Instance.new("Weld",t) tprw.Part0 = t tprw.Part1 = tpr tprw.C0 = CFrame.new(1,.5,0)
+local tplw = Instance.new("Weld",t) tplw.Part0 = t tplw.Part1 = tpl tplw.C0 = CFrame.new(-1,.5,0)
+--
+local rapr = Instance.new("Part",ra) rapr.Size = Vector3.new(.1,.1,.1) rapr.CanCollide = false rapr.Transparency = 1 --Right Arm
+local lapl = Instance.new("Part",la) lapl.Size = Vector3.new(.1,.1,.1) lapl.CanCollide = false lapl.Transparency = 1 --Left Arm
+local raprw = Instance.new("Weld",ra) raprw.Part0 = ra raprw.Part1 = rapr raprw.C0 = CFrame.new(-.5,.5,0)
+local laplw = Instance.new("Weld",la) laplw.Part0 = la laplw.Part1 = lapl laplw.C0 = CFrame.new(.5,.5,0)
+--joint welds
+local rsw = Instance.new("Weld",ra) rsw.Part0 = tpr rsw.Part1 = nil --Right Shoulder
+local lsw = Instance.new("Weld",la) lsw.Part0 = tpl lsw.Part1 = nil --Left Shoulder
+--gun model--
+local function creategun()
+--Converted with ttyyuu12345's model to script plugin v4
+function sandbox(var,func)
+	local env = getfenv(func)
+	local newenv = setmetatable({},{
+		__index = function(self,k)
+			if k=="script" then
+				return var
+			else
+				return env[k]
+			end
+		end,
+	})
+	setfenv(func,newenv)
+	return func
+end
+cors = {}
+mas = Instance.new("Model",game:GetService("Lighting"))
+Model0 = Instance.new("Model")
+Part1 = Instance.new("Part")
+Part2 = Instance.new("Part")
+Part3 = Instance.new("Part")
+WeldConstraint4 = Instance.new("WeldConstraint")
+Part5 = Instance.new("Part")
+WeldConstraint6 = Instance.new("WeldConstraint")
+WeldConstraint7 = Instance.new("WeldConstraint")
+Part8 = Instance.new("Part")
+WeldConstraint9 = Instance.new("WeldConstraint")
+WeldConstraint10 = Instance.new("WeldConstraint")
+WeldConstraint11 = Instance.new("WeldConstraint")
+Part12 = Instance.new("Part")
+Part13 = Instance.new("Part")
+WeldConstraint14 = Instance.new("WeldConstraint")
+Part15 = Instance.new("Part")
+Part16 = Instance.new("Part")
+WeldConstraint17 = Instance.new("WeldConstraint")
+WeldConstraint18 = Instance.new("WeldConstraint")
+Part19 = Instance.new("Part")
+Part20 = Instance.new("Part")
+WeldConstraint21 = Instance.new("WeldConstraint")
+Part22 = Instance.new("Part")
+WeldConstraint23 = Instance.new("WeldConstraint")
+Model0.Name = "gun"
+Model0.Parent = mas
+Part1.Name = "Handle"
+Part1.Parent = Model0
+Part1.CFrame = CFrame.new(100.938477, 23.8801613, -108.945274, 0.803930104, -0.00498482632, -0.594721258, 0.000852990604, 0.999974132, -0.00722878333, 0.594741881, 0.00530394772, 0.803912997)
+Part1.Orientation = Vector3.new(0.409999996, -36.4899979, 0.049999997)
+Part1.Position = Vector3.new(100.938477, 23.8801613, -108.945274)
+Part1.Rotation = Vector3.new(0.519999981, -36.4899979, 0.359999985)
+Part1.Color = Color3.new(0.105882, 0.164706, 0.207843)
+Part1.Transparency = 1
+Part1.Size = Vector3.new(0.271587253, 1.35793722, 0.271587431)
+Part1.BottomSurface = Enum.SurfaceType.Smooth
+Part1.BrickColor = BrickColor.new("Black")
+Part1.CanCollide = false
+Part1.Material = Enum.Material.Metal
+Part1.TopSurface = Enum.SurfaceType.Smooth
+Part1.brickColor = BrickColor.new("Black")
+Part2.Parent = Model0
+Part2.CFrame = CFrame.new(100.662735, 23.9763107, -109.178238, 0.803839028, -0.00493576005, -0.594844699, 0.000852896366, 0.999974787, -0.00714508584, 0.594864845, 0.00523596723, 0.803822458)
+Part2.Orientation = Vector3.new(0.409999996, -36.5, 0.049999997)
+Part2.Position = Vector3.new(100.662735, 23.9763107, -109.178238)
+Part2.Rotation = Vector3.new(0.50999999, -36.5, 0.349999994)
+Part2.Color = Color3.new(0.105882, 0.164706, 0.207843)
+Part2.Size = Vector3.new(0.339484632, 0.108634979, 0.0950556025)
+Part2.BottomSurface = Enum.SurfaceType.Smooth
+Part2.BrickColor = BrickColor.new("Black")
+Part2.CanCollide = false
+Part2.Material = Enum.Material.Metal
+Part2.TopSurface = Enum.SurfaceType.Smooth
+Part2.brickColor = BrickColor.new("Black")
+Part3.Parent = Model0
+Part3.CFrame = CFrame.new(100.477272, 24.1208344, -109.300568, 0.00492594484, 0.803836763, -0.594847798, -0.999974728, 0.000837364234, -0.00714954128, -0.00524876919, 0.594867945, 0.803820133)
+Part3.Orientation = Vector3.new(0.409999996, -36.5, -89.9499969)
+Part3.Position = Vector3.new(100.477272, 24.1208344, -109.300568)
+Part3.Rotation = Vector3.new(0.50999999, -36.5, -89.6500015)
+Part3.Color = Color3.new(0.105882, 0.164706, 0.207843)
+Part3.Size = Vector3.new(0.393802106, 0.108634979, 0.0950556025)
+Part3.BottomSurface = Enum.SurfaceType.Smooth
+Part3.BrickColor = BrickColor.new("Black")
+Part3.CanCollide = false
+Part3.Material = Enum.Material.Metal
+Part3.TopSurface = Enum.SurfaceType.Smooth
+Part3.brickColor = BrickColor.new("Black")
+WeldConstraint4.Parent = Part3
+WeldConstraint4.Part0 = Part3
+WeldConstraint4.Part1 = Part2
+Part5.Parent = Model0
+Part5.CFrame = CFrame.new(100.603096, 24.3147335, -109.201149, 0.804022074, -0.00503333705, -0.594596386, 0.00085399684, 0.999973536, -0.0073103467, 0.594617426, 0.00536970189, 0.80400461)
+Part5.Orientation = Vector3.new(0.419999987, -36.4799995, 0.049999997)
+Part5.Position = Vector3.new(100.603096, 24.3147335, -109.201149)
+Part5.Rotation = Vector3.new(0.519999981, -36.4799995, 0.359999985)
+Part5.Color = Color3.new(0.105882, 0.164706, 0.207843)
+Part5.Size = Vector3.new(1.69742119, 0.203690529, 0.271587461)
+Part5.BottomSurface = Enum.SurfaceType.Smooth
+Part5.BrickColor = BrickColor.new("Black")
+Part5.CanCollide = false
+Part5.Material = Enum.Material.Metal
+Part5.TopSurface = Enum.SurfaceType.Smooth
+Part5.brickColor = BrickColor.new("Black")
+WeldConstraint6.Parent = Part5
+WeldConstraint6.Part0 = Part5
+WeldConstraint6.Part1 = Part16
+WeldConstraint7.Parent = Part5
+WeldConstraint7.Part0 = Part5
+WeldConstraint7.Part1 = Part19
+Part8.Parent = Model0
+Part8.CFrame = CFrame.new(100.928474, 23.7767162, -108.965073, 0.790873766, -0.144370049, -0.594724894, 0.174304828, 0.984665811, -0.00723577663, 0.586649835, -0.0979410186, 0.803910255)
+Part8.Orientation = Vector3.new(0.409999996, -36.4899979, 10.04)
+Part8.Position = Vector3.new(100.928474, 23.7767162, -108.965073)
+Part8.Rotation = Vector3.new(0.519999981, -36.4899979, 10.3499994)
+Part8.Color = Color3.new(0.623529, 0.631373, 0.67451)
+Part8.Size = Vector3.new(0.407381058, 0.678968549, 0.271587461)
+Part8.BottomSurface = Enum.SurfaceType.Smooth
+Part8.BrickColor = BrickColor.new("Fossil")
+Part8.CanCollide = false
+Part8.Material = Enum.Material.Slate
+Part8.TopSurface = Enum.SurfaceType.Smooth
+Part8.brickColor = BrickColor.new("Fossil")
+WeldConstraint9.Parent = Part8
+WeldConstraint9.Part0 = Part8
+WeldConstraint9.Part1 = Part22
+WeldConstraint10.Parent = Part8
+WeldConstraint10.Part0 = Part8
+WeldConstraint10.Part1 = Part2
+WeldConstraint11.Parent = Part8
+WeldConstraint11.Part0 = Part8
+WeldConstraint11.Part1 = Part1
+Part12.Parent = Model0
+Part12.CFrame = CFrame.new(99.8241043, 24.4670258, -109.770966, 0.803930223, -0.00498490315, -0.594721019, 0.00085299596, 0.999974012, -0.00722887041, 0.594741583, 0.00530401571, 0.803913176)
+Part12.Orientation = Vector3.new(0.409999996, -36.4899979, 0.049999997)
+Part12.Position = Vector3.new(99.8241043, 24.4670258, -109.770966)
+Part12.Rotation = Vector3.new(0.519999981, -36.4899979, 0.359999985)
+Part12.Color = Color3.new(0.105882, 0.164706, 0.207843)
+Part12.Size = Vector3.new(0.0678968653, 0.20369038, 0.176531628)
+Part12.BottomSurface = Enum.SurfaceType.Smooth
+Part12.BrickColor = BrickColor.new("Black")
+Part12.CanCollide = false
+Part12.Material = Enum.Material.SmoothPlastic
+Part12.TopSurface = Enum.SurfaceType.Smooth
+Part12.brickColor = BrickColor.new("Black")
+Part12.Shape = Enum.PartType.Cylinder
+Part13.Parent = Model0
+Part13.CFrame = CFrame.new(101.002449, 23.3428402, -108.930023, 0.790792346, -0.144294962, -0.594851375, 0.174290657, 0.984668911, -0.0071533937, 0.586763799, -0.0980203673, 0.803817451)
+Part13.Orientation = Vector3.new(0.409999996, -36.5, 10.04)
+Part13.Position = Vector3.new(101.002449, 23.3428402, -108.930023)
+Part13.Rotation = Vector3.new(0.50999999, -36.5, 10.3400002)
+Part13.Color = Color3.new(0.105882, 0.164706, 0.207843)
+Part13.Size = Vector3.new(0.407381058, 0.203690544, 0.271587461)
+Part13.BottomSurface = Enum.SurfaceType.Smooth
+Part13.BrickColor = BrickColor.new("Black")
+Part13.CanCollide = false
+Part13.Material = Enum.Material.Metal
+Part13.TopSurface = Enum.SurfaceType.Smooth
+Part13.brickColor = BrickColor.new("Black")
+WeldConstraint14.Parent = Part13
+WeldConstraint14.Part0 = Part13
+WeldConstraint14.Part1 = Part8
+Part15.Parent = Model0
+Part15.CFrame = CFrame.new(99.8172379, 24.46702, -109.773712, 0.803930223, -0.00498490315, -0.594721019, 0.00085299596, 0.999974012, -0.00722887041, 0.594741583, 0.00530401571, 0.803913176)
+Part15.Orientation = Vector3.new(0.409999996, -36.4899979, 0.049999997)
+Part15.Position = Vector3.new(99.8172379, 24.46702, -109.773712)
+Part15.Rotation = Vector3.new(0.519999981, -36.4899979, 0.359999985)
+Part15.Color = Color3.new(0.0666667, 0.0666667, 0.0666667)
+Part15.Size = Vector3.new(0.0678968653, 0.20369038, 0.135793507)
+Part15.BottomSurface = Enum.SurfaceType.Smooth
+Part15.BrickColor = BrickColor.new("Really black")
+Part15.CanCollide = false
+Part15.Material = Enum.Material.SmoothPlastic
+Part15.TopSurface = Enum.SurfaceType.Smooth
+Part15.brickColor = BrickColor.new("Really black")
+Part15.Shape = Enum.PartType.Cylinder
+Part16.Parent = Model0
+Part16.CFrame = CFrame.new(100.518448, 24.4841995, -109.259399, 0.80401504, -0.00503334729, -0.59459132, 0.000853998587, 0.999973059, -0.00731024938, 0.594612062, 0.00536973123, 0.803997576)
+Part16.Orientation = Vector3.new(0.419999987, -36.4799995, 0.049999997)
+Part16.Position = Vector3.new(100.518448, 24.4841995, -109.259399)
+Part16.Rotation = Vector3.new(0.519999981, -36.4799995, 0.359999985)
+Part16.Color = Color3.new(0.105882, 0.164706, 0.207843)
+Part16.Size = Vector3.new(1.76531804, 0.271587402, 0.271587461)
+Part16.BottomSurface = Enum.SurfaceType.Smooth
+Part16.BrickColor = BrickColor.new("Black")
+Part16.CanCollide = false
+Part16.Material = Enum.Material.Metal
+Part16.TopSurface = Enum.SurfaceType.Smooth
+Part16.brickColor = BrickColor.new("Black")
+WeldConstraint17.Parent = Part16
+WeldConstraint17.Part0 = Part16
+WeldConstraint17.Part1 = Part12
+WeldConstraint18.Parent = Part16
+WeldConstraint18.Part0 = Part16
+WeldConstraint18.Part1 = Part15
+Part19.Parent = Model0
+Part19.CFrame = CFrame.new(99.8672562, 24.3137894, -109.7491, 0.803929985, -0.00498482212, -0.594721317, 0.000852967962, 0.999974132, -0.0072287661, 0.59474194, 0.00530394865, 0.803912997)
+Part19.Orientation = Vector3.new(0.409999996, -36.4899979, 0.049999997)
+Part19.Position = Vector3.new(99.8672562, 24.3137894, -109.7491)
+Part19.Rotation = Vector3.new(0.519999981, -36.4899979, 0.359999985)
+Part19.Color = Color3.new(0.105882, 0.164706, 0.207843)
+Part19.Size = Vector3.new(0.135793433, 0.0678968653, 0.271587461)
+Part19.BottomSurface = Enum.SurfaceType.Smooth
+Part19.BrickColor = BrickColor.new("Black")
+Part19.CanCollide = false
+Part19.Material = Enum.Material.Metal
+Part19.TopSurface = Enum.SurfaceType.Smooth
+Part19.brickColor = BrickColor.new("Black")
+Part20.Parent = Model0
+Part20.CFrame = CFrame.new(100.96167, 23.2699795, -108.967567, 0.803838253, -0.00491723372, -0.594845951, 0.00083023723, 0.999974787, -0.00714454427, 0.594866037, 0.00524902251, 0.803821564)
+Part20.Orientation = Vector3.new(0.409999996, -36.5, 0.049999997)
+Part20.Position = Vector3.new(100.96167, 23.2699795, -108.967567)
+Part20.Rotation = Vector3.new(0.50999999, -36.5, 0.349999994)
+Part20.Color = Color3.new(0.105882, 0.164706, 0.207843)
+Part20.Size = Vector3.new(0.543174803, 0.135793686, 0.271587461)
+Part20.BottomSurface = Enum.SurfaceType.Smooth
+Part20.BrickColor = BrickColor.new("Black")
+Part20.CanCollide = false
+Part20.Material = Enum.Material.Metal
+Part20.TopSurface = Enum.SurfaceType.Smooth
+Part20.brickColor = BrickColor.new("Black")
+WeldConstraint21.Parent = Part20
+WeldConstraint21.Part0 = Part20
+WeldConstraint21.Part1 = Part13
+Part22.Parent = Model0
+Part22.CFrame = CFrame.new(100.859795, 24.2106876, -109.005821, 0.790954888, -0.144435093, -0.594601154, 0.174307793, 0.984664679, -0.0073169847, 0.586539567, -0.0978563949, 0.804001033)
+Part22.Orientation = Vector3.new(0.419999987, -36.4799995, 10.04)
+Part22.Position = Vector3.new(100.859795, 24.2106876, -109.005821)
+Part22.Rotation = Vector3.new(0.519999981, -36.4799995, 10.3499994)
+Part22.Color = Color3.new(0.105882, 0.164706, 0.207843)
+Part22.Size = Vector3.new(0.407381058, 0.203690529, 0.271587461)
+Part22.BottomSurface = Enum.SurfaceType.Smooth
+Part22.BrickColor = BrickColor.new("Black")
+Part22.CanCollide = false
+Part22.Material = Enum.Material.Metal
+Part22.TopSurface = Enum.SurfaceType.Smooth
+Part22.brickColor = BrickColor.new("Black")
+WeldConstraint23.Parent = Part22
+WeldConstraint23.Part0 = Part22
+WeldConstraint23.Part1 = Part5
+for i,v in pairs(mas:GetChildren()) do
+	v.Parent = workspace
+	pcall(function() v:MakeJoints() end)
+end
+mas:Destroy()
+for i,v in pairs(cors) do
+	spawn(function()
+		pcall(v)
+	end)
+end
+Model0.Parent = char
+end
+creategun()
+--gun model end--
+local shot = Instance.new("Part",Model0) shot.Size = Vector3.new(.2,.2,.2) shot.Transparency = 1 shot.Anchored = true shot.CanCollide = false shot.CFrame = ra.CFrame * CFrame.new(0,-2,0)
+coroutine.resume(coroutine.create(function()
+	while true do
+		shot.CFrame = ra.CFrame * CFrame.new(0,-2.6,-.4) * CFrame.Angles(rad(-90),rad(0),rad(0))
+		swait()
+	end
+end))
+local gunweld = Instance.new("Weld",ra) gunweld.Part0 = t gunweld.Part1 = Part1 gunweld.C0 = CFrame.new(1.1,-.7,0) * CFrame.Angles(rad(-120),rad(-90),rad(0))
+function turnto(position)
+	rut.CFrame = CFrame.new(rut.CFrame.p, Vector3.new(position.X, rut.Position.Y, position.Z)) * CFrame.new(0, 0, 0)
+end
+function fireto(position)
+	shot.CFrame = CFrame.new(shot.CFrame.p, Vector3.new(position.X, position.Y, position.Z)) * CFrame.new(0, 0, 0)
+end
+function sound(parent,id,vol,pit)
+	local sound = Instance.new("Sound",parent)
+	sound.Volume = vol
+	sound.SoundId = "rbxassetid://"..id
+	sound.Pitch = pit
+	sound:Play()
+	coroutine.resume(coroutine.create(function()
+	
+	repeat
+		swait()
+	until sound.Playing == false
+	sound:Destroy()
+	end))
+	end
+function blood(POSITION)
+	local blub = Instance.new("Part",workspace)
+	blub.Material = "SmoothPlastic"
+	blub.BrickColor = BrickColor.new("Maroon")
+	blub.Size = Vector3.new(.3,.3,.3)
+	blub.Shape = "Ball"
+	blub.CFrame = POSITION.CFrame * CFrame.new(math.random(-1,1),math.random(-1,1),math.random(-1,1)) blub.Transparency = 0
+	blub.CanCollide = true blub.Anchored = false blub.Name = "Blood"
+	coroutine.resume(coroutine.create(function(PART)
+	wait(.5)
+	blub.CanCollide = false blub.Anchored = true
+	blub.Shape = "Cylinder"
+		for i = 0,10 do
+			blub.Orientation = Vector3.new(0,0,90)
+			blub.Size = blub.Size + Vector3.new(0,.05,.05)
+			blub.Size = blub.Size - Vector3.new(.035,0,0)
+			wait(.1)
+		end
+		for i = 0,10 do
+		
+			blub.Orientation = Vector3.new(0,0,90)
+			blub.Size = blub.Size + Vector3.new(0,.05,.05)
+			blub.Size = blub.Size - Vector3.new(.035,0,0)
+		wait(.1)
+		end
+		coroutine.resume(coroutine.create(function()
+			for i = 0,1,.01 do
+				blub.Color = blub.Color:lerp(Color3.fromRGB(40,0,0),i)
+				swait()
+			end
+		end))
+		for i = 0,10 do
+			blub.Size = blub.Size + Vector3.new(0,.025,.025)
+			blub.Size = blub.Size - Vector3.new(.035,0,0)
+			blub.Transparency = blub.Transparency + .1
+			wait(.1)
+		end
+		if blub.Transparency >= .99 then
+			blub:Destroy()
+		end
+	end))
+end
+function nubblud(pos)
+	local sizes = {.1,.2,.3,.4,.5,.6}
+	local poses = {.1,.2,.3,.4,.5}
+	local mposes = {-.1,-.2,-.3,-.4,-.5}
+	coroutine.resume(coroutine.create(function()
+	local blod = Instance.new("Part",workspace) blod.Size = Vector3.new(sizes[math.random(1,6)],sizes[math.random(1,6)],sizes[math.random(1,6)]) blod.BrickColor = BrickColor.new("Maroon") blod.Material = "SmoothPlastic" 
+	blod.CFrame = pos.CFrame * CFrame.new(math.random(mposes[math.random(1,5)],poses[math.random(1,5)]),math.random(mposes[math.random(1,5)],poses[math.random(1,5)]),math.random(mposes[math.random(1,5)],poses[math.random(1,5)]))
+	wait(5)
+	blod:Destroy()
+	end))
+end
+function bullet()
+	local bulet = Instance.new("Part",workspace)
+	bulet.Size = Vector3.new(.15,.15,2)
+	bulet.BrickColor = BrickColor.new("Daisy orange")
+	bulet.Material = "Neon" bulet.CanCollide = false
+	bulet.CFrame = shot.CFrame * CFrame.new(0,0,-2.2) bulet.Name = "Bullet"
+	local mes = Instance.new("SpecialMesh",bulet) mes.MeshType = "Sphere"
+	local direc = Instance.new("BodyGyro",bulet) direc.MaxTorque = Vector3.new(huge,huge,huge) direc.CFrame = CFrame.new(bulet.Position,mouse.Hit.p)
+	local vel = Instance.new("BodyVelocity",bulet) vel.MaxForce = Vector3.new(huge,huge,huge) vel.Velocity = direc.CFrame.lookVector * 400
+	local a = false
+	function ow(hit)
+		if hit ~= nil then
+			local nub = hit.Parent:FindFirstChildOfClass("Humanoid")
+			if nub ~= nil then
+				if hit.Parent == char then
+					
+				else
+				a = true
+				nub.MaxHealth = 100
+				nub.Health = nub.Health -0
+				nub:TakeDamage(math.random(11,23))
+				nub.WalkSpeed = nub.WalkSpeed -1.2
+				nub.JumpPower = nub.JumpPower -10
+				if hit.Name == "Head" or hit.Name == "Handle" then
+					function expl(pos)
+						local p = Instance.new("Part",workspace)
+						p.Size = Vector3.new(.1,.1,.1) p.BrickColor = BrickColor.new("Maroon")
+						p.Material = "Neon" p.Shape = "Ball" p.CanCollide = false p.Anchored = true
+						p.CFrame = pos.CFrame
+						coroutine.resume(coroutine.create(function()
+						for i = 0,2,.1 do
+							p.Size = p.Size:lerp(Vector3.new(4,4,4),i)
+							p.Transparency = p.Transparency +.07
+							swait()
+							if p.Transparency >.99 then
+								p:Destroy()
+							end
+						end
+						end))
+					end
+					nub.Parent:BreakJoints()
+					hit.Parent.Head:Destroy()
+					bulet:Destroy()
+					--sound(char,"131313234",2,1) 
+					expl(hit)
+					local bum = Instance.new("Explosion",workspace) bum.Visible = false bum.BlastPressure = 20000 bum.BlastRadius = .5 bum.Position = hit.Position
+						for i = 1,math.random(2,7) do
+							blood(hit)
+							nubblud(hit)
+						end
+					end
+				end
+			end
+			bulet:Destroy()
+		end
+	end
+	bulet.Touched:connect(ow)
+	coroutine.resume(coroutine.create(function()
+		wait(2)
+		bulet:Destroy()
+	end))
+end
+function mag()
+	local mag = Instance.new("Part",workspace) mag.Size = Vector3.new(.35,1,.2) mag.BrickColor = BrickColor.new("Black") mag.Material = "Metal" mag.CFrame = Part1.CFrame * CFrame.new(0,-1,0)
+	coroutine.resume(coroutine.create(function()
+		wait(3)
+		mag:Destroy()
+	end))
+end
+function effect()
+	local ef = Instance.new("Part",Model0) ef.Material = "Neon" ef.Name = "Effect" ef.Size = Vector3.new(.4,.4,.4) ef.Anchored = true ef.CanCollide = false ef.BrickColor = BrickColor.new("Daisy orange") ef.Transparency = 0 ef.CFrame = Part15.CFrame
+	coroutine.resume(coroutine.create(function()
+	for i = 1,10 do
+		ef.Size = ef.Size +Vector3.new(.05,.05,.05)
+		ef.Transparency = ef.Transparency +.1
+		ef.CFrame = ef.CFrame * CFrame.Angles(rad(math.random(-180,180)),rad(math.random(-180,180)),rad(math.random(-180,180)))
+		if ef.Transparency > .99 then
+			ef:Destroy()
+		end
+		swait()
+	end
+end))
+end
+local grabda = false
+local keyhold = false
+local lukin = false
+function fire()
+	if not using and mode == "shoot" or using and grabda and mode == "grab" and killmode == "shoot1" then
+	using = true
+	rsw.Part1 = rapr
+	lukin = true
+	coroutine.resume(coroutine.create(function()
+	while lukin do
+		turnto(mouse.Hit.p)
+		swait()
+	end
+	end))
+	keyhold = true
+	for i = 0,1,.07 do
+		rsw.C0 = rsw.C0:lerp(CFrame.Angles(rad(90),rad(0),rad(53)),i)
+		rutj.C0 = rutj.C0:lerp(CFrame.Angles(rad(-90),rad(0),rad(233)),i)
+		nec.C0 = nec.C0:lerp(CFrame.new(0,1,0) * CFrame.Angles(rad(-90),rad(0),rad(127)),i)
+		swait()
+	end
+	repeat
+	if ammo >0 then
+	fireto(mouse.Hit.p)
+	sound(char,"131070686",4,1)
+	ammo = ammo -1
+	effect()
+	bullet()
+	for i = 0,1,.3 do
+		rsw.C0 = rsw.C0:lerp(CFrame.new(0,0,.3) * CFrame.Angles(rad(90),rad(0),rad(53)) * CFrame.Angles(rad(40),rad(0),rad(0)),i)
+		swait()
+	end
+	for i = 0,1,.2 do
+		rsw.C0 = rsw.C0:lerp(CFrame.Angles(rad(90),rad(0),rad(53)),i)
+		swait()
+	end
+	wait(.35)
+	else
+		sound(char,"537744814",10,1)
+		keyhold = false
+		swait()
+	end
+	until keyhold == false
+	wait(.2)
+	lukin = false
+	for i = 0,1,.07 do
+		rsw.C0 = rsw.C0:lerp(CFrame.Angles(rad(0),rad(0),rad(0)),i)
+		rutj.C0 = rutj.C0:lerp(CFrame.Angles(rad(-90),rad(0),rad(180)),i)
+		nec.C0 = nec.C0:lerp(CFrame.new(0,1,0) * CFrame.Angles(rad(-90),rad(0),rad(180)),i)
+		swait()
+	end
+	rsw.Part1 = nil
+	if killmode ~= "shoot1" then
+	using = false
+	end
+	end
+end
+function keyup()
+	keyhold = false
+end
+function reload()
+	if ammo >6 then
+		else
+	using = true
+	rsw.Part1 = rapr lsw.Part1 = lapl
+	sound(char,"198915489",2,1.3)
+	info("Reloading...",2.2)
+	for i = 0,1,.05 do
+		rsw.C0 = rsw.C0:lerp(CFrame.new(0,0,0) * CFrame.Angles(rad(80),rad(-45),rad(-40)),i)
+		lsw.C0 = lsw.C0:lerp(CFrame.new(0,0,0) * CFrame.Angles(rad(60),rad(0),rad(50)),i)
+		nec.C0 = nec.C0:lerp(CFrame.new(0,1,0) * CFrame.Angles(rad(-90),rad(0),rad(180)),i)
+		swait()
+	end
+	mag()
+	for i = 0,1,.1 do
+		rsw.C0 = rsw.C0:lerp(CFrame.new(0,0,0) * CFrame.Angles(rad(60),rad(-45),rad(-40)),i)
+		lsw.C0 = lsw.C0:lerp(CFrame.new(0,0,0) * CFrame.Angles(rad(-10),rad(0),rad(0)),i)
+		nec.C0 = nec.C0:lerp(CFrame.new(0,1,0) * CFrame.Angles(rad(-90),rad(0),rad(180)),i)
+		swait()
+	end
+	for i = 0,1,.05 do
+		rsw.C0 = rsw.C0:lerp(CFrame.new(0,0,0) * CFrame.Angles(rad(60),rad(-45),rad(-40)),i)
+		lsw.C0 = lsw.C0:lerp(CFrame.new(0,0,0) * CFrame.Angles(rad(-10),rad(0),rad(50)),i)
+		nec.C0 = nec.C0:lerp(CFrame.new(0,1,0) * CFrame.Angles(rad(-90),rad(0),rad(180)),i)
+		swait()
+	end
+	local mag = Instance.new("Part",workspace) mag.Size = Vector3.new(.35,1,.2) mag.BrickColor = BrickColor.new("Black") mag.CanCollide = false mag.Material = "Metal"
+	local magw = Instance.new("Weld",mag) magw.Part0 = la magw.Part1 = mag magw.C0 = CFrame.new(.3,-1,.1) * CFrame.Angles(rad(90),rad(-40),rad(-90))
+	for i = 0,1,.05 do
+		rsw.C0 = rsw.C0:lerp(CFrame.new(0,0,0) * CFrame.Angles(rad(80),rad(-45),rad(-40)),i)
+		lsw.C0 = lsw.C0:lerp(CFrame.new(.4,0,0) * CFrame.Angles(rad(50),rad(45),rad(50)),i)
+		nec.C0 = nec.C0:lerp(CFrame.new(0,1,0) * CFrame.Angles(rad(-90),rad(0),rad(180)),i)
+		swait()
+	end
+	mag:Destroy()
+	for i = 0,1,.05 do
+		rsw.C0 = rsw.C0:lerp(CFrame.new(-.5,-.7,0) * CFrame.Angles(rad(110),rad(0),rad(-47)),i)
+		lsw.C0 = lsw.C0:lerp(CFrame.new(.3,-.5,0) * CFrame.Angles(rad(160),rad(-77),rad(40)),i)
+		nec.C0 = nec.C0:lerp(CFrame.new(0,1,0) * CFrame.Angles(rad(-90),rad(0),rad(180)),i)
+		swait()
+	end
+	for i = 0,1,.05 do
+		rsw.C0 = rsw.C0:lerp(CFrame.new(-.5,-.7,0) * CFrame.Angles(rad(110),rad(0),rad(-47)),i)
+		lsw.C0 = lsw.C0:lerp(CFrame.new(.5,-.5,.3) * CFrame.Angles(rad(150),rad(-50),rad(40)),i)
+		nec.C0 = nec.C0:lerp(CFrame.new(0,1,0) * CFrame.Angles(rad(-90),rad(0),rad(180)),i)
+		swait()
+	end
+	for i = 0,1,.05 do
+		rsw.C0 = rsw.C0:lerp(CFrame.new(-.5,-.7,0) * CFrame.Angles(rad(110),rad(0),rad(-47)),i)
+		lsw.C0 = lsw.C0:lerp(CFrame.new(.3,-.5,0) * CFrame.Angles(rad(160),rad(-77),rad(40)),i)
+		nec.C0 = nec.C0:lerp(CFrame.new(0,1,0) * CFrame.Angles(rad(-90),rad(0),rad(180)),i)
+		swait()
+	end
+	for i = 0,.6,.05 do
+		rsw.C0 = rsw.C0:lerp(CFrame.new(0,0,0) * CFrame.Angles(rad(0),rad(0),rad(0)),i)
+		lsw.C0 = lsw.C0:lerp(CFrame.new(0,0,0) * CFrame.Angles(rad(0),rad(0),rad(0)),i)
+		nec.C0 = nec.C0:lerp(CFrame.new(0,1,0) * CFrame.Angles(rad(-90),rad(0),rad(180)),i)
+		swait()
+	end
+	ammo = 7
+	rsw.Part1 = nil lsw.Part1 = nil
+	using = false
+	end
+end
+function greb()
+	local hbox = Instance.new("Part",char) hbox.Size = Vector3.new(2,5,.5) hbox.CanCollide = false hbox.Transparency = 1
+	local hwb = Instance.new("Weld",hbox) hwb.Part0 = t hwb.Part1 = hbox hwb.C0 = CFrame.new(0,0,-1)
+	local aa = false
+	function grabd(hit)
+		if hit ~= nil and not grab and not aa then
+			local aaa = hit.Parent:FindFirstChildOfClass("Humanoid") or hit.Parent.Parent:FindFirstChildOfClass("Humanoid") or hit.Parent.Parent.Parent:FindFirstChildOfClass("Humanoid")
+			if aaa ~= nil and not grab then
+				grab = true aa = true
+				hbox:Destroy()
+				if aaa.Parent.Name == "ded" then
+					info("Press Q to Release",1)
+				else
+					info("Press E to Kill or Q to Release",1)
+				end
+				local tos = aaa.Parent:FindFirstChild("Torso") or aaa.Parent:FindFirstChild("UpperTorso")
+				aaa.PlatformStand = true
+				local w = Instance.new("Weld",t) w.Name = "grabweld" w.Part0 = t w.Part1 = tos
+				coroutine.resume(coroutine.create(function()
+					for i = 0,.5,.1 do
+						w.C0 = w.C0:lerp(CFrame.new(-.9,0,-.8),i)	
+						swait()
+					end
+				end))
+				if aaa.Parent.Name ~= "ded" then
+				for i = 0,1,.05 do
+					rsw.C0 = rsw.C0:lerp(CFrame.new(.7,0,-.15) * CFrame.Angles(rad(110),rad(0),rad(-80)) * CFrame.Angles(rad(10),rad(0),rad(0)),i)
+					lsw.C0 = lsw.C0:lerp(CFrame.new(-.2,-.2,-.4) * CFrame.Angles(rad(130),rad(10),rad(50)),i)
+					swait()
+				end
+				function kill()
+					aaa.Parent.Archivable = true
+					grab = false
+					if ammo >0 then
+						ammo = ammo -1
+	sound(char,"131070686",5,1)
+				coroutine.resume(coroutine.create(function()
+				for i = 0,1,.5 do
+					rsw.C0 = rsw.C0:lerp(CFrame.new(1,0,.45) * CFrame.Angles(rad(110),rad(0),rad(-80)) * CFrame.Angles(rad(10),rad(0),rad(15)),i)
+					swait()
+				end
+				for i = 0,1,.05 do
+					rsw.C0 = rsw.C0:lerp(CFrame.new(.7,0,-.15) * CFrame.Angles(rad(110),rad(0),rad(-80)),i)
+					swait()
+				end
+				end))
+				coroutine.resume(coroutine.create(function()
+				aaa.Health = .1
+				for i,v in pairs(aaa.Parent:GetChildren()) do
+						if v:IsA("Script") then
+							v:Destroy()
+						end
+				end
+				end))
+				wait(.5)
+				coroutine.resume(coroutine.create(function()
+				for i,v in pairs(tos.Parent:GetChildren()) do
+						if v:IsA("BasePart") then
+							v.Anchored = false
+						end
+					end
+				for i,v in pairs(t:GetChildren()) do
+					if v.Name == "grabweld" then
+						v:Destroy()
+					end
+				end
+				end))
+				coroutine.resume(coroutine.create(function()
+				for i = 0,.5,.1 do
+					rsw.C0 = rsw.C0:lerp(CFrame.Angles(rad(-15),rad(0),rad(20)),i)
+					lsw.C0 = lsw.C0:lerp(CFrame.Angles(rad(110),rad(20),rad(-30)),i)
+					rutj.C0 = rutj.C0:lerp(CFrame.Angles(rad(-90),rad(0),rad(150)),i)
+					swait()
+				end
+				end))
+				aaa.DisplayDistanceType = "None"
+				if tos.Name == "Torso" then
+				coroutine.resume(coroutine.create(function()
+				aaa.PlatformStand = true
+				local disshit = aaa.Parent
+				local h1 = disshit.Head
+				local t1 = disshit.Torso
+				local ra1 = disshit["Right Arm"]
+				local la1 = disshit["Left Arm"]
+				local rl1 = disshit["Right Leg"]
+				local ll1 = disshit["Left Leg"]
+				t1:BreakJoints()
+			at2 = Instance.new("Attachment",t1) at2.Position = Vector3.new(1,.7,0) at2.Position = Vector3.new(1,.5,0)
+			at = Instance.new("Attachment",ra1) at.Name = "oof" at.Position = Vector3.new(-.5,.7,0)
+			balls = Instance.new("BallSocketConstraint",ra1) balls.Attachment0 = at2 balls.Attachment1 = at
+			at21 = Instance.new("Attachment",t1) at21.Position = Vector3.new(-1,.7,0) at21.Position = Vector3.new(-1,.5,0) at21.Orientation = Vector3.new(0,180,0)
+			at1 = Instance.new("Attachment",la1) at.Name = "oof" at1.Position = Vector3.new(.5,.7,0)
+			balls1 = Instance.new("BallSocketConstraint",la1) balls1.Attachment0 = at21 balls1.Attachment1 = at1
+			nek = Instance.new("Attachment",h1) nek2 = Instance.new("Attachment",t1) nek2.Position = Vector3.new(0,1,0) nek.Position = Vector3.new(0,-.5,0) nball = Instance.new("BallSocketConstraint",h1) nball.Attachment0 = nek nball.Attachment1 = nek2
+			owihatedis = Instance.new("Attachment",t1) owihatedis.Position = Vector3.new(.5,-1,0) oihd = Instance.new("Attachment",rl1) oihd.Position = Vector3.new(0,1,0) oww = Instance.new("BallSocketConstraint",rl1) oww.Attachment0 = owihatedis oww.Attachment1 = oihd
+			owihatedis2 = Instance.new("Attachment",t1) owihatedis2.Position = Vector3.new(-.5,-1,0) oihd2 = Instance.new("Attachment",ll1) oihd2.Position = Vector3.new(0,1,0) oww2 = Instance.new("BallSocketConstraint",ll1) oww2.Attachment0 = owihatedis2 oww2.Attachment1 = oihd2
+			box = Instance.new("Part",t1) box.Size = Vector3.new(1,1.3,1) box.Transparency = 1
+		box1 = Instance.new("Part",t1) box1.Size = Vector3.new(1,1.3,1) box1.Transparency = 1
+		box2 = Instance.new("Part",t1) box2.Size = Vector3.new(1,1.3,1) box2.Transparency = 1
+		box3 = Instance.new("Part",t1) box3.Size = Vector3.new(1,1.3,1) box3.Transparency = 1
+		box4 = Instance.new("Part",t1) box4.Size = h.Size - Vector3.new(0,.7,0) box4.Transparency = 1
+		bw = Instance.new("Weld",box) bw.Part0 = box bw.Part1 = ra1 bw.C0 = bw.C0 * CFrame.new(0,.45,0)
+		bw1 = Instance.new("Weld",box1) bw1.Part0 = box1 bw1.Part1 = la1 bw1.C0 = bw1.C0 * CFrame.new(0,.45,0)
+		bw2 = Instance.new("Weld",box2) bw2.Part0 = box2 bw2.Part1 = rl1 bw2.C0 = bw2.C0 * CFrame.new(0,.45,0)
+		bw3 = Instance.new("Weld",box3) bw3.Part0 = box3 bw3.Part1 = ll1 bw3.C0 = bw3.C0 * CFrame.new(0,.45,0)
+		bw4 = Instance.new("Weld",box4) bw4.Part0 = box4 bw4.Part1 = h1  bw4.C0 = bw4.C0 * CFrame.new(0,0,0)
+		local rt = disshit:FindFirstChild("HumanoidRootPart")
+		if rt ~= nil then
+			rt:Destroy()
+		end
+		wait()
+		local ded = disshit:Clone()
+		local as = ded:FindFirstChildOfClass("Humanoid")
+		as.Died:connect(function()
+			for i,v in pairs(ded.Torso:GetChildren()) do
+				if v:IsA("Part") then
+					v:Destroy()
+				end
+			end
+		end)
+		coroutine.resume(coroutine.create(function()
+				for i = 1,math.random(4,9) do
+					nubblud(ded.Head)
+					wait(.05)
+				end
+				end))
+		as.PlatformStand = true
+		ded.Parent = workspace disshit:Destroy()
+		ded.Torso.CFrame = ded.Torso.CFrame * CFrame.new(0,4,-6)
+		ded.Torso.Orientation = Vector3.new(math.random(-70,70),math.random(-70,70),math.random(-70,70))
+		ded.Name = "ded"
+		local yes = Instance.new("Part",char) yes.Size = t.Size yes.Anchored = true yes.CanCollide = false yes.Transparency = 1 yes.CFrame = rut.CFrame * CFrame.Angles(rad(50),rad(0),rad(0))
+		local furs = Instance.new("BodyVelocity",ded.Torso) furs.MaxForce = Vector3.new(huge,huge,huge)
+		furs.Velocity = yes.CFrame.lookVector * 35
+		
+		coroutine.resume(coroutine.create(function()
+			wait(.1)
+			furs:Destroy()
+			yes:Destroy()
+		end))
+		end))
+				end
+					wait(.4)
+					for i = 0,1,.05 do
+					rsw.C0 = rsw.C0:lerp(CFrame.Angles(rad(0),rad(0),rad(0)),i)
+					lsw.C0 = lsw.C0:lerp(CFrame.Angles(rad(0),rad(0),rad(0)),i)
+					nec.C0 = nec.C0:lerp(CFrame.new(0,1,0) * CFrame.Angles(rad(-90),rad(0),rad(180)),i)
+					rutj.C0 = rutj.C0:lerp(CFrame.Angles(rad(-90),rad(0),rad(180)),i)
+					swait()
+					end
+					if aaa.Parent ~= nil then
+						aaa.Parent:BreakJoints()
+					end
+					using = false
+					rsw.Part1 = nil lsw.Part1 = nil
+					else
+					aaa.PlatformStand = true
+					sound(char,"537744814",10,1)
+					wait(.5)
+					local furs = Instance.new("BodyVelocity",tos) furs.MaxForce = Vector3.new(huge,huge,huge)
+					furs.Velocity = rut.CFrame.lookVector * 30
+					w:Destroy()
+					for i = 0,.5,.05 do
+					rsw.C0 = rsw.C0:lerp(CFrame.Angles(rad(-15),rad(0),rad(-20)),i)
+					lsw.C0 = lsw.C0:lerp(CFrame.Angles(rad(90),rad(20),rad(10)),i)
+					swait()
+					end
+					furs:Destroy()
+					for i = 0,1,.1 do
+					rsw.C0 = rsw.C0:lerp(CFrame.Angles(rad(0),rad(0),rad(0)),i)
+					lsw.C0 = lsw.C0:lerp(CFrame.Angles(rad(0),rad(0),rad(0)),i)
+					nec.C0 = nec.C0:lerp(CFrame.new(0,1,0) * CFrame.Angles(rad(-90),rad(0),rad(180)),i)
+					swait()
+					end
+					coroutine.resume(coroutine.create(function()
+						wait(2)
+						if aaa.Parent.Name == "ded" then
+							else
+						aaa.PlatformStand = false
+						end
+					end))
+					grab = false
+					using = false
+					rsw.Part1 = nil lsw.Part1 = nil
+					end
+			end		
+				function drop()
+					aaa.PlatformStand = true
+					w:Destroy()
+					local furs = Instance.new("BodyVelocity",tos) furs.MaxForce = Vector3.new(huge,huge,huge)
+					furs.Velocity = rut.CFrame.lookVector * 30
+					for i = 0,.5,.05 do
+					rsw.C0 = rsw.C0:lerp(CFrame.Angles(rad(-15),rad(0),rad(-20)),i)
+					lsw.C0 = lsw.C0:lerp(CFrame.Angles(rad(90),rad(20),rad(10)),i)
+					swait()
+					end
+					furs:Destroy()
+					for i = 0,1,.05 do
+					rsw.C0 = rsw.C0:lerp(CFrame.Angles(rad(0),rad(0),rad(0)),i)
+					lsw.C0 = lsw.C0:lerp(CFrame.Angles(rad(0),rad(0),rad(0)),i)
+					nec.C0 = nec.C0:lerp(CFrame.new(0,1,0) * CFrame.Angles(rad(-90),rad(0),rad(180)),i)
+					swait()
+					end
+					coroutine.resume(coroutine.create(function()
+						wait(2)
+						if aaa.Parent.Name == "ded" then
+						else
+						aaa.PlatformStand = false
+						end
+					end))
+					using = false
+					rsw.Part1 = nil lsw.Part1 = nil
+					grab = false	
+				end
+				else
+					oldmode = killmode
+					killmode = "release1"
+					hum.JumpPower = 0
+					hum.WalkSpeed = 8
+					coroutine.resume(coroutine.create(function()
+					for i = 0,1,.05 do
+					rsw.C0 = rsw.C0:lerp(CFrame.new(0,0,0),i)
+					lsw.C0 = lsw.C0:lerp(CFrame.new(0,0,0) * CFrame.Angles(rad(-33),rad(0),rad(-30)),i)
+					swait()
+					end
+					end))
+					grabda = true
+					w:Destroy()
+					local ata = Instance.new("Attachment",la) ata.Position = Vector3.new(0,-.8,0)
+					local ata1 = Instance.new("Attachment",aaa.Parent["Right Leg"]) ata1.Position = Vector3.new(0,-.8,0)
+					local ba = Instance.new("BallSocketConstraint",ata) ba.Attachment0 = ata ba.Attachment1 = ata1
+					rsw.Part1 = nil
+					function drop1()
+						using = true
+						grabda = false
+						killmode = oldmode
+						ba.Attachment1 = nil
+						ata:Destroy()
+						ata1:Destroy()
+						ba:Destroy()
+						hum.JumpPower = 50
+						hum.WalkSpeed = 16
+					for i = 0,1,.05 do
+						lsw.C0 = lsw.C0:lerp(CFrame.new(0,0,0),i)
+						swait()
+					end
+					lsw.Part1 = nil
+					using = false
+					grab = false
+					end
+				end
+			end
+		end
+	end
+	local tcon = hbox.Touched:connect(grabd)
+	using = true
+	coroutine.resume(coroutine.create(function()
+		for i = 0,.5,.1 do
+			rutj.C0 = rutj.C0:lerp(CFrame.Angles(rad(-90),rad(0),rad(180)),i)
+			rh.C0 = rh.C0:lerp(CFrame.new(1,-1,0) * CFrame.Angles(rad(0),rad(90),rad(0)),i)
+			lh.C0 = lh.C0:lerp(CFrame.new(-1,-1,0) * CFrame.Angles(rad(0),rad(-90),rad(0)),i)
+			swait()
+		end
+	end))
+	rsw.Part1 = rapr lsw.Part1 = lapl
+	for i = 0,.7,.05 do
+		rsw.C0 = rsw.C0:lerp(CFrame.new(.2,0,-.3) * CFrame.Angles(rad(90),rad(0),rad(70)),i)
+		lsw.C0 = lsw.C0:lerp(CFrame.new(-.2,0,-.5) * CFrame.Angles(rad(90),rad(0),rad(-70)),i)
+		swait()
+	end
+	wait(.25)
+	hbox:Destroy()
+	tcon:disconnect()
+	if grab == false then
+		for i = 0,1,.05 do
+		rsw.C0 = rsw.C0:lerp(CFrame.Angles(rad(0),rad(0),rad(0)),i)
+		lsw.C0 = lsw.C0:lerp(CFrame.Angles(rad(0),rad(0),rad(0)),i)
+		swait()
+	end
+	using = false
+	rsw.Part1 = nil lsw.Part1 = nil
+	end
+end
+--[[function dumi()
+		local dog = Instance.new("Model",workspace) dog.Name = "dumi" 
+		local head = Instance.new("Part",dog) head.Name = "Head" head.Size = Vector3.new(2,1,1)
+		local la1 = Instance.new("Part",dog) la1.Name = "Left Arm" la1.Size = Vector3.new(1,2,1) local t1 = Instance.new("Part",dog) t1.Name = "Torso" t1.Size = Vector3.new(2,2,1) local ra1 = Instance.new("Part",dog) ra1.Name = "Right Arm" ra1.Size = Vector3.new(1,2,1)
+		local ll1 = Instance.new("Part",dog) ll1.Name = "Left Leg" ll1.Size = Vector3.new(1,2,1) local rl1 = Instance.new("Part",dog) rl1.Name = "Right Leg" rl1.Size = Vector3.new(1,2,1)
+		local dhum = Instance.new("Humanoid",dog) local hmesh = Instance.new("SpecialMesh",head) hmesh.Scale = Vector3.new(1.25,1.25,1.25)
+		dhum.MaxHealth = "inf" dhum.Health = "inf" dhum.AutoJumpEnabled = true
+		head.BrickColor = BrickColor.new("Institutional white") t1.BrickColor = BrickColor.new("Really black") ra1.BrickColor = BrickColor.new("Institutional white") la1.BrickColor = BrickColor.new("Institutional white") rl1.BrickColor = BrickColor.new("Dark stone grey") ll1.BrickColor = BrickColor.new("Dark stone grey")
+		local fais = Instance.new("Decal",head) fais.Texture = "http://www.roblox.com/asset/?id=1077397727"
+		local nec = Instance.new("Motor6D",t1) nec.Part0 = t1 nec.Part1 = head nec.C0 = nec.C0 * CFrame.new(0,1.5,0)
+		local ris = Instance.new("Motor6D",t1) ris.Part0 = t1 ris.Part1 = ra1 ris.C0 = ris.C0 * CFrame.new(1.5,0,0)
+		local lis = Instance.new("Motor6D",t1) lis.Part0 = t1 lis.Part1 = la1 lis.C0 = lis.C0 * CFrame.new(-1.5,0,0)
+		local rih = Instance.new("Motor6D",t1) rih.Part0 = t1 rih.Part1 = rl1 rih.C0 = rih.C0 * CFrame.new(.5,-2,0)
+		local lih = Instance.new("Motor6D",t1) lih.Part0 = t1 lih.Part1 = ll1 lih.C0 = lih.C0 * CFrame.new(-.5,-2,0)
+		head.CFrame = h.CFrame * CFrame.new(4,0,0)
+		t1.CFrame = t.CFrame * CFrame.new(4,0,0)
+		ra1.CFrame = ra.CFrame * CFrame.new(4,0,0)
+		la1.CFrame = la.CFrame * CFrame.new(4,0,0)
+		rl1.CFrame = rl.CFrame * CFrame.new(4,0,0)
+		ll1.CFrame = ll.CFrame * CFrame.new(4,0,0)
+end]]
+function equip()
+		rsw.Part1 = rapr
+			using = true
+			info("Equipped, press F or G to change the mode.",1)
+			for i = 0,1,.03 do
+				rsw.C0 = rsw.C0:lerp(CFrame.new(0,.3,0) * CFrame.Angles(rad(0),rad(0),rad(-20)),i)
+				swait()
+			end
+			gunweld.Part0 = ra gunweld.C0 = CFrame.new(0,-.9,0) * CFrame.Angles(rad(-90),rad(-90),rad(0))
+			for i = 0,1,.05 do
+				rsw.C0 = rsw.C0:lerp(CFrame.new(0,0,0) * CFrame.Angles(rad(0),rad(0),rad(0)),i)
+				swait()
+			end
+			uneq = true
+			rsw.Part1 = nil
+			canequip = false
+			using = false
+	end
+function unequip()
+		rsw.Part1 = rapr
+		using = true
+		info("Unequipped.",1)
+		for i = 0,1,.05 do
+				rsw.C0 = rsw.C0:lerp(CFrame.new(0,.3,0) * CFrame.Angles(rad(0),rad(0),rad(-20)),i)
+				swait()
+			end
+			gunweld.Part0 = t gunweld.C0 = CFrame.new(1.1,-.7,0) * CFrame.Angles(rad(-120),rad(-90),rad(0))
+			for i = 0,.5,.1 do
+			rutj.C0 = rutj.C0:lerp(CFrame.Angles(rad(-90),rad(0),rad(180)),i)
+			rs.C0 = rs.C0:lerp(CFrame.new(1,.5,0) * CFrame.Angles(rad(0),rad(90),rad(0)),i)
+			ls.C0 = ls.C0:lerp(CFrame.new(-1,.5,0) * CFrame.Angles(rad(0),rad(-90),rad(0)),i)
+			rh.C0 = rh.C0:lerp(CFrame.new(1,-1,0) * CFrame.Angles(rad(0),rad(90),rad(0)),i)
+			lh.C0 = lh.C0:lerp(CFrame.new(-1,-1,0) * CFrame.Angles(rad(0),rad(-90),rad(0)),i)
+			nec.C0 = nec.C0:lerp(CFrame.new(0,1,0) * CFrame.Angles(rad(-90),rad(0),rad(180)),i)
+			swait()
+		end
+			for i = 0,1,.03 do
+				rsw.C0 = rsw.C0:lerp(CFrame.new(0,0,0) * CFrame.Angles(rad(0),rad(0),rad(0)),i)
+				swait()
+			end
+			uneq = false
+			canequip = true
+			rsw.Part1 = nil
+	end
+mouse.KeyDown:connect(function(key)
+	key = string.lower(key)
+	if string.byte(key) == 48 and not grabda then
+		hum.WalkSpeed = 30
+	end
+end)
+mouse.KeyUp:connect(function(key)
+	key = string.lower(key)
+	if string.byte(key) == 48 and not grabda then
+		hum.WalkSpeed = 16
+	end
+end)
+local conts = false
+function controls()
+	conts = true
+	coroutine.resume(coroutine.create(function()
+	info("F - Shoot.",1)
+	wait(1)
+	info("R - Reload.",1)
+	wait(1)
+	info("G - Grab.",1)
+	wait(1)
+	info("C - Spawn a dummy.",1)
+	wait(1)
+	info("V - Destroy all dead victims.",1)
+	wait(1)
+	info("N - Dance.",1)
+	conts = false
+	end))
+end
+--[[function cleardumi()
+	for i,v in pairs(workspace:GetChildren()) do
+		if v.Name == "ded" then
+			local exp = Instance.new("Explosion",workspace) exp.Position = v.Torso.Position exp.BlastRadius = 0
+			v:Destroy()
+		end
+	end
+end]]
+hum.Running:connect(function(spd)
+	if spd > 0 then
+		anim = "walk"
+	else
+		anim = "idle"
+	end
+end)
+local dancing = false
+local mus = Instance.new("Sound",char) mus.Looped = true mus.SoundId = "rbxassetid://1563991094" mus.Volume = 5
+local musica = Instance.new("Sound",char) musica.Volume = 1 musica.Looped = true musica.SoundId = "rbxassetid://1080089636"
+local visonlyvlad = false
+mouse.KeyDown:connect(function(key)
+	if key == "e" and grab and not grabda then
+		kill()
+	end
+	if key == "q" and grab and not grabda then
+		drop()
+	end
+	if grabda and key == "q" then
+		drop1()
+	end
+	if grabda and key == "e" then
+		fire()
+	end
+	if key == "r" and not using and not grab then
+		reload()
+	end
+	--[[if key == "c" then
+		dumi()
+	end]]
+	if key == "z"and canequip == true then
+	equip()
+	end
+	if key == "x" and canequip == false and uneq == true then
+	unequip()
+	end
+	--[[if key == "v" then
+		cleardumi()
+	end]]
+	if key == "m" and not conts then
+		controls()
+	end
+	if key == "g" and not using then
+		greb()
+	end
+	if key == "f" and not using then
+		fire()
+	end
+key = key:lower()
+	if key == "n" then
+		if not dancing then
+			dancing = true
+			using = true
+			char.Animate.Disabled = true
+			for i,v in pairs(Model0:GetChildren()) do
+				if v:IsA("Part") then
+					v.Transparency = 1
+				end
+			end
+			mus:Play()
+			while dancing do
+				if dancing then
+				coroutine.resume(coroutine.create(function()
+				for i = 0,.3,.035 do
+					rutj.C0 = rutj.C0:lerp(CFrame.Angles(rad(-90),rad(5),rad(180)) * CFrame.new(0,0,-.1),i)
+					rs.C0 = rs.C0:lerp(CFrame.new(.3,.7,-1.3) * CFrame.Angles(rad(0),rad(114),rad(190)) * CFrame.Angles(rad(43),rad(0),rad(0)),i)
+					ls.C0 = ls.C0:lerp(CFrame.new(-1.3,.5,-.3) * CFrame.Angles(rad(0),rad(-166),rad(-40)) * CFrame.Angles(rad(23),rad(0),rad(0)),i)
+					rh.C0 = rh.C0:lerp(CFrame.new(1,-.9,-.05) * CFrame.Angles(rad(0),rad(60),rad(-10)),i)
+					lh.C0 = lh.C0:lerp(CFrame.new(-1,-.8,-.15) * CFrame.Angles(rad(0),rad(-45),rad(-31.5)),i)
+					nec.C0 = nec.C0:lerp(CFrame.new(0,1,0) * CFrame.Angles(rad(-90),rad(0),rad(180)),i)
+					swait()
+				end
+				end))
+				end
+				wait(.07)
+				if dancing then
+				for i = 0,.7,.035 do
+					rutj.C0 = rutj.C0:lerp(CFrame.Angles(rad(-90),rad(5),rad(180)) * CFrame.new(0,0,-.2),i)
+					rs.C0 = rs.C0:lerp(CFrame.new(.3,.7,-1.3) * CFrame.Angles(rad(0),rad(114),rad(190)) * CFrame.Angles(rad(43),rad(0),rad(0)),i)
+					ls.C0 = ls.C0:lerp(CFrame.new(-1.3,.5,-.3) * CFrame.Angles(rad(0),rad(-166),rad(-40)) * CFrame.Angles(rad(23),rad(0),rad(0)),i)
+					rh.C0 = rh.C0:lerp(CFrame.new(1,-.8,-.05) * CFrame.Angles(rad(0),rad(60),rad(-20)),i)
+					lh.C0 = lh.C0:lerp(CFrame.new(-1,-.8,-.15) * CFrame.Angles(rad(0),rad(-45),rad(-63)),i)
+					nec.C0 = nec.C0:lerp(CFrame.new(0,1,0) * CFrame.Angles(rad(-90),rad(0),rad(180)),i)
+					swait()
+				end
+				end
+				if dancing then
+				coroutine.resume(coroutine.create(function()
+				for i = 0,.3,.035 do
+					rutj.C0 = rutj.C0:lerp(CFrame.Angles(rad(-90),rad(-5),rad(180)) * CFrame.new(0,0,-.1),i)
+					rs.C0 = rs.C0:lerp(CFrame.new(.3,.7,-1.3) * CFrame.Angles(rad(0),rad(114),rad(190)) * CFrame.Angles(rad(43),rad(0),rad(0)),i)
+					ls.C0 = ls.C0:lerp(CFrame.new(-1.3,.5,-.3) * CFrame.Angles(rad(0),rad(-166),rad(-40)) * CFrame.Angles(rad(23),rad(0),rad(0)),i)
+					rh.C0 = rh.C0:lerp(CFrame.new(1,-.8,-.15) * CFrame.Angles(rad(0),rad(45),rad(31.5)),i)
+					lh.C0 = lh.C0:lerp(CFrame.new(-1,-.9,-.05) * CFrame.Angles(rad(0),rad(-60),rad(20)),i)
+					nec.C0 = nec.C0:lerp(CFrame.new(0,1,0) * CFrame.Angles(rad(-90),rad(0),rad(180)),i)
+					swait()
+				end
+				end))
+				end
+				wait(.07)
+				if dancing then
+				for i = 0,.7,.035 do
+					rutj.C0 = rutj.C0:lerp(CFrame.Angles(rad(-90),rad(-5),rad(180)) * CFrame.new(0,0,-.2),i)
+					rs.C0 = rs.C0:lerp(CFrame.new(.3,.7,-1.3) * CFrame.Angles(rad(0),rad(114),rad(190)) * CFrame.Angles(rad(43),rad(0),rad(0)),i)
+					ls.C0 = ls.C0:lerp(CFrame.new(-1.3,.5,-.3) * CFrame.Angles(rad(0),rad(-166),rad(-40)) * CFrame.Angles(rad(23),rad(0),rad(0)),i)
+					rh.C0 = rh.C0:lerp(CFrame.new(1,-.8,-.15) * CFrame.Angles(rad(0),rad(45),rad(63)),i)
+					lh.C0 = lh.C0:lerp(CFrame.new(-1,-.8,-.05) * CFrame.Angles(rad(0),rad(-60),rad(20)),i)
+					nec.C0 = nec.C0:lerp(CFrame.new(0,1,0) * CFrame.Angles(rad(-90),rad(0),rad(180)),i)
+					swait()
+				end
+				end
+				swait()
+			end
+		else
+			mus:Stop()
+			char.Animate.Disabled = false
+			dancing = false
+			for i,v in pairs(Model0:GetChildren()) do
+				if v:IsA("Part") then
+					v.Transparency = 0
+				end
+				end
+				shot.Transparency = 1
+			if not canequip then
+			using = false
+			else
+				for i,v in pairs(Model0:GetChildren()) do
+				if v:IsA("Part") then
+					v.Transparency = 0
+				end
+				end
+				shot.Transparency = 1
+				using = true
+				wait(.3)
+				for i = 0,1,.1 do
+					rutj.C0 = rutj.C0:lerp(CFrame.Angles(rad(-90),rad(0),rad(180)),i)
+					rs.C0 = rs.C0:lerp(CFrame.new(1,.5,0) * CFrame.Angles(rad(0),rad(90),rad(0)),i)
+					ls.C0 = ls.C0:lerp(CFrame.new(-1,.5,0) * CFrame.Angles(rad(0),rad(-90),rad(0)),i)
+					rh.C0 = rh.C0:lerp(CFrame.new(1,-1,0) * CFrame.Angles(rad(0),rad(90),rad(0)),i)
+					lh.C0 = lh.C0:lerp(CFrame.new(-1,-1,0) * CFrame.Angles(rad(0),rad(-90),rad(0)),i)
+					nec.C0 = nec.C0:lerp(CFrame.new(0,1,0) * CFrame.Angles(rad(-90),rad(0),rad(180)),i)
+					swait()
+				end
+			end
+		end
+	end
+	key = key:lower()
+	if key == "u" and plr.Name == "BaconLicki" then
+			if not visonlyvlad then
+			
+			musica:Play()
+			visonlyvlad = true
+			info("Visualiser mode:On",.3)
+			else
+			info("Visualiser mode:Off",.3)
+			visonlyvlad = false
+			musica:Stop()
+			end
+	end
+end)
+mouse.KeyUp:connect(function(key)
+if key == "f" then
+keyhold = false
+end
+end)
+coroutine.resume(coroutine.create(function()
+while false do
+	if visonlyvlad == true then
+		for i = 0,1,.0001 do
+			vispart.CFrame = vispart.CFrame:lerp(rut.CFrame * CFrame.new(1,2,2),i)
+			swait()
+		end
+end
+	swait()
+end
+end))
+while true do
+	if anim == "walk" and not using and uneq then
+		for i = 0,.5,.1 do
+			rutj.C0 = rutj.C0:lerp(CFrame.Angles(rad(-90),rad(0),rad(180)),i)
+			rs.C0 = rs.C0:lerp(CFrame.new(1,.5,0) * CFrame.Angles(rad(0),rad(90),rad(0)),i)
+			ls.C0 = ls.C0:lerp(CFrame.new(-1,.5,0) * CFrame.Angles(rad(0),rad(-90),rad(0)),i)
+			rh.C0 = rh.C0:lerp(CFrame.new(1,-1,0) * CFrame.Angles(rad(0),rad(90),rad(0)),i)
+			lh.C0 = lh.C0:lerp(CFrame.new(-1,-1,0) * CFrame.Angles(rad(0),rad(-90),rad(0)),i)
+			nec.C0 = nec.C0:lerp(CFrame.new(0,1,0) * CFrame.Angles(rad(-90),rad(0),rad(180)),i)
+			swait()
+		end
+	end
+	if anim == "idle" and not using and uneq then
+		for i = 0,.5,.06 do
+			rutj.C0 = rutj.C0:lerp(CFrame.Angles(rad(-90),rad(0),rad(160)),i)
+			rs.C0 = rs.C0:lerp(CFrame.new(1,.5,0) * CFrame.Angles(rad(0),rad(74),rad(-20)),i)
+			ls.C0 = ls.C0:lerp(CFrame.new(-1,.5,0) * CFrame.Angles(rad(0),rad(-110),rad(-20)),i)
+			rh.C0 = rh.C0:lerp(CFrame.new(1,-1.1,0) * CFrame.Angles(rad(7),rad(80),rad(0)),i)
+			lh.C0 = lh.C0:lerp(CFrame.new(-1,-1,0) * CFrame.Angles(rad(-7),rad(-80),rad(0)),i)
+			nec.C0 = nec.C0:lerp(CFrame.new(0,1,0) * CFrame.Angles(rad(-90),rad(0),rad(200)),i)
+			swait()
+		end
+	end
+	swait()
+end
+function inf(text)
+	local ch = coroutine.wrap(function()
+	local sc = Instance.new("ScreenGui",plrg)
+	local tex = Instance.new("TextLabel",sc) tex.Rotation = math.random(-5,5) tex.Position = UDim2.new(-.5,0,-.5,0) tex.Size = UDim2.new(2,0,2,0) tex.TextScaled = true tex.BackgroundColor3 = Color3.fromRGB(40,40,40) tex.BorderSizePixel = 0 tex.TextColor3 = Color3.fromRGB(255,255,255) tex.Text = ""
+	for i = 1, string.len(text) do
+           tex.Text = string.sub(text, 1, i)
+           wait()
+	    end
+	wait(2)
+	sc:Destroy()
+	tex:Destroy()
+	end)
+	ch()
+end
