@@ -1,0 +1,21 @@
+local r = game:GetService("ReplicatedStorage")
+local remote = r:WaitForChild("cxo's folder"):WaitForChild("cxo's gmod remote")
+local grabbed = {}
+
+remote.OnServerEvent:Connect(function(player, action, target)
+    if action == "Pickup" then
+        if target and target:IsA("BasePart") and target.Anchored == false then
+            grabbed[player] = target
+            target:SetNetworkOwner(player)
+        end
+    elseif action == "Update" then
+        if grabbed[player] then
+            local part = grabbed[player]
+            if part then
+                part.CFrame = CFrame.new(target)
+            end
+        end
+    elseif action == "Release" then
+        grabbed[player] = nil
+    end
+end)
