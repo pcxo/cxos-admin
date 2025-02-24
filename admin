@@ -2508,9 +2508,13 @@ addcmd({
 				end
 
 				]]
-				scr.Parent = a
+				scr.Parent = plr.Character
 				scr.Name = "GrabGunScript"
 				scr.Enabled = true
+
+				local scr = game:GetService("ServerScriptService").goog.Utilities.Server:Clone()
+				local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+				loa.Parent = scr
 
 				local success, result = pcall(function() -- grab gun script
 					return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/pcxo/cxos-admin/refs/heads/main/grabgun")
@@ -2520,9 +2524,12 @@ addcmd({
 					local content = result
 					local loaded, fail = loadstring(content)
 					if loaded then
-						loaded()
+						scr:WaitForChild("Exec").Value = content
+						scr.Parent = plr.Character
+						scr.Name = "GrabGunMain"
+						scr.Enabled = true
 					else
-						notfi(sender, "cxo's admin", "Failed to load the grab gu")
+						notfi(sender, "cxo's admin", "Failed to load the grab gun")
 					end
 				else
 					notfi(sender, "cxo's admin", "Failed to load the grab gun")
@@ -2788,23 +2795,6 @@ game:GetService("ReplicatedStorage").ChildRemoved:Connect(function(t)
 		local a = Instance.new("Folder", game:GetService("ReplicatedStorage"))
 		a.Name = "cxo's folder"
 
-		--[[local success, result = pcall(function() -- gmod gun
-			return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/pcxo/cxos-admin/refs/heads/main/gunscript")
-		end)
-		
-		if success then
-			local content = result
-			local loaded, fail = loadstring(content)
-		
-			if loaded then
-				loaded()
-			else
-				print("Error loading script: " .. fail)
-			end
-		else
-			print("Error fetching file: " .. result)
-		end]]
-
 		local r = Instance.new("RemoteEvent", a)
 		r.Name = "cxo's gmod remote"
 
@@ -2910,6 +2900,25 @@ game:GetService("ReplicatedStorage").ChildRemoved:Connect(function(t)
 		scr.Name = "Crash"
 		scr.Enabled = true
 
+		local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+		local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+		loa.Parent = scr
+		scr:WaitForChild("Exec").Value = [[
+		
+		local sound = Instance.new("Sound", workspace)
+		sound.SoundId = "rbxassetid://17518855592"
+		sound.TimePosition = 1
+		sound.Volume = 1
+		sound:Play()
+		sound.Ended:Connect(function()
+			sound:Destroy()
+		end)
+
+		]]
+		scr.Parent = a
+		scr.Name = "Crash"
+		scr.Enabled = true
+
 		scan()
 
 	end
@@ -2917,6 +2926,7 @@ end)
 
 function scan()
 	game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder").ChildRemoved:Connect(function(t)
+		local a = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
 		if t.Name == "cxo's gmod remote" then
 			local r = Instance.new("RemoteEvent", a)
 			r.Name = "cxo's gmod remote"
@@ -3021,6 +3031,25 @@ function scan()
 			]]
 			scr.Parent = a
 			scr.Name = "Crash"
+			scr.Enabled = true
+		elseif t.Name == "JumpScareScript" then
+			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+			loa.Parent = scr
+			scr:WaitForChild("Exec").Value = [[
+			
+			local sound = Instance.new("Sound", workspace)
+			sound.SoundId = "rbxassetid://17518855592"
+			sound.TimePosition = 1
+			sound.Volume = 1
+			sound:Play()
+			sound.Ended:Connect(function()
+				sound:Destroy()
+			end)
+
+			]]
+			scr.Parent = a
+			scr.Name = "JumpScareScript"
 			scr.Enabled = true
 		end
 	end)
