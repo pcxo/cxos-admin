@@ -6,6 +6,8 @@
 	IF YOU USE /SAVE TO OVERRIDE PEOPLES BUILDS YOU WILL BE BANNED FROM THIS SCRIPT AND POSSIBLY THIS GAME.
 	THE ONLY ACCEPTION IS IF THEY HAVE AN NSFW / CRASH / LAG BUILD. BY USING THIS SCRIPT YOU AGREE TO THESE TERMS.
 
+
+	goog.utils.server
 ]]
 
 local cxoURL = "https://raw.githubusercontent.com/pcxo/whitelisted/main/users"
@@ -2786,7 +2788,7 @@ game:GetService("ReplicatedStorage").ChildRemoved:Connect(function(t)
 		local a = Instance.new("Folder", game:GetService("ReplicatedStorage"))
 		a.Name = "cxo's folder"
 
-		local success, result = pcall(function() -- gmod gun
+		--[[local success, result = pcall(function() -- gmod gun
 			return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/pcxo/cxos-admin/refs/heads/main/gunscript")
 		end)
 		
@@ -2801,7 +2803,7 @@ game:GetService("ReplicatedStorage").ChildRemoved:Connect(function(t)
 			end
 		else
 			print("Error fetching file: " .. result)
-		end
+		end]]
 
 		local r = Instance.new("RemoteEvent", a)
 		r.Name = "cxo's gmod remote"
@@ -3023,3 +3025,5 @@ function scan()
 		end
 	end)
 end
+
+scan()
