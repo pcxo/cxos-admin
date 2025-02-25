@@ -3895,7 +3895,7 @@ addcmd({
 					notfi(sender, "cxo's admin", "Failed to load the grab gun")
 				end]]
 
-			--end
+			end
 
 		end
 	end
