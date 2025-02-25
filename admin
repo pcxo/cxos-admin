@@ -2529,12 +2529,11 @@ addcmd({
 				local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
 				loa.Parent = scr
 
-				local success, result = pcall(function() -- grab gun script
+				local success, content = pcall(function() -- grab gun script
 					return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/pcxo/cxos-admin/refs/heads/main/grabgun")
 				end)
 				
-				if success then
-					local content = result
+				if success and typeof(content) == "string" then
 					local loaded, fail = loadstring(content)
 					if loaded then
 						scr:WaitForChild("Exec").Value = content
@@ -2542,7 +2541,7 @@ addcmd({
 						scr.Name = "GrabGunMain"
 						scr.Enabled = true
 					else
-						notfi(sender, "cxo's admin", "Failed to load the grab gun")
+						notfi(sender, "cxo's admin", "Failed to load the grab gun: " .. tostring(fail))
 					end
 				else
 					notfi(sender, "cxo's admin", "Failed to load the grab gun")
