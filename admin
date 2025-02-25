@@ -22,6 +22,8 @@ local locked = false
 local connected
 local connected2
 local guiactive = false
+local banhammered
+local ignorethis
 
 -- Thanks roblox for taking down my module every time i upload this script --
 
@@ -614,11 +616,6 @@ addcmd({ -- Requested by punchy39, he gave da anim code
 	Name = "jork",
 	Aliases = {"j"},
 	Function = function(sender, targets, arguments)
-
-		if #targets ~= 1 then
-			notfi(sender, "cxo's admin", "Too many targets!")
-		end
-
 		for i, plr in ipairs(targets) do
 			if plr.Character and plr.Character:FindFirstChild("Humanoid") and plr.Character:FindFirstChild("Torso") then
 				local tip = Instance.new("Part", plr.Character)
@@ -721,16 +718,11 @@ addcmd({ -- Requested by punchy39, he gave da anim code
 		end
 	end
 })
-
+--[[
 addcmd({
 	Name = "test",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
-
-		if #targets ~= 1 then
-			notfi(sender, "cxo's admin", "Too many targets!")
-		end
-
 		for i, plr in ipairs(targets) do
 			if plr.Character and plr.Character:FindFirstChild("Humanoid") and plr.Character:FindFirstChild("Torso") then
 				local tip = Instance.new("Part", plr.Character)
@@ -813,7 +805,7 @@ addcmd({
 		end
 	end
 })
-
+]]
 addcmd({
 	Name = "troll",
 	Aliases = {},
@@ -837,7 +829,7 @@ addcmd({
 
 addcmd({
 	Name = "admin",
-	Aliases = {},
+	Aliases = {"perm"},
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
 			if not table.find(_G.permadmins, plr.Name) then
@@ -849,7 +841,7 @@ addcmd({
 
 addcmd({
 	Name = "unadmin",
-	Aliases = {},
+	Aliases = {"noperm"},
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
 			if table.find(_G.permadmins, plr.Name) then
@@ -871,7 +863,7 @@ addcmd({
 	Name = "shutdown",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
-		local reason = table.concat(arguments, " ", 1)
+		local reason = table.concat(arguments, " ")
 
 		if reason == "" or reason == " " then
 			reason = "No reason provided."
@@ -985,15 +977,24 @@ addcmd({
 
 				local sound = Instance.new("Sound", workspace)
 				sound.SoundId = "http://www.roblox.com/asset/?id=10730819"
+				sound.Name = "banned"
 
 				banhammer.Handle.Touched:Connect(function(person)
+
 					local playuh = person.Parent
 					local playuhn = playuh.Name
 					if playuhn == plr.Name then return end
 					if playuhn == sender.Name then return end
 					if not playuh:FindFirstChild("Humanoid") then return playuh.Parent end
+					if not workspace:FindFirstChild("banned") then local sound = Instance.new("Sound", workspace); sound.SoundId = "http://www.roblox.com/asset/?id=10730819"; sound.Name = "banned" end
 					sound.Playing = true
-					game.Players:FindFirstChild(playuhn):Kick("You have been struck by the banhammer.")
+					bansound.Players:FindFirstChild(playuhn):Kick("You have been struck by the banhammer.")
+
+					banhammered = sound.Ended:Connect(function()
+						sound:Destroy()
+						banhammered:Disconnect()
+					end)
+
 				end)
 			end
 		end
@@ -1118,7 +1119,7 @@ addcmd({
 	Name = "crash",
 	Aliases = {"c"},
 	Function = function(sender, targets, arguments)
-		local msg = table.concat(arguments, " ", 1)
+		local msg = table.concat(arguments, " ")
 		
 		if msg and msg ~= "" then
 
@@ -1168,7 +1169,7 @@ addcmd({
 	Name = "msg",
 	Aliases = {"message"},
 	Function = function(sender, targets, arguments)
-		local msg = table.concat(arguments, " ", 1)
+		local msg = table.concat(arguments, " ")
 		
 		if msg then
 
@@ -1346,7 +1347,7 @@ addcmd({
 	Aliases = {},
 	Function = function(sender, targets, arguments)
 
-		local plr2 = table.concat(arguments, " ", 2)
+		local plr2 = table.concat(arguments, " ")
 		local foundplr2 = p(plr2, sender)
 		plr2 = foundplr2[1]
 
@@ -2168,7 +2169,7 @@ addcmd({
 
 addcmd({
 	Name = "towers",
-	Aliases = {},
+	Aliases = {"911"},
 	Function = function(sender, targets, arguments)
 
 		if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("Airplane") then
@@ -2192,12 +2193,13 @@ addcmd({
 			b.Size = Vector3.new(40, 220, 40)
 			b.Reflectance = 0.2
 			b.BrickColor = BrickColor.new("Dark stone grey")
-			a.Anchored = true
+			b.Anchored = true
 
 			c.CFrame = CFrame.new(-172, 110.7, 81)
 			c.Size = Vector3.new(40, 220, 40)
 			c.Reflectance = 0.2
-			a.Anchored = true
+			c.BrickColor = BrickColor.new("Dark stone grey")
+			c.Anchored = true
 
 		end
 
@@ -2223,16 +2225,19 @@ addcmd({
 				a.Size = Vector3.new(4, 59, 4)
 				a.Reflectance = 0.2
 				a.BrickColor = BrickColor.new("Dark stone grey")
+				a.Anchored = true
 
 				b.CFrame = CFrame.new(-98, 110.7, 81)
 				b.Size = Vector3.new(40, 220, 40)
 				b.Reflectance = 0.2
 				b.BrickColor = BrickColor.new("Dark stone grey")
+				b.Anchored = true
 
 				c.CFrame = CFrame.new(-172, 110.7, 81)
 				c.Size = Vector3.new(40, 220, 40)
 				c.Reflectance = 0.2
 				c.BrickColor = BrickColor.new("Dark stone grey")
+				c.Anchored = true
 
 			else
 				notfi(sender, "cxo's admin", "Plane failed to load: ".. fail)
@@ -2252,15 +2257,19 @@ addcmd({
 			a.Size = Vector3.new(4, 59, 4)
 			a.Reflectance = 0.2
 			a.BrickColor = BrickColor.new("Dark stone grey")
+			a.Anchored = true
 
 			b.CFrame = CFrame.new(-98, 110.7, 81)
 			b.Size = Vector3.new(40, 220, 40)
 			b.Reflectance = 0.2
 			b.BrickColor = BrickColor.new("Dark stone grey")
+			b.Anchored = true
 
 			c.CFrame = CFrame.new(-172, 110.7, 81)
 			c.Size = Vector3.new(40, 220, 40)
 			c.Reflectance = 0.2
+			c.BrickColor = BrickColor.new("Dark stone grey")
+			c.Anchored = true
 
 		end
 	end
@@ -2273,134 +2282,138 @@ addcmd({
     Name = "playerlist",
     Aliases = {"gui"},
     Function = function(sender, targets, arguments)
-    	local gui = Instance.new("ScreenGui")
-    	gui.Name = "PlayerListUI"
-		gui.ResetOnSpawn = false
-        gui.Parent = sender:WaitForChild("PlayerGui")
-        
-        local frame = Instance.new("Frame")
-        frame.Size = UDim2.new(0, 400, 0, 300)
-        frame.Position = UDim2.new(0, 10, 1, -310)
-        frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-        frame.BackgroundTransparency = 0.3
-        frame.BorderSizePixel = 0
-		frame.Parent = gui
-        
-        local topbar = Instance.new("Frame")
-        topbar.Size = UDim2.new(1, 0, 0, 30)
-        topbar.Position = UDim2.new(0, 0, 0, 0)
-        topbar.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-        topbar.BackgroundTransparency = 0.2
-        topbar.BorderSizePixel = 0
-        topbar.Parent = frame
+		for i, plr in ipairs(targets) do
+			if plr.PlayerGui then
+				local gui = Instance.new("ScreenGui")
+				gui.Name = "PlayerListUI"
+				gui.ResetOnSpawn = false
+				gui.Parent = sender:WaitForChild("PlayerGui")
+				
+				local frame = Instance.new("Frame")
+				frame.Size = UDim2.new(0, 400, 0, 300)
+				frame.Position = UDim2.new(0, 10, 1, -310)
+				frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+				frame.BackgroundTransparency = 0.3
+				frame.BorderSizePixel = 0
+				frame.Parent = gui
+				
+				local topbar = Instance.new("Frame")
+				topbar.Size = UDim2.new(1, 0, 0, 30)
+				topbar.Position = UDim2.new(0, 0, 0, 0)
+				topbar.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+				topbar.BackgroundTransparency = 0.2
+				topbar.BorderSizePixel = 0
+				topbar.Parent = frame
 
-        local title = Instance.new("TextLabel")
-        title.Text = "Player List"
-        title.Size = UDim2.new(1, -10, 1, 0)
-        title.Position = UDim2.new(0, 10, 0, 0)
-        title.TextColor3 = Color3.fromRGB(255, 255, 255)
-        title.BackgroundTransparency = 1
-        title.Font = Enum.Font.GothamBold
-        title.TextSize = 18
-        title.TextXAlignment = Enum.TextXAlignment.Left
-        title.TextYAlignment = Enum.TextYAlignment.Center
-        title.Parent = topbar
+				local title = Instance.new("TextLabel")
+				title.Text = "Player List"
+				title.Size = UDim2.new(1, -10, 1, 0)
+				title.Position = UDim2.new(0, 10, 0, 0)
+				title.TextColor3 = Color3.fromRGB(255, 255, 255)
+				title.BackgroundTransparency = 1
+				title.Font = Enum.Font.GothamBold
+				title.TextSize = 18
+				title.TextXAlignment = Enum.TextXAlignment.Left
+				title.TextYAlignment = Enum.TextYAlignment.Center
+				title.Parent = topbar
 
-        local close = Instance.new("TextButton")
-        close.Size = UDim2.new(0, 25, 0, 25)
-        close.Position = UDim2.new(1, -30, 0, 2)
-        close.Text = "X"
-        close.TextColor3 = Color3.fromRGB(255, 255, 255)
-        close.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
-        close.BackgroundTransparency = 0.5
-        close.BorderSizePixel = 0
-        close.Font = Enum.Font.GothamBold
-        close.TextSize = 14
-        close.Parent = topbar
+				local close = Instance.new("TextButton")
+				close.Size = UDim2.new(0, 25, 0, 25)
+				close.Position = UDim2.new(1, -30, 0, 2)
+				close.Text = "X"
+				close.TextColor3 = Color3.fromRGB(255, 255, 255)
+				close.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+				close.BackgroundTransparency = 0.5
+				close.BorderSizePixel = 0
+				close.Font = Enum.Font.GothamBold
+				close.TextSize = 14
+				close.Parent = topbar
 
-		close.MouseEnter:Connect(function()
-            close.BackgroundTransparency = 0.2
-        end)
+				close.MouseEnter:Connect(function()
+					close.BackgroundTransparency = 0.2
+				end)
 
-        close.MouseLeave:Connect(function()
-            close.BackgroundTransparency = 0.5
-        end)
+				close.MouseLeave:Connect(function()
+					close.BackgroundTransparency = 0.5
+				end)
 
-        close.MouseButton1Click:Connect(function()
-            frame:TweenPosition(UDim2.new(0.5, -200, 1.5, -150), "Out", "Quad", 0.5)
-            task.wait(0.5)
-            gui:Destroy()
-        end)
-        
-        local scroll = Instance.new("ScrollingFrame")
-        scroll.Size = UDim2.new(1, 0, 1, -40)
-    	scroll.Position = UDim2.new(0, 0, 0, 40)
-        scroll.BackgroundTransparency = 1
-        scroll.BorderSizePixel = 0
-        scroll.ScrollBarThickness = 5
-        scroll.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 100)
-        scroll.Parent = frame
-        
-        local layout = Instance.new("UIListLayout")
-        layout.Parent = scroll
-        layout.FillDirection = Enum.FillDirection.Vertical
-        layout.Padding = UDim.new(0, 5)
+				close.MouseButton1Click:Connect(function()
+					frame:TweenPosition(UDim2.new(0.5, -200, 1.5, -150), "Out", "Quad", 0.5)
+					task.wait(0.5)
+					gui:Destroy()
+				end)
+				
+				local scroll = Instance.new("ScrollingFrame")
+				scroll.Size = UDim2.new(1, 0, 1, -40)
+				scroll.Position = UDim2.new(0, 0, 0, 40)
+				scroll.BackgroundTransparency = 1
+				scroll.BorderSizePixel = 0
+				scroll.ScrollBarThickness = 5
+				scroll.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 100)
+				scroll.Parent = frame
+				
+				local layout = Instance.new("UIListLayout")
+				layout.Parent = scroll
+				layout.FillDirection = Enum.FillDirection.Vertical
+				layout.Padding = UDim.new(0, 5)
 
-        local function update()
-            for i, q in pairs(scroll:GetChildren()) do
-                if q:IsA("Frame") then
-                    q:Destroy()
-                end
-            end
+				local function update()
+					for i, q in pairs(scroll:GetChildren()) do
+						if q:IsA("Frame") then
+							q:Destroy()
+						end
+					end
 
-            for i, plr in ipairs(game.Players:GetPlayers()) do
-                local plrframe = Instance.new("Frame")
-                plrframe.Size = UDim2.new(1, -10, 0, 35)
-                plrframe.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-                plrframe.BackgroundTransparency = 0.5
-                plrframe.BorderSizePixel = 0
-                plrframe.Parent = scroll
+					for i, plr in ipairs(game.Players:GetPlayers()) do
+						local plrframe = Instance.new("Frame")
+						plrframe.Size = UDim2.new(1, -10, 0, 35)
+						plrframe.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+						plrframe.BackgroundTransparency = 0.5
+						plrframe.BorderSizePixel = 0
+						plrframe.Parent = scroll
 
-                local plrname = Instance.new("TextLabel")
-                plrname.Text = "@".. plr.Name .. " (".. plr.DisplayName ..")"
-                plrname.Size = UDim2.new(0.6, -5, 1, 0)
-                plrname.Position = UDim2.new(0, 5, 0, 0)
-                plrname.TextColor3 = Color3.fromRGB(255, 255, 255)
-                plrname.BackgroundTransparency = 1
-                plrname.Font = Enum.Font.Gotham
-                plrname.TextSize = 16
-				plrname.TextScaled = true
-                plrname.TextXAlignment = Enum.TextXAlignment.Left
-                plrname.TextYAlignment = Enum.TextYAlignment.Center
-                plrname.Parent = plrframe
+						local plrname = Instance.new("TextLabel")
+						plrname.Text = "@".. plr.Name .. " (".. plr.DisplayName ..")"
+						plrname.Size = UDim2.new(0.6, -5, 1, 0)
+						plrname.Position = UDim2.new(0, 5, 0, 0)
+						plrname.TextColor3 = Color3.fromRGB(255, 255, 255)
+						plrname.BackgroundTransparency = 1
+						plrname.Font = Enum.Font.Gotham
+						plrname.TextSize = 16
+						plrname.TextScaled = true
+						plrname.TextXAlignment = Enum.TextXAlignment.Left
+						plrname.TextYAlignment = Enum.TextYAlignment.Center
+						plrname.Parent = plrframe
 
-                local success, code = pcall(game:GetService("LocalizationService").GetCountryRegionForPlayerAsync, game:GetService("LocalizationService"), plr)
-        
-                local country = Instance.new("TextLabel")
-                country.Size = UDim2.new(0.35, 0, 1, 0)
-                country.Position = UDim2.new(0.65, 0, 0, 0)
-                country.TextColor3 = success and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
-                country.BackgroundTransparency = 1
-                country.Font = Enum.Font.Gotham
-                country.TextSize = 14
-                country.TextXAlignment = Enum.TextXAlignment.Center
-				country.TextYAlignment = Enum.TextYAlignment.Center
-				country.Parent = plrframe
-        
-                if success and code then
-                    country.Text = "[" .. countries[code] .. "]"
-                else
-                    country.Text = "[UNKNOWN]"
-                end
-            end
-            scroll.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y)
-        end
-        
-        game.Players.PlayerAdded:Connect(update)
-        game.Players.PlayerRemoving:Connect(update)
-        
-        update()
-    end
+						local success, code = pcall(game:GetService("LocalizationService").GetCountryRegionForPlayerAsync, game:GetService("LocalizationService"), plr)
+				
+						local country = Instance.new("TextLabel")
+						country.Size = UDim2.new(0.35, 0, 1, 0)
+						country.Position = UDim2.new(0.65, 0, 0, 0)
+						country.TextColor3 = success and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+						country.BackgroundTransparency = 1
+						country.Font = Enum.Font.Gotham
+						country.TextSize = 14
+						country.TextXAlignment = Enum.TextXAlignment.Center
+						country.TextYAlignment = Enum.TextYAlignment.Center
+						country.Parent = plrframe
+				
+						if success and code then
+							country.Text = "[" .. countries[code] .. "]"
+						else
+							country.Text = "[UNKNOWN]"
+						end
+					end
+					scroll.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y)
+				end
+				
+				game.Players.PlayerAdded:Connect(update)
+				game.Players.PlayerRemoving:Connect(update)
+				
+				update()
+			end
+		end
+	end
 })
 
 addcmd({
