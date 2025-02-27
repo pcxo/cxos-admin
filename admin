@@ -7,8 +7,14 @@
 	THE ONLY ACCEPTION IS IF THEY HAVE AN NSFW / CRASH / LAG BUILD. BY USING THIS SCRIPT YOU AGREE TO THESE TERMS.
 
 
-	goog.utils.server
+	im over here googing my goog i got goog on my goog right now
 ]]
+
+if _G.cxosadminloaded == true then
+	print("cxo's admin is already running!")
+	return
+end
+_G.cxosadminloaded = true
 
 local cxoURL = "https://raw.githubusercontent.com/pcxo/whitelisted/main/users"
 local prefix = "/"
@@ -18,6 +24,8 @@ local crashbanned = {}
 local countries = {}
 local chats = {}
 local TempWhitelist = {}
+local autore = {}
+local fpslooped = {}
 local locked = false
 local connected
 local connected2
@@ -86,9 +94,9 @@ end
 --repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("RemoteScript")
 repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
 --repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("JumpScareScript")
---[[
-game:GetService("ReplicatedStorage").RemoteScript.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
-game:GetService("ReplicatedStorage").JumpScareScript.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
+
+--game:GetService("ReplicatedStorage").RemoteScript.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
+--[[game:GetService("ReplicatedStorage").JumpScareScript.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
 
 if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("OrbScript") then
 	local clonedorb = game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("OrbScript"):Clone()
@@ -206,12 +214,475 @@ local function addcmd(data)
 		data.Aliases = {}
 	end
 
+	if data.Player == nil then
+		data.Player = true
+	end
+
 	cmds[data.Name] = {
 		Data = data
 	}
 end
 
-function notfi(plr, title, message, duration) -- Anotha dizzy ui
+function gui(plr, section)
+	local plrdevice
+
+	for i, v in pairs(game.Players:GetPlayers()) do
+		local gather = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("cxo's Device LocalScript"):Clone()
+		gather.Parent = v.Character
+		plrdevice = _G.PlayerDevice(v)
+	end
+
+	-- GUI TO LUA --
+
+	local ScreenGui = Instance.new("ScreenGui")
+	local Frame = Instance.new("Frame")
+	local Frame_2 = Instance.new("Frame")
+	local TextLabel = Instance.new("TextLabel")
+	local CloseButton = Instance.new("TextButton")
+	local MinimizeButton = Instance.new("TextButton")
+	local ImageLabel = Instance.new("ImageLabel")
+
+	local TabsFrame = Instance.new("Frame")
+	local PlayerListButton = Instance.new("TextButton")
+	local CommandsButton = Instance.new("TextButton")
+	local SudoButton = Instance.new("TextButton")
+	local TabHighlight = Instance.new("Frame")
+
+	local ContentFrame = Instance.new("Frame")
+	local PlayerList = Instance.new("ScrollingFrame")
+	local CommandsList = Instance.new("Frame")
+	local SudoPanel = Instance.new("Frame")
+
+	local SudoLabel = Instance.new("TextLabel")
+
+	ScreenGui.Parent = plr:WaitForChild("PlayerGui")
+	ScreenGui.Name = "cxo's admin GUI"
+
+	Frame.Parent = ScreenGui
+	Frame.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
+	Frame.BackgroundTransparency = 0.2
+	Frame.Size = UDim2.new(0, 523, 0, 350)
+	Frame.Position = UDim2.new(0.3, 0, 0.3, 0)
+	Frame.Draggable = true
+	Frame.Active = true
+
+	Frame_2.Parent = Frame
+	Frame_2.Size = UDim2.new(1, 0, 0, 24)
+	Frame_2.BackgroundTransparency = 0.4
+	Frame_2.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+	Frame_2.Name = "Frame2"
+
+	TextLabel.Parent = Frame_2
+	TextLabel.Size = UDim2.new(0, 177, 0, 24)
+	TextLabel.Position = UDim2.new(0.33, 0, 0, 0)
+	TextLabel.Font = Enum.Font.SourceSansBold
+	TextLabel.Text = "cxo's admin"
+	TextLabel.TextScaled = true
+	TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+	TextLabel.BackgroundTransparency = 1
+
+	ImageLabel.Parent = Frame_2
+	ImageLabel.Size = UDim2.new(0, 24, 0, 24)
+	ImageLabel.BackgroundTransparency = 1
+	ImageLabel.Image = "rbxthumb://type=AvatarHeadShot&id=" .. plr.UserId .. "&w=420&h=420"
+
+	CloseButton.Parent = Frame_2
+	CloseButton.Position = UDim2.new(0.95, 0, 0, 0)
+	CloseButton.Size = UDim2.new(0, 23, 0, 24)
+	CloseButton.BackgroundTransparency = 1
+	CloseButton.Text = "X"
+	CloseButton.TextScaled = true
+	CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+	CloseButton.Font = Enum.Font.SourceSansBold
+	CloseButton.Name = "CloseButton"
+
+	MinimizeButton.Parent = Frame_2
+	MinimizeButton.Position = UDim2.new(0.91, 0, 0, 0)
+	MinimizeButton.Size = UDim2.new(0, 23, 0, 24)
+	MinimizeButton.BackgroundTransparency = 1
+	MinimizeButton.Text = "–"
+	MinimizeButton.TextScaled = true
+	MinimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+	MinimizeButton.Font = Enum.Font.SourceSansBold
+	MinimizeButton.Name = "MinimizeButton"
+
+	TabsFrame.Parent = Frame
+	TabsFrame.Size = UDim2.new(1, 0, 0, 30)
+	TabsFrame.Position = UDim2.new(0, 0, 0, 24)
+	TabsFrame.BackgroundTransparency = 1
+	TabsFrame.Name = "TabsFrame"
+
+	TabHighlight.Parent = TabsFrame
+	TabHighlight.Size = UDim2.new(0.33, 0, 0, 3)
+	TabHighlight.Position = UDim2.new(0, 0, 1, -3)
+	TabHighlight.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	TabHighlight.Name = "TabHighlight"
+
+	PlayerListButton.Parent = TabsFrame
+	PlayerListButton.Size = UDim2.new(0.33, 0, 1, 0)
+	PlayerListButton.Position = UDim2.new(0, 0, 0, 0)
+	PlayerListButton.BackgroundTransparency = 1
+	PlayerListButton.Text = "Player List"
+	PlayerListButton.TextSize = 20
+	PlayerListButton.Font = Enum.Font.SourceSansBold
+	PlayerListButton.TextColor3 = Color3.fromRGB(180, 180, 180)
+	PlayerListButton.Name = "PlayerListButton"
+
+	CommandsButton.Parent = TabsFrame
+	CommandsButton.Size = UDim2.new(0.33, 0, 1, 0)
+	CommandsButton.Position = UDim2.new(0.33, 0, 0, 0)
+	CommandsButton.BackgroundTransparency = 1
+	CommandsButton.Text = "Commands"
+	CommandsButton.TextSize = 20
+	CommandsButton.Font = Enum.Font.SourceSansBold
+	CommandsButton.TextColor3 = Color3.fromRGB(180, 180, 180)
+	CommandsButton.Name = "CommandsButton"
+
+	SudoButton.Parent = TabsFrame
+	SudoButton.Size = UDim2.new(0.33, 0, 1, 0)
+	SudoButton.Position = UDim2.new(0.66, 0, 0, 0)
+	SudoButton.BackgroundTransparency = 1
+	SudoButton.Text = "Sudo Panel"
+	SudoButton.TextSize = 20
+	SudoButton.Font = Enum.Font.SourceSansBold
+	SudoButton.TextColor3 = Color3.fromRGB(180, 180, 180)
+	SudoButton.Name = "SudoButton"
+
+	ContentFrame.Parent = Frame
+	ContentFrame.Size = UDim2.new(1, 0, 1, -54)
+	ContentFrame.Position = UDim2.new(0, 0, 0, 54)
+	ContentFrame.BackgroundTransparency = 1
+	ContentFrame.Name = "ContentFrame"
+
+	local scroll = Instance.new("ScrollingFrame")
+	scroll.Size = UDim2.new(1, 0, 1, -40)
+	scroll.Position = UDim2.new(0, 0, 0, 0)
+	scroll.BackgroundTransparency = 1
+	scroll.BorderSizePixel = 0
+	scroll.ScrollBarThickness = 5
+	scroll.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 100)
+	scroll.Parent = PlayerList
+	scroll.Name = "scroll"
+
+	local layout = Instance.new("UIListLayout")
+	layout.Parent = scroll
+	layout.FillDirection = Enum.FillDirection.Vertical
+	layout.Padding = UDim.new(0, 5)
+	layout.Name = "layout"
+
+	local function update()
+		for i, q in pairs(scroll:GetChildren()) do
+			if q:IsA("Frame") then
+				q:Destroy()
+			end
+		end
+
+		layout.Padding = UDim.new(0, 5)
+
+		for i, player in ipairs(game.Players:GetPlayers()) do
+
+			local plrframe = Instance.new("Frame")
+			plrframe.Size = UDim2.new(1, 0, 0, 35)
+			plrframe.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+			plrframe.BackgroundTransparency = 0.5
+			plrframe.BorderSizePixel = 0
+			plrframe.Parent = scroll
+			plrframe.Name = "plrframe"
+
+			local headshot = Instance.new("ImageLabel")
+			headshot.Size = UDim2.new(0, 30, 0, 30)
+			headshot.Position = UDim2.new(0, 3.5, 0, 5)
+			headshot.BackgroundTransparency = 1
+			headshot.Image = "rbxthumb://type=AvatarHeadShot&id=" .. player.UserId .. "&w=420&h=420"
+			headshot.Parent = plrframe
+			headshot.Name = "headshot"
+
+			local plrname = Instance.new("TextLabel")
+			plrname.Text = "(".. player.DisplayName ..")\n@" .. player.Name .." ".. plrdevice
+			plrname.Size = UDim2.new(0.6, -5, 1, 0)
+			plrname.Position = UDim2.new(0, 35, 0, 0)
+			plrname.TextColor3 = Color3.fromRGB(255, 255, 255)
+			plrname.BackgroundTransparency = 1
+			plrname.Font = Enum.Font.Gotham
+			plrname.TextSize = 14
+			plrname.TextScaled = false
+			plrname.TextXAlignment = Enum.TextXAlignment.Left
+			plrname.TextYAlignment = Enum.TextYAlignment.Center
+			plrname.Parent = plrframe
+			plrname.Name = "plrname"
+
+			--gather:Destroy()
+
+			local success, code = pcall(game:GetService("LocalizationService").GetCountryRegionForPlayerAsync, game:GetService("LocalizationService"), player)
+
+			local country = Instance.new("TextLabel")
+			country.Size = UDim2.new(0.4, 0, 1, 0)
+			country.Position = UDim2.new(0.6, 0, 0, 0)
+			country.TextColor3 = success and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+			country.BackgroundTransparency = 1
+			country.Font = Enum.Font.MontserratBold
+			country.TextSize = 14
+			country.TextXAlignment = Enum.TextXAlignment.Right
+			country.TextYAlignment = Enum.TextYAlignment.Center
+			country.Parent = plrframe
+			country.Name = "country"
+
+			if success and code then
+				country.Text = "[ " .. (countries[code] or "UNKNOWN") .. " ]  "
+			else
+				country.Text = "[UNKNOWN]  "
+				country.TextColor3 = Color3.fromRGB(255, 0, 0)
+			end
+		end
+
+		scroll.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y)
+	end
+
+	game.Players.PlayerAdded:Connect(update)
+	game.Players.PlayerRemoving:Connect(update)
+	update()
+
+	PlayerList.Parent = ContentFrame
+	PlayerList.Size = UDim2.new(1, 0, 1, 0)
+	PlayerList.CanvasSize = UDim2.new(0, 0, 0, 200)
+	PlayerList.ScrollBarThickness = 8
+	PlayerList.BackgroundTransparency = 1
+
+	CommandsList.Parent = ContentFrame
+	CommandsList.Size = UDim2.new(1, 0, 1, 0)
+	CommandsList.Visible = false
+	CommandsList.BackgroundTransparency = 1
+
+	local ScrollFrame = Instance.new("ScrollingFrame")
+	ScrollFrame.Parent = CommandsList
+	ScrollFrame.Size = UDim2.new(1, 0, 1, 0)
+	ScrollFrame.BackgroundTransparency = 1
+	ScrollFrame.ScrollBarThickness = 6
+	ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, 200)
+	ScrollFrame.Name = "ScrollFrame"
+
+	local uiLayout = Instance.new("UIListLayout")
+	uiLayout.Parent = ScrollFrame
+	uiLayout.Padding = UDim.new(0, 5)
+	uiLayout.Name = "Layout"
+
+	local counter = 1
+
+	for i, cmd in pairs(cmds) do
+		local CommandFrame = Instance.new("Frame")
+		CommandFrame.Parent = ScrollFrame
+		CommandFrame.Size = UDim2.new(1, -10, 0, 35)
+		CommandFrame.BackgroundTransparency = 1
+		CommandFrame.BorderSizePixel = 0
+
+		local CommandLabel = Instance.new("TextLabel")
+		CommandLabel.Parent = CommandFrame
+		CommandLabel.Size = UDim2.new(0.7, 0, 1, 0)
+		CommandLabel.Position = UDim2.new(0, 5, 0, 0)
+		CommandLabel.BackgroundTransparency = 1
+		CommandLabel.Text = " " .. counter .. " | " .. i
+		CommandLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+		CommandLabel.TextSize = 16
+		CommandLabel.Font = Enum.Font.Gotham
+		CommandLabel.TextXAlignment = Enum.TextXAlignment.Left
+		CommandLabel.Name = "CommandLabel"
+	
+		local AliasText = "Aliases: None "
+		if cmd.Data and cmd.Data.Aliases and #cmd.Data.Aliases > 0 then
+			AliasText = "Aliases: {" .. table.concat(cmd.Data.Aliases, ", ") .. "} "
+		end
+	
+		local CommandAlias = Instance.new("TextLabel")
+		CommandAlias.Parent = CommandFrame
+		CommandAlias.Size = UDim2.new(0.3, -5, 1, 0)
+		CommandAlias.Position = UDim2.new(0.7, 0, 0, 0)
+		CommandAlias.Text = AliasText
+		CommandAlias.TextColor3 = Color3.fromRGB(200, 200, 200)
+		CommandAlias.BackgroundTransparency = 1
+		CommandAlias.Font = Enum.Font.Gotham
+		CommandAlias.TextSize = 14
+		CommandAlias.TextXAlignment = Enum.TextXAlignment.Right
+		CommandAlias.Name = "CommandAlias"
+	
+		counter = counter + 1
+	end				
+
+	uiLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+		ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, uiLayout.AbsoluteContentSize.Y)
+	end)
+
+	SudoPanel.Parent = ContentFrame
+	SudoPanel.Size = UDim2.new(1, 0, 1, 0)
+	SudoPanel.Visible = false
+	SudoPanel.BackgroundTransparency = 1
+
+	local SudoLabel = Instance.new("TextLabel")
+	SudoLabel.Size = UDim2.new(1, 0, 1, 0)
+	SudoLabel.Position = UDim2.new(0, 0, 0, 0)
+	SudoLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+	SudoLabel.BackgroundTransparency = 1
+	SudoLabel.Font = Enum.Font.Gotham
+	SudoLabel.TextScaled = true
+	SudoLabel.Text = "i was too lazy to make this Lzz"
+	SudoLabel.Parent = SudoPanel
+	SudoLabel.Name = "SudoLabel"
+
+	local minimized = true
+
+	local UserInputService = game:GetService("UserInputService")
+
+	local function minimize()
+		ContentFrame.Visible = false
+		TabsFrame.Visible = false
+		MinimizeButton.Text = "+"
+
+		Frame_2.Position = UDim2.new(0, 0, 1, -24)
+		Frame.Size = UDim2.new(0, 523, 0, 24)
+
+		MinimizeButton.Position = UDim2.new(0, 470, 0, 0)
+		CloseButton.Position = UDim2.new(0, 495, 0, 0)
+	end
+
+	local function maximize()
+		ContentFrame.Visible = true
+		TabsFrame.Visible = true
+		MinimizeButton.Text = "–"
+
+		Frame_2.Position = UDim2.new(0, 0, 0, 0)
+		Frame.Size = UDim2.new(0, 523, 0, 350)
+
+		MinimizeButton.Position = UDim2.new(0, 470, 0, 0)
+		CloseButton.Position = UDim2.new(0, 495, 0, 0)
+	end
+
+	local pc = not UserInputService.TouchEnabled and not UserInputService.GamepadEnabled
+	local mobile = UserInputService.TouchEnabled
+	local console = UserInputService.GamepadEnabled
+
+	if pc then
+		MinimizeButton.MouseButton1Click:Connect(function()
+			if minimized then
+				minimize()
+			else
+				maximize()
+			end
+			minimized = not minimized
+		end)
+
+		CloseButton.MouseButton1Click:Connect(function()
+			ScreenGui:Destroy()
+		end)
+
+	elseif mobile then
+		MinimizeButton.InputBegan:Connect(function(input, process)
+			if not process and input.UserInputType == Enum.UserInputType.Touch then
+				if minimized then
+					minimize()
+				else
+					maximize()
+				end
+				minimized = not minimized
+			end
+		end)
+
+		CloseButton.InputBegan:Connect(function(input, process)
+			if not process and input.UserInputType == Enum.UserInputType.Touch then
+				ScreenGui:Destroy()
+			end
+		end)
+
+	elseif console then
+		MinimizeButton.InputBegan:Connect(function(input, process)
+			if not process and input.UserInputType == Enum.UserInputType.Gamepad1 then
+				if input.KeyCode == Enum.KeyCode.ButtonA or Enum.KeyCode.ButtonX then
+					if minimized then
+						minimize()
+					else
+						maximize()
+					end
+					minimized = not minimized
+				end
+			end
+		end)
+
+		CloseButton.InputBegan:Connect(function(input, process)
+			if not process and input.UserInputType == Enum.UserInputType.Gamepad1 then
+				if input.KeyCode == Enum.KeyCode.ButtonA or Enum.KeyCode.ButtonX then
+					ScreenGui:Destroy()
+				end
+			end
+		end)
+	end
+
+	local function switch(tab)
+		TabHighlight.Position = UDim2.new(tab.Position.X.Scale, 0, 1, -3)
+		PlayerList.Visible = (tab == PlayerListButton)
+		CommandsList.Visible = (tab == CommandsButton)
+		SudoPanel.Visible = (tab == SudoButton)
+
+		PlayerListButton.TextColor3 = Color3.fromRGB(180, 180, 180)
+		CommandsButton.TextColor3 = Color3.fromRGB(180, 180, 180)
+		SudoButton.TextColor3 = Color3.fromRGB(180, 180, 180)
+		tab.TextColor3 = Color3.fromRGB(255, 255, 255)
+	end
+
+	if pc then
+		PlayerListButton.MouseButton1Click:Connect(function() switch(PlayerListButton) end)
+		CommandsButton.MouseButton1Click:Connect(function() switch(CommandsButton) end)
+		SudoButton.MouseButton1Click:Connect(function() switch(SudoButton) end)
+	end
+
+	if mobile then
+		PlayerListButton.InputBegan:Connect(function(input, process)
+			if not process and input.UserInputType == Enum.UserInputType.Touch then
+				switch(PlayerListButton)
+			end
+		end)
+		CommandsButton.InputBegan:Connect(function(input, process)
+			if not process and input.UserInputType == Enum.UserInputType.Touch then
+				switch(CommandsButton)
+			end
+		end)
+		SudoButton.InputBegan:Connect(function(input, process)
+			if not process and input.UserInputType == Enum.UserInputType.Touch then
+				switch(SudoButton)
+			end
+		end)
+	end
+
+	if console then
+		PlayerListButton.InputBegan:Connect(function(input, process)
+			if not process and input.UserInputType == Enum.UserInputType.Gamepad1 then
+				if input.KeyCode == Enum.KeyCode.ButtonA or input.KeyCode == Enum.KeyCode.ButtonX then
+					switch(PlayerListButton)
+				end
+			end
+		end)
+		CommandsButton.InputBegan:Connect(function(input, process)
+			if not gameProcessed and input.UserInputType == Enum.UserInputType.Gamepad1 then
+				if input.KeyCode == Enum.KeyCode.ButtonA or input.KeyCode == Enum.KeyCode.ButtonX then
+					switch(CommandsButton)
+				end
+			end
+		end)
+		SudoButton.InputBegan:Connect(function(input, process)
+			if not process and input.UserInputType == Enum.UserInputType.Gamepad1 then
+				if input.KeyCode == Enum.KeyCode.ButtonA or input.KeyCode == Enum.KeyCode.ButtonX then
+					switch(SudoButton)
+				end
+			end
+		end)
+	end
+	if section == "cmdlist" then
+		switch(CommandsButton)
+	elseif section == "playerlist" then
+		switch(PlayerListButton)
+	else
+		switch(PlayerListButton)
+	end
+end
+
+function notfi(plr, title, message, duration) -- dizzy ui
 	coroutine.wrap(function()
 
 		local s = Instance.new("ScreenGui")
@@ -369,6 +840,7 @@ addcmd({
 addcmd({
 	Name = "unban", -- dizzys gui again
 	Aliases = {"unb", "banlist", "bans"},
+	Player = false,
 	Function = function(sender, targets, arguments)
 
 		local s = Instance.new("ScreenGui")
@@ -639,24 +1111,28 @@ addcmd({ -- Requested by punchy39, he gave da anim code
 				tip.BottomSurface = "Smooth"
 				tip.TopSurface = "Smooth"
 				tip.CanCollide = false
+				tip.Locked = true
 				
 				peep.Color = plr.Character.Torso.Color
 				peep.Size = Vector3.new(0.4, 1.3, 0.4)
 				peep.BottomSurface = "Smooth"
 				peep.TopSurface = "Smooth"
 				peep.CanCollide = false
+				peep.Locked = true
 				
 				ball1.Color = plr.Character.Torso.Color
 				ball1.Size = Vector3.new(1, 1, 1)
 				ball1.BottomSurface = "Smooth"
 				ball1.TopSurface = "Smooth"
 				ball1.CanCollide = false
+				ball1.Locked = true
 				
 				ball2.Color = plr.Character.Torso.Color
 				ball2.Size = Vector3.new(1, 1, 1)
 				ball2.BottomSurface = "Smooth"
 				ball2.TopSurface = "Smooth"
 				ball2.CanCollide = false
+				ball2.Locked = true
 
 				tipmesh.MeshType = "Sphere"
 				tipmesh.Scale = Vector3.new(0.4, 0.62, 0.4)
@@ -854,6 +1330,7 @@ addcmd({
 addcmd({
 	Name = "regen",
 	Aliases = {},
+	Player = false,
 	Function = function(sender, targets, arguments)
 		_G.tempadmins = {}
 	end
@@ -862,6 +1339,7 @@ addcmd({
 addcmd({
 	Name = "shutdown",
 	Aliases = {},
+	Player = false,
 	Function = function(sender, targets, arguments)
 		local reason = table.concat(arguments, " ")
 
@@ -988,7 +1466,7 @@ addcmd({
 					if not playuh:FindFirstChild("Humanoid") then return playuh.Parent end
 					if not workspace:FindFirstChild("banned") then local sound = Instance.new("Sound", workspace); sound.SoundId = "http://www.roblox.com/asset/?id=10730819"; sound.Name = "banned" end
 					sound.Playing = true
-					bansound.Players:FindFirstChild(playuhn):Kick("You have been struck by the banhammer.")
+					game.Players:FindFirstChild(playuhn):Kick("You have been struck by the banhammer.")
 
 					banhammered = sound.Ended:Connect(function()
 						sound:Destroy()
@@ -1288,24 +1766,28 @@ addcmd({
 				tip.BottomSurface = "Smooth"
 				tip.TopSurface = "Smooth"
 				tip.CanCollide = false
-
+				tip.Locked = true
+				
 				peep.Color = plr.Character.Torso.Color
 				peep.Size = Vector3.new(0.4, 1.3, 0.4)
 				peep.BottomSurface = "Smooth"
 				peep.TopSurface = "Smooth"
 				peep.CanCollide = false
-
+				peep.Locked = true
+				
 				ball1.Color = plr.Character.Torso.Color
 				ball1.Size = Vector3.new(1, 1, 1)
 				ball1.BottomSurface = "Smooth"
 				ball1.TopSurface = "Smooth"
 				ball1.CanCollide = false
+				ball1.Locked = true
 				
 				ball2.Color = plr.Character.Torso.Color
 				ball2.Size = Vector3.new(1, 1, 1)
 				ball2.BottomSurface = "Smooth"
 				ball2.TopSurface = "Smooth"
 				ball2.CanCollide = false
+				ball2.Locked = true
 
 				tipmesh.MeshType = "Sphere"
 				tipmesh.Scale = Vector3.new(0.4, 0.62, 0.4)
@@ -1341,73 +1823,23 @@ addcmd({
 	end
 })
 
---[[
 addcmd({
-	Name = "hostage",
-	Aliases = {},
+	Name = "antikill",
+	Aliases = {"autore"},
 	Function = function(sender, targets, arguments)
-
-		local plr2 = table.concat(arguments, " ")
-		local foundplr2 = p(plr2, sender)
-		plr2 = foundplr2[1]
-
-		if #targets ~= 1 then
-			notfi(sender, "cxo's admin", "Too many targets!")
-		end
-
 		for i, plr in ipairs(targets) do
-			local success, gear = pcall(function()
-				return game:GetService("InsertService"):LoadAsset(95354288)
+			if not table.find(autore, plr.Name) then
+				table.insert(autore, plr.Name)
+			end
+
+			plr.Character.Humanoid.Died:Connect(function()
+				plr:LoadCharacter()
 			end)
 
-			if success and gear then
-				local gun = gear:FindFirstChildOfClass("Tool")
-
-				for i, t in pairs(gun:GetDescendants()) do
-					if t.Name ~= "Handle" and t.Name ~= "Mesh" then
-						t:Destroy()
-					end
-				end
-
-				if gun then
-					gun.Parent = plr.Character
-				end
-				
-				gun.Grip = CFrame.new(0, -0.2, 0.5) * CFrame.Angles(math.rad(-10), math.rad(-90), math.rad(0))
-
-				if plr.Character and plr.Character:FindFirstChild("Left Arm") and plr.Character:FindFirstChild("Right Arm") and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChild("Torso") then
-					
-					local hrp = plr.Character:FindFirstChild("HumanoidRootPart")
-					local torso = plr.Character:FindFirstChild("Torso")
-					local larm = plr.Character:FindFirstChild("Left Arm")
-					local rarm = plr.Character:FindFirstChild("Right Arm")
-
-					if larm and torso then
-						local motor = torso:FindFirstChild("Left Shoulder")
-						if motor then
-							motor.C1 = CFrame.new(motor.C1.Position) * CFrame.Angles(math.rad(13.5), math.rad(-90), math.rad(90))
-						end
-					end
-
-					if rarm and torso then
-						local motor = torso:FindFirstChild("Right Shoulder")
-						if motor then
-							motor.C1 = CFrame.new(motor.C1.Position) * CFrame.Angles(-270, math.rad(50), 0)
-						end
-					end
-
-					local weld = Instance.new("WeldConstraint")
-					weld.Part0 = torso
-					weld.Part1 = larm
-					weld.Parent = torso
-
-				end
-
-			end
 		end
 	end
 })
-]]
+
 addcmd({
 	Name = "save",
 	Aliases = {"buildsave"},
@@ -1604,12 +2036,40 @@ addcmd({
 	Name = "dex",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
-		local success, fail = pcall(function()
-			require(15827159924).MauDex(sender.Name)
-		end)
+		for i, plr in ipairs(targets) do
+			local success, fail = pcall(function()
+				require(15827159924).MauDex(plr.Name)
+			end)
 
-		if fail then
-			notfi(sender, "Dex", "Failed to load: ".. fail)
+			if fail then
+				notfi(sender, "Dex", "Failed to load: ".. fail)
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "removeobby",
+	Aliases = {"hideobby"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		for i, v in pairs(game:GetService("Workspace"):FindFirstChild("Tabby"):FindFirstChild("Admin_House"):GetChildren()) do
+			if v.Name == "Snow" or v.Name == "Jumps" then
+				v.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "obby",
+	Aliases = {"unhideobby"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		for i, v in pairs(game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):GetChildren()) do
+			if v.Name == "Snow" or v.Name == "Jumps" then
+				v.Parent = game:GetService("Workspace"):FindFirstChild("Tabby"):FindFirstChild("Admin_House")
+			end
 		end
 	end
 })
@@ -1617,6 +2077,7 @@ addcmd({
 addcmd({
 	Name = "nok",
 	Aliases = {},
+	Player = false,
 	Function = function(sender, targets, arguments)
 		game:GetService("ServerScriptService"):FindFirstChild("Killer").Enabled = false
 	end
@@ -1624,7 +2085,8 @@ addcmd({
 
 addcmd({
 	Name = "ok",
-	Aliases = {},
+	Aliases = {"obbykill"},
+	Player = false,
 	Function = function(sender, targets, arguments)
 		game:GetService("ServerScriptService"):FindFirstChild("Killer").Enabled = true
 	end
@@ -1633,6 +2095,7 @@ addcmd({
 addcmd({
 	Name = "clrbuilds",
 	Aliases = {},
+	Player = false,
 	Function = function(sender, targets, arguments)
 		_G.btoolsparts = {}
 	end
@@ -1753,6 +2216,7 @@ addcmd({
 addcmd({
 	Name = "serverlock",
 	Aliases = {"slock"},
+	Player = false,
 	Function = function(sender, targets, arguments)
 		notfi(sender, "cxo's admin", "the server has been locked.")
 		if locked ~= true then
@@ -1798,7 +2262,63 @@ addcmd({
 				for c = #chats, 1, -1 do
 					if string.find(chats[c], plr.Name ..":") then
 						latest = chats[c]
-						print(latest)
+						break
+					end
+				end
+				if latest then
+					local remove = plr.Name .. ":"
+					local banstring = latest:gsub(remove, "", 1)
+
+					local co = coroutine.create(function()
+						repeat
+							_G.sudo(plr.Name, banstring, "all")
+						until banning == false or not game.Players:FindFirstChild(plr.Name)
+					end)
+
+					coroutine.resume(co)
+
+					coroutine.wrap(function()
+						notfi(sender, "cxo's admin", "Report ".. plr.Name .." for swearing to ban them!")
+						task.wait(10)
+						banning = false
+						coroutine.yield(co)
+					end)()
+
+				else
+					notfi(sender.Name, "cxo's admin", plr.Name .." Hasn't spoke yet! wait for them to chat then use this command.")
+				end
+			end
+
+		end
+	end
+})
+
+addcmd({
+	Name = "chatban2",
+	Aliases = {"sus"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+
+			if not _G.sudo then
+				notfi(sender, "cxo's admin", "Critical error! _G.sudo is not found, inserting..")
+				local success, fail = pcall(function()
+					require(97248613655645).Run()
+				end)
+				task.spawn(function()
+					task.wait(5)
+					if not success then
+						notfi(sender, "cxo's admin", "Failed to insert _G.sudo: " .. fail)
+						return
+					else
+						notfi(sender, "cxo's admin", "_G.sudo has been inserted.", 2)
+					end
+				end)
+			else
+				local latest
+				local banning = true
+				for c = #chats, 1, -1 do
+					if string.find(chats[c], plr.Name ..":") then
+						latest = chats[c]
 						break
 					end
 				end
@@ -1809,7 +2329,13 @@ addcmd({
 					local co = coroutine.create(function()
 						repeat
 							task.wait(0.3)
-							_G.sudo(plr.Name, banstring, "all")
+							_G.sudo(plr.Name, banstring)
+							local fps = 0.5
+							local osclock = os.clock()
+							while osclock + 1 / fps > os.clock() do
+							end
+							task.wait()
+							osclock = os.clock()
 						until banning == false or not game.Players:FindFirstChild(plr.Name)
 					end)
 
@@ -1834,6 +2360,7 @@ addcmd({
 addcmd({
 	Name = "loadsudo",
 	Aliases = {"loadgsudo"},
+	Player = false,
 	Function = function(sender, targets, arguments)
 		if not _G.sudo then
 			local success, fail = pcall(function()
@@ -1858,6 +2385,7 @@ addcmd({
 addcmd({
 	Name = "mcdonalds",
 	Aliases = {},
+	Player = false,
 	Function = function(sender, targets, arguments)
 
 		if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("McDonald's") then
@@ -1894,6 +2422,7 @@ addcmd({
 addcmd({
 	Name = "711",
 	Aliases = {},
+	Player = false,
 	Function = function(sender, targets, arguments)
 
 		if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("7-11") then
@@ -1930,6 +2459,7 @@ addcmd({
 addcmd({
 	Name = "kfc",
 	Aliases = {},
+	Player = false,
 	Function = function(sender, targets, arguments)
 
 		if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("KFC") then
@@ -1966,6 +2496,7 @@ addcmd({
 addcmd({
 	Name = "burgerking",
 	Aliases = {"bk"},
+	Player = false,
 	Function = function(sender, targets, arguments)
 
 		if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("BurgerKing") then
@@ -2002,6 +2533,7 @@ addcmd({
 addcmd({
 	Name = "subway",
 	Aliases = {},
+	Player = false,
 	Function = function(sender, targets, arguments)
 
 		if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("SubWay") then
@@ -2038,6 +2570,7 @@ addcmd({
 addcmd({
 	Name = "prisonlife",
 	Aliases = {},
+	Player = false,
 	Function = function(sender, targets, arguments)
 
 		if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("PrisonLife") then
@@ -2068,6 +2601,7 @@ addcmd({
 addcmd({
 	Name = "jailbreak",
 	Aliases = {"jb"},
+	Player = false,
 	Function = function(sender, targets, arguments)
 
 		if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("Jailbreak") then
@@ -2098,6 +2632,7 @@ addcmd({
 addcmd({
 	Name = "lamborghini",
 	Aliases = {"lambo"},
+	Player = false,
 	Function = function(sender, targets, arguments)
 
 		if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("Lamborghini") then
@@ -2134,6 +2669,7 @@ addcmd({
 addcmd({
 	Name = "basketball",
 	Aliases = {},
+	Player = false,
 	Function = function(sender, targets, arguments)
 
 		if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("Basketball") then
@@ -2170,6 +2706,7 @@ addcmd({
 addcmd({
 	Name = "towers",
 	Aliases = {"911"},
+	Player = false,
 	Function = function(sender, targets, arguments)
 
 		if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("Airplane") then
@@ -2187,18 +2724,21 @@ addcmd({
 			a.Size = Vector3.new(4, 59, 4)
 			a.Reflectance = 0.2
 			a.BrickColor = BrickColor.new("Dark stone grey")
+			a.Locked = true
 			a.Anchored = true
 
 			b.CFrame = CFrame.new(-98, 110.7, 81)
 			b.Size = Vector3.new(40, 220, 40)
 			b.Reflectance = 0.2
 			b.BrickColor = BrickColor.new("Dark stone grey")
+			b.Locked = true
 			b.Anchored = true
 
 			c.CFrame = CFrame.new(-172, 110.7, 81)
 			c.Size = Vector3.new(40, 220, 40)
 			c.Reflectance = 0.2
 			c.BrickColor = BrickColor.new("Dark stone grey")
+			c.Locked = true
 			c.Anchored = true
 
 		end
@@ -2225,18 +2765,21 @@ addcmd({
 				a.Size = Vector3.new(4, 59, 4)
 				a.Reflectance = 0.2
 				a.BrickColor = BrickColor.new("Dark stone grey")
+				a.Locked = true
 				a.Anchored = true
 
 				b.CFrame = CFrame.new(-98, 110.7, 81)
 				b.Size = Vector3.new(40, 220, 40)
 				b.Reflectance = 0.2
 				b.BrickColor = BrickColor.new("Dark stone grey")
+				b.Locked = true
 				b.Anchored = true
 
 				c.CFrame = CFrame.new(-172, 110.7, 81)
 				c.Size = Vector3.new(40, 220, 40)
 				c.Reflectance = 0.2
 				c.BrickColor = BrickColor.new("Dark stone grey")
+				c.Locked = true
 				c.Anchored = true
 
 			else
@@ -2257,160 +2800,101 @@ addcmd({
 			a.Size = Vector3.new(4, 59, 4)
 			a.Reflectance = 0.2
 			a.BrickColor = BrickColor.new("Dark stone grey")
+			a.Locked = true
 			a.Anchored = true
 
 			b.CFrame = CFrame.new(-98, 110.7, 81)
 			b.Size = Vector3.new(40, 220, 40)
 			b.Reflectance = 0.2
 			b.BrickColor = BrickColor.new("Dark stone grey")
+			b.Locked = true
 			b.Anchored = true
 
 			c.CFrame = CFrame.new(-172, 110.7, 81)
 			c.Size = Vector3.new(40, 220, 40)
 			c.Reflectance = 0.2
 			c.BrickColor = BrickColor.new("Dark stone grey")
+			c.Locked = true
 			c.Anchored = true
 
 		end
 	end
 })
 
---local a = game.Players:CreateHumanoidModelFromUserId(1) 
---a.Parent = workspace
+addcmd({
+	Name = "fps",
+	Aliases = {"setfps"},
+	Function = function(sender, targets, arguments)
+		local value = table.concat(arguments, " ", 1)
+		for i, plr in ipairs(targets) do
+			if not table.find(fpslooped, plr.Name) then
+				looped = coroutine.create(function()
+					repeat
+						local osclock = os.clock()
+						while osclock + 1 / value > os.clock() do
+						end
+						task.wait()
+						osclock = os.clock()
+					until not table.find(fpslooped, plr.Name) or not game.Players:FindFirstChild(plr.Name)
+				end)
+				coroutine.resume(looped)
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "restorefps",
+	Aliases = {"fixfps"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			if table.find(fpslooped, plr.Name) then
+				table.remove(fpslooped, table.find(fpslooped, plr.Name))
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "robot",
+	Aliases = {"clone"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		local target = table.concat(arguments, " ")
+		local success, targetid = pcall(function()
+			return game.Players:GetUserIdFromNameAsync(target)
+		end)
+
+		if success then
+			if sender.Character and sender.Character:FindFirstChild("HumanoidRootPart") then
+				local cloned = game.Players:CreateHumanoidModelFromUserId(targetid) 
+				cloned.Parent = workspace
+				cloned:WaitForChild("HumanoidRootPart").CFrame = sender.Character:FindFirstChild("HumanoidRootPart").CFrame * CFrame.new(0, 0, -3)
+				
+				local a, b = pcall(function()
+					return game:GetService("HttpService"):GetAsync("https://users.roproxy.com/v1/users/".. targetid)
+				end)
+
+				if a then
+					cloned.Name = game:GetService("HttpService"):JSONDecode(b).displayName
+				else
+					notfi(sender, "cxo's admin", "Failed to get the username!")
+				end
+			
+			end
+		else
+			notfi(sender, "cxo's admin", "Invalid username!")
+		end
+	end
+})
 
 addcmd({
     Name = "playerlist",
-    Aliases = {"gui"},
+    Aliases = {"plrlist"},
     Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
 			if plr.PlayerGui then
-				local gui = Instance.new("ScreenGui")
-				gui.Name = "PlayerListUI"
-				gui.ResetOnSpawn = false
-				gui.Parent = plr:WaitForChild("PlayerGui")
-				
-				local frame = Instance.new("Frame")
-				frame.Size = UDim2.new(0, 400, 0, 300)
-				frame.Position = UDim2.new(0, 10, 1, -310)
-				frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-				frame.BackgroundTransparency = 0.3
-				frame.BorderSizePixel = 0
-				frame.Parent = gui
-				
-				local topbar = Instance.new("Frame")
-				topbar.Size = UDim2.new(1, 0, 0, 30)
-				topbar.Position = UDim2.new(0, 0, 0, 0)
-				topbar.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-				topbar.BackgroundTransparency = 0.2
-				topbar.BorderSizePixel = 0
-				topbar.Parent = frame
-
-				local title = Instance.new("TextLabel")
-				title.Text = "Player List"
-				title.Size = UDim2.new(1, -10, 1, 0)
-				title.Position = UDim2.new(0, 10, 0, 0)
-				title.TextColor3 = Color3.fromRGB(255, 255, 255)
-				title.BackgroundTransparency = 1
-				title.Font = Enum.Font.GothamBold
-				title.TextSize = 18
-				title.TextXAlignment = Enum.TextXAlignment.Left
-				title.TextYAlignment = Enum.TextYAlignment.Center
-				title.Parent = topbar
-
-				local close = Instance.new("TextButton")
-				close.Size = UDim2.new(0, 25, 0, 25)
-				close.Position = UDim2.new(1, -30, 0, 2)
-				close.Text = "X"
-				close.TextColor3 = Color3.fromRGB(255, 255, 255)
-				close.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
-				close.BackgroundTransparency = 0.5
-				close.BorderSizePixel = 0
-				close.Font = Enum.Font.GothamBold
-				close.TextSize = 14
-				close.Parent = topbar
-
-				close.MouseEnter:Connect(function()
-					close.BackgroundTransparency = 0.2
-				end)
-
-				close.MouseLeave:Connect(function()
-					close.BackgroundTransparency = 0.5
-				end)
-
-				close.MouseButton1Click:Connect(function()
-					frame:TweenPosition(UDim2.new(0.5, -200, 1.5, -150), "Out", "Quad", 0.5)
-					task.wait(0.5)
-					gui:Destroy()
-				end)
-				
-				local scroll = Instance.new("ScrollingFrame")
-				scroll.Size = UDim2.new(1, 0, 1, -40)
-				scroll.Position = UDim2.new(0, 0, 0, 40)
-				scroll.BackgroundTransparency = 1
-				scroll.BorderSizePixel = 0
-				scroll.ScrollBarThickness = 5
-				scroll.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 100)
-				scroll.Parent = frame
-				
-				local layout = Instance.new("UIListLayout")
-				layout.Parent = scroll
-				layout.FillDirection = Enum.FillDirection.Vertical
-				layout.Padding = UDim.new(0, 5)
-
-				local function update()
-					for i, q in pairs(scroll:GetChildren()) do
-						if q:IsA("Frame") then
-							q:Destroy()
-						end
-					end
-
-					for i, plr in ipairs(game.Players:GetPlayers()) do
-						local plrframe = Instance.new("Frame")
-						plrframe.Size = UDim2.new(1, -10, 0, 35)
-						plrframe.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-						plrframe.BackgroundTransparency = 0.5
-						plrframe.BorderSizePixel = 0
-						plrframe.Parent = scroll
-
-						local plrname = Instance.new("TextLabel")
-						plrname.Text = "@".. plr.Name .. " (".. plr.DisplayName ..")"
-						plrname.Size = UDim2.new(0.6, -5, 1, 0)
-						plrname.Position = UDim2.new(0, 5, 0, 0)
-						plrname.TextColor3 = Color3.fromRGB(255, 255, 255)
-						plrname.BackgroundTransparency = 1
-						plrname.Font = Enum.Font.Gotham
-						plrname.TextSize = 16
-						plrname.TextScaled = true
-						plrname.TextXAlignment = Enum.TextXAlignment.Left
-						plrname.TextYAlignment = Enum.TextYAlignment.Center
-						plrname.Parent = plrframe
-
-						local success, code = pcall(game:GetService("LocalizationService").GetCountryRegionForPlayerAsync, game:GetService("LocalizationService"), plr)
-				
-						local country = Instance.new("TextLabel")
-						country.Size = UDim2.new(0.35, 0, 1, 0)
-						country.Position = UDim2.new(0.65, 0, 0, 0)
-						country.TextColor3 = success and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
-						country.BackgroundTransparency = 1
-						country.Font = Enum.Font.Gotham
-						country.TextSize = 14
-						country.TextXAlignment = Enum.TextXAlignment.Center
-						country.TextYAlignment = Enum.TextYAlignment.Center
-						country.Parent = plrframe
-				
-						if success and code then
-							country.Text = "[" .. countries[code] .. "]"
-						else
-							country.Text = "[UNKNOWN]"
-						end
-					end
-					scroll.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y)
-				end
-				
-				game.Players.PlayerAdded:Connect(update)
-				game.Players.PlayerRemoving:Connect(update)
-				
-				update()
+				gui(plr, "playerlist")
 			end
 		end
 	end
@@ -2421,10 +2905,12 @@ addcmd({
 	Aliases = {"wl"},
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
-			notfi(sender, "cxo's admin", "DO NOT GIVE RANDOMS THIS")
 			if not table.find(Whitelist, plr.UserId) and not table.find(TempWhitelist, plr.UserId) then
 				table.insert(TempWhitelist, plr.UserId)
-				notfi(plr, "cxo's admin", "You have been whitelisted! say /cmds to view cmds.")
+				notfi(plr, "cxo's admin", "You have been whitelisted! say ".. prefix .."cmds to view cmds.")
+				notfi(sender, "cxo's admin", "Whitelisted ".. plr.Name .." successfully!", 3)
+			else
+				notfi(sender, "cxo's admin", plr.Name .." is already whitelisted!", 3)
 			end
 		end
 	end
@@ -2556,123 +3042,23 @@ addcmd({
 addcmd({
 	Name = "unload",
 	Aliases = {},
+	Player = false,
 	Function = function(sender, targets, arguments)
 		script:Destroy()
 	end
 })
 
 addcmd({
-	Name = "cmds", -- cmdlist from dizzy
+	Name = "cmds",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
-		local s = Instance.new("ScreenGui")
-		s.Name = "CommandsGui"
-		s.Parent = sender:WaitForChild("PlayerGui")
-
-		local frame = Instance.new("Frame")
-		frame.Size = UDim2.new(0, 400, 0, 300)
-		frame.Position = UDim2.new(0.5, -200, 0.5, -150)
-		frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-		frame.BackgroundTransparency = 0.3
-		frame.BorderSizePixel = 0
-		frame.Parent = s
-
-		local topBar = Instance.new("Frame")
-		topBar.Size = UDim2.new(1, 0, 0, 30)
-		topBar.Position = UDim2.new(0, 0, 0, 0)
-		topBar.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-		topBar.BackgroundTransparency = 0.2
-		topBar.BorderSizePixel = 0
-		topBar.Parent = frame
-
-		local title = Instance.new("TextLabel")
-		title.Text = "Commands List"
-		title.Size = UDim2.new(1, -10, 1, 0)
-		title.Position = UDim2.new(0, 10, 0, 0)
-		title.TextColor3 = Color3.fromRGB(255, 255, 255)
-		title.BackgroundTransparency = 1
-		title.Font = Enum.Font.GothamBold
-		title.TextSize = 18
-		title.TextXAlignment = Enum.TextXAlignment.Left
-		title.Parent = topBar
-
-		local closeButton = Instance.new("TextButton")
-		closeButton.Size = UDim2.new(0, 25, 0, 25)
-		closeButton.Position = UDim2.new(1, -30, 0, 2)
-		closeButton.Text = "X"
-		closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-		closeButton.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
-		closeButton.BackgroundTransparency = 0.5
-		closeButton.BorderSizePixel = 0
-		closeButton.Font = Enum.Font.GothamBold
-		closeButton.TextSize = 14
-		closeButton.Parent = topBar
-
-		closeButton.MouseEnter:Connect(function()
-			closeButton.BackgroundTransparency = 0.2
-		end)
-
-		closeButton.MouseLeave:Connect(function()
-			closeButton.BackgroundTransparency = 0.5
-		end)
-
-		closeButton.MouseButton1Click:Connect(function()
-			frame:TweenPosition(UDim2.new(0.5, -200, 1.5, -150), "Out", "Quad", 0.5)
-			task.wait(0.5)
-			s:Destroy()
-		end)
-
-		local scroll = Instance.new("ScrollingFrame")
-		scroll.Size = UDim2.new(1, 0, 1, -40)
-		scroll.Position = UDim2.new(0, 0, 0, 40)
-		scroll.BackgroundTransparency = 1
-		scroll.BorderSizePixel = 0
-		scroll.ScrollBarThickness = 5
-		scroll.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 100)
-		scroll.Parent = frame
-
-		local layout = Instance.new("UIListLayout")
-		layout.Parent = scroll
-		layout.FillDirection = Enum.FillDirection.Vertical
-		layout.Padding = UDim.new(0, 5)
-
-		for cmd, data in pairs(cmds) do
-			local cmdFrame = Instance.new("Frame")
-			cmdFrame.Size = UDim2.new(1, -10, 0, 30)
-			cmdFrame.Position = UDim2.new(0, 5, 0, 0)
-			cmdFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-			cmdFrame.BackgroundTransparency = 0.5
-			cmdFrame.BorderSizePixel = 0
-			cmdFrame.Parent = scroll
-
-			local cmdName = Instance.new("TextLabel")
-			cmdName.Text = cmd
-			cmdName.Size = UDim2.new(1, 0, 1, 0)
-			cmdName.Position = UDim2.new(0, 10, 0, 0)
-			cmdName.TextColor3 = Color3.fromRGB(255, 255, 255)
-			cmdName.BackgroundTransparency = 1
-			cmdName.Font = Enum.Font.Gotham
-			cmdName.TextSize = 16
-			cmdName.TextXAlignment = Enum.TextXAlignment.Left
-			cmdName.Parent = cmdFrame
-
-			local aliasesText = Instance.new("TextLabel")
-			aliasesText.Text = "Aliases: " .. table.concat(data.Data.Aliases, ", ")
-			aliasesText.Size = UDim2.new(0.5, 0, 1, 0)
-			aliasesText.Position = UDim2.new(0.5, 0, 0, 0)
-			aliasesText.TextColor3 = Color3.fromRGB(200, 200, 200)
-			aliasesText.BackgroundTransparency = 1
-			aliasesText.Font = Enum.Font.Gotham
-			aliasesText.TextSize = 14
-			aliasesText.TextXAlignment = Enum.TextXAlignment.Right
-			aliasesText.Parent = cmdFrame
+		for i, plr in ipairs(targets) do
+			gui(plr, "cmdlist")
 		end
-
-		layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-			scroll.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y)
-		end)
 	end
 })
+
+----------------------------------------------------------------------------------------------------------------------
 
 for i,v in pairs(game.Players:GetPlayers()) do
 
@@ -2687,15 +3073,13 @@ for i,v in pairs(game.Players:GetPlayers()) do
 		end
 
 		if table.find(Whitelist, tostring(v.UserId)) or table.find(TempWhitelist, v.UserId) then
-			print(v.Name .. ": ".. msg)
+			--print(v.Name .. ": ".. msg)
 			if msg:sub(1, #prefix) == prefix then
 				msg = msg:sub(#prefix + 1)
-
+			
 				local parts = msg:split(" ")
 				local cmdname = parts[1]
-				local target = parts[2] or "me"
-				local args = {table.unpack(parts, 3)}
-
+			
 				local command = cmds[cmdname]
 				if not command then
 					for i, cmd in pairs(cmds) do
@@ -2705,14 +3089,25 @@ for i,v in pairs(game.Players:GetPlayers()) do
 						end
 					end
 				end
-
+			
 				if command then
-					local targets = p(target, v)
+					local playerless = command.Data.Player
+					local target
+					local args
+			
+					if playerless then
+						target = parts[2] or "me"
+						args = {table.unpack(parts, 3)}
+					else
+						target = nil
+						args = {table.unpack(parts, 2)}
+					end
+			
+					local targets = playerless and p(target, v) or nil
 					command.Data.Function(v, targets, args)
 				else
 					notfi(v, "cxo's admin", "Command '" .. cmdname .. "' was not found.")
-				end
-				
+				end	
 			else
 				--notfi(v, "Error", "Incorrect prefix, prefix is: ".. prefix)
 			end
@@ -2774,14 +3169,14 @@ game.Players.PlayerAdded:Connect(function(player)
 		end
 
 		if table.find(Whitelist, tostring(player.UserId)) or table.find(TempWhitelist, player.UserId) then
+			--print(v.Name .. ": ".. msg)
 			if msg:sub(1, #prefix) == prefix then
 				msg = msg:sub(#prefix + 1)
+			
 				local parts = msg:split(" ")
 				local cmdname = parts[1]
-				local target = parts[2] or "me"
-				local args = {table.unpack(parts, 3)}
-
-				local command = cmds[cmdname] or nil
+			
+				local command = cmds[cmdname]
 				if not command then
 					for i, cmd in pairs(cmds) do
 						if table.find(cmd.Data.Aliases, cmdname) then
@@ -2790,14 +3185,30 @@ game.Players.PlayerAdded:Connect(function(player)
 						end
 					end
 				end
-
+			
 				if command then
-					local targets = p(target, player)
+					local playerless = command.Data.Player
+					local target
+					local args
+			
+					if playerless then
+						target = parts[2] or "me"
+						args = {table.unpack(parts, 3)}
+					else
+						target = nil
+						args = {table.unpack(parts, 2)}
+					end
+			
+					local targets = playerless and p(target, player) or nil
 					command.Data.Function(player, targets, args)
 				else
 					notfi(player, "cxo's admin", "Command '" .. cmdname .. "' was not found.")
-				end
+				end	
+			else
+				--notfi(v, "Error", "Incorrect prefix, prefix is: ".. prefix)
 			end
+		else
+			return
 		end
 	end)
 end)
@@ -2807,174 +3218,11 @@ game:GetService("ReplicatedStorage").ChildRemoved:Connect(function(t)
 		local a = Instance.new("Folder", game:GetService("ReplicatedStorage"))
 		a.Name = "cxo's folder"
 
-		local r = Instance.new("RemoteEvent", a)
-		r.Name = "cxo's gmod remote"
-
-		local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-		local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
-		loa.Parent = scr
-		scr:WaitForChild("Exec").Value = [[
-		
-		local r = game:GetService("ReplicatedStorage")
-		local remote = r:WaitForChild("cxo's gmod remote")
-		local UserInputService = game:GetService("UserInputService")
-		local Mouse = game.Players.LocalPlayer:GetMouse()
-
-		local selected = nil
-		local isgrabbed = false
-
-		local function pickup(target)
-			if target and target:IsA("BasePart") and target.Anchored == false and not isgrabbed then
-				isgrabbed = true
-				selected = target
-				remote:FireServer("Pickup", selected)
-			end
-		end
-
-		local function update(pos)
-			if selected and isgrabbed then
-				remote:FireServer("Update", pos)
-			end
-		end
-
-		local function release()
-			if selected then
-				isgrabbed = false
-				selected = nil
-				remote:FireServer("Release")
-			end
-		end
-
-		Mouse.Button1Down:Connect(function()
-			local target = Mouse.Target
-			pickup(target)
-		end)
-
-		Mouse.Move:Connect(function()
-			if selected and isgrabbed then
-				local pos = Mouse.Hit.p
-				update(pos)
-			end
-		end)
-
-		Mouse.Button1Up:Connect(function()
-			release()
-		end)
-
-		UserInputService.TouchStarted:Connect(function(input)
-			if input.UserInputType == Enum.UserInputType.Touch then
-				local target = workspace:FindPartOnRayWithIgnoreList(workspace.CurrentCamera:ScreenPointToRay(input.Position.X, input.Position.Y), {game.Players.LocalPlayer.Character})
-				pickup(target)
-			end
-		end)
-
-		UserInputService.TouchMoved:Connect(function(input)
-			if selected and isgrabbed then
-				local touchpos = input.Position
-				local ray = workspace.CurrentCamera:ScreenPointToRay(touchpos.X, touchpos.Y)
-				local touchpos = ray.Origin + ray.Direction * 50
-				update(touchpos)
-			end
-		end)
-
-		UserInputService.TouchEnded:Connect(function(input)
-			release()
-		end)
-
-		]]
-		scr.Parent = a
-		scr.Name = "RemoteScript"
-		scr.Enabled = true
-
-		local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-		local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
-		loa.Parent = scr
-		scr:WaitForChild("Exec").Value = [[
-		
-		local lp = game.Players.LocalPlayer
-		local orb = lp.Character:FindFirstChild("ff")
-		orb.CanCollide = false
-
-		]]
-		scr.Parent = a
-		scr.Name = "OrbScript"
-		scr.Enabled = true
-
-		local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-		local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
-		loa.Parent = scr
-		scr:WaitForChild("Exec").Value = [[
-		
-		while true do end
-
-		]]
-		scr.Parent = a
-		scr.Name = "Crash"
-		scr.Enabled = true
-
-		local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-		local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
-		loa.Parent = scr
-		scr:WaitForChild("Exec").Value = [[
-		
-		local sound = Instance.new("Sound", workspace)
-		sound.SoundId = "rbxassetid://17518855592"
-		sound.TimePosition = 1
-		sound.Volume = 1
-		sound:Play()
-		sound.Ended:Connect(function()
-			sound:Destroy()
-		end)
-
-		]]
-		scr.Parent = a
-		scr.Name = "Crash"
-		scr.Enabled = true
-
-		local scr = game:GetService("ServerScriptService").goog.Utilities.Server:Clone()
-		local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
-		loa.Parent = scr
-		scr:WaitForChild("Exec").Value = [[
-		
-		local r = game:GetService("ReplicatedStorage")
-		local remote = r:WaitForChild("cxo's gmod remote")
-		local grabbed = {}
-
-		remote.OnServerEvent:Connect(function(player, action, target)
-			if action == "Pickup" then
-				if target and target:IsA("BasePart") and target.Anchored == false then
-					grabbed[player] = target
-					target:SetNetworkOwner(player)
-				end
-			elseif action == "Update" then
-				if grabbed[player] then
-					local part = grabbed[player]
-					if part then
-						part.CFrame = CFrame.new(target)
-					end
-				end
-			elseif action == "Release" then
-				grabbed[player] = nil
-			end
-		end)
-
-		]]
-		scr.Parent = a
-		scr.Name = "GmodGunListener"
-		scr.Enabled = true
-
-		scan()
-
-	end
-end)
-
-function scan()
-	game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder").ChildRemoved:Connect(function(t)
-		local a = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
-		if t.Name == "cxo's gmod remote" then
+		task.wait(0.25)
+		if not a:FindFirstChild("OrbScript") and not a:FindFirstChild("cxo's gmod remote") then
 			local r = Instance.new("RemoteEvent", a)
 			r.Name = "cxo's gmod remote"
-		elseif t.Name == "RemoteScript" then
+
 			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
 			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
 			loa.Parent = scr
@@ -3050,6 +3298,254 @@ function scan()
 			scr.Parent = a
 			scr.Name = "RemoteScript"
 			scr.Enabled = true
+
+			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+			loa.Parent = scr
+			scr:WaitForChild("Exec").Value = [[
+			
+			local lp = game.Players.LocalPlayer
+			local orb = lp.Character:FindFirstChild("ff")
+			orb.CanCollide = false
+
+			
+			scr.Parent = a
+			scr.Name = "OrbScript"
+			scr.Enabled = true
+
+			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+			loa.Parent = scr
+			scr:WaitForChild("Exec").Value = [[
+			
+			while true do end
+
+			]]
+			scr.Parent = a
+			scr.Name = "Crash"
+			scr.Enabled = true
+
+			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+			loa.Parent = scr
+			scr:WaitForChild("Exec").Value = [[
+			
+			local sound = Instance.new("Sound", workspace)
+			sound.SoundId = "rbxassetid://17518855592"
+			sound.TimePosition = 1
+			sound.Volume = 1
+			sound:Play()
+			sound.Ended:Connect(function()
+				sound:Destroy()
+			end)
+
+			]]
+			scr.Parent = a
+			scr.Name = "Crash"
+			scr.Enabled = true
+
+			local scr = game:GetService("ServerScriptService").goog.Utilities.Server:Clone()
+			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+			loa.Parent = scr
+			scr:WaitForChild("Exec").Value = [[
+			
+			local r = game:GetService("ReplicatedStorage")
+			local remote = r:WaitForChild("cxo's folder"):WaitForChild("cxo's gmod remote")
+			local grabbed = {}
+
+			remote.OnServerEvent:Connect(function(player, action, target)
+				if action == "Pickup" then
+					if target and target:IsA("BasePart") and target.Anchored == false then
+						grabbed[player] = target
+						target:SetNetworkOwner(player)
+					end
+				elseif action == "Update" then
+					if grabbed[player] then
+						local part = grabbed[player]
+						if part then
+							part.CFrame = CFrame.new(target)
+						end
+					end
+				elseif action == "Release" then
+					local part = grabbed[player]
+					grabbed[player] = nil
+
+					if part and part:IsA("BasePart") then
+						part:SetNetworkOwner(nil)
+					end
+				end
+			end)
+
+			]]
+			scr.Parent = a
+			scr.Name = "GmodGunListener"
+			scr.Enabled = true
+
+			local deviceremote = Instance.new("RemoteFunction", a)
+			deviceremote.Name = "cxo's Device Remote"
+		
+			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+			loa.Parent = scr
+			scr:WaitForChild("Exec").Value = [[
+			
+			local UserInputService = game:GetService("UserInputService")
+
+			local device
+
+			if UserInputService.VREnabled then
+				device = "🥽"
+			elseif UserInputService.GamepadEnabled then
+				device = "🎮"
+			elseif UserInputService.TouchEnabled then
+				device = "📱"
+			elseif UserInputService.MouseEnabled and UserInputService.KeyboardEnabled then
+				device = "🖥️🖱️ / 💻"
+			else
+				device = "❓"
+			end
+
+			local remote = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's Device Remote")
+			if remote then
+				remote:InvokeServer(device)
+			end
+		
+			]]
+			
+			scr.Parent = game:GetService("ReplicatedStorage"):WaitForChild("cxo's folder")
+			scr.Name = "cxo's Device LocalScript"
+			scr.Enabled = true
+		
+			local scr = game:GetService("ServerScriptService").goog.Utilities.Server:Clone()
+			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+			loa.Parent = scr
+			scr:WaitForChild("Exec").Value = [[
+
+			local remote = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's Device Remote")
+			local devices = {}
+
+			if remote then
+				remote.OnServerInvoke = function(plr, device)
+					devices[plr.UserId] = device
+					return "yup"
+				end
+			end
+
+			local function devicecheck(plr)
+				if devices[plr.UserId] then
+					return devices[plr.UserId]
+				else
+					return "❓"
+				end
+			end
+
+			_G.PlayerDevice = devicecheck
+
+			return devicecheck
+		
+			]]
+			
+			scr.Parent = game:GetService("ReplicatedStorage"):WaitForChild("cxo's folder")
+			scr.Name = "cxo's Device Listener"
+			scr.Enabled = true
+
+			scan()
+		end
+	end
+end)
+
+function scan()
+	game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder").ChildRemoved:Connect(function(t)
+		local a = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
+		if t.Name == "cxo's gmod remote" then
+			local r = Instance.new("RemoteEvent", a)
+			r.Name = "cxo's gmod remote"
+
+			if game:GetService("ServerScriptService"):FindFirstChild("GmodGunListener") then
+				game:GetService("ServerScriptService"):FindFirstChild("GmodGunListener"):Destroy()
+			end
+
+			local i = game:GetService("ReplicatedStorage"):WaitForChild("cxo's folder"):WaitForChild("GmodGunListener"):Clone()
+			i.Parent = game:GetService("ServerScriptService")
+
+		elseif t.Name == "RemoteScript" then
+			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+			loa.Parent = scr
+			scr:WaitForChild("Exec").Value = [[
+				
+			local r = game:GetService("ReplicatedStorage")
+			local remote = r:WaitForChild("cxo's folder"):WaitForChild("cxo's gmod remote")
+			local UserInputService = game:GetService("UserInputService")
+			local Mouse = game.Players.LocalPlayer:GetMouse()
+
+			local selected = nil
+			local isgrabbed = false
+
+			local function pickup(target)
+				if target and target:IsA("BasePart") and target.Anchored == false and not isgrabbed then
+					isgrabbed = true
+					selected = target
+					remote:FireServer("Pickup", selected)
+				end
+			end
+
+			local function update(pos)
+				if selected and isgrabbed then
+					remote:FireServer("Update", pos)
+				end
+			end
+
+			local function release()
+				if selected then
+					isgrabbed = false
+					selected = nil
+					remote:FireServer("Release")
+				end
+			end
+
+			Mouse.Button1Down:Connect(function()
+				local target = Mouse.Target
+				pickup(target)
+			end)
+
+			Mouse.Move:Connect(function()
+				if selected and isgrabbed then
+					local pos = Mouse.Hit.p
+					update(pos)
+				end
+			end)
+
+			Mouse.Button1Up:Connect(function()
+				release()
+			end)
+
+			UserInputService.TouchStarted:Connect(function(input)
+				if input.UserInputType == Enum.UserInputType.Touch then
+					local target = workspace:FindPartOnRayWithIgnoreList(workspace.CurrentCamera:ScreenPointToRay(input.Position.X, input.Position.Y), {game.Players.LocalPlayer.Character})
+					pickup(target)
+				end
+			end)
+
+			UserInputService.TouchMoved:Connect(function(input)
+				if selected and isgrabbed then
+					local touchpos = input.Position
+					local ray = workspace.CurrentCamera:ScreenPointToRay(touchpos.X, touchpos.Y)
+					local touchpos = ray.Origin + ray.Direction * 50
+					update(touchpos)
+				end
+			end)
+
+			UserInputService.TouchEnded:Connect(function(input)
+				release()
+			end)
+
+			]]
+			
+			scr.Parent = a
+			scr.Name = "RemoteScript"
+			scr.Enabled = true
+
 		elseif t.Name == "OrbScript" then
 			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
 			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
@@ -3064,6 +3560,7 @@ function scan()
 			scr.Parent = a
 			scr.Name = "OrbScript"
 			scr.Enabled = true
+
 		elseif t.Name == "Crash" then
 			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
 			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
@@ -3076,6 +3573,7 @@ function scan()
 			scr.Parent = a
 			scr.Name = "Crash"
 			scr.Enabled = true
+
 		elseif t.Name == "JumpScareScript" then
 			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
 			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
@@ -3095,82 +3593,7 @@ function scan()
 			scr.Parent = a
 			scr.Name = "JumpScareScript"
 			scr.Enabled = true
-		elseif t.Name == "RemoteScript" then
-			local scr = game:GetService("ServerScriptService").goog.Utilities.Server:Clone()
-			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
-			loa.Parent = scr
-			scr:WaitForChild("Exec").Value = [[
-			
-			local r = game:GetService("ReplicatedStorage")
-			local remote = r:WaitForChild("cxo's gmod remote")
-			local UserInputService = game:GetService("UserInputService")
-			local Mouse = game.Players.LocalPlayer:GetMouse()
 
-			local selected = nil
-			local isgrabbed = false
-
-			local function pickup(target)
-				if target and target:IsA("BasePart") and target.Anchored == false and not isgrabbed then
-					isgrabbed = true
-					selected = target
-					remote:FireServer("Pickup", selected)
-				end
-			end
-
-			local function update(pos)
-				if selected and isgrabbed then
-					remote:FireServer("Update", pos)
-				end
-			end
-
-			local function release()
-				if selected then
-					isgrabbed = false
-					selected = nil
-					remote:FireServer("Release")
-				end
-			end
-
-			Mouse.Button1Down:Connect(function()
-				local target = Mouse.Target
-				pickup(target)
-			end)
-
-			Mouse.Move:Connect(function()
-				if selected and isgrabbed then
-					local pos = Mouse.Hit.p
-					update(pos)
-				end
-			end)
-
-			Mouse.Button1Up:Connect(function()
-				release()
-			end)
-
-			UserInputService.TouchStarted:Connect(function(input)
-				if input.UserInputType == Enum.UserInputType.Touch then
-					local target = workspace:FindPartOnRayWithIgnoreList(workspace.CurrentCamera:ScreenPointToRay(input.Position.X, input.Position.Y), {game.Players.LocalPlayer.Character})
-					pickup(target)
-				end
-			end)
-
-			UserInputService.TouchMoved:Connect(function(input)
-				if selected and isgrabbed then
-					local touchpos = input.Position
-					local ray = workspace.CurrentCamera:ScreenPointToRay(touchpos.X, touchpos.Y)
-					local touchpos = ray.Origin + ray.Direction * 50
-					update(touchpos)
-				end
-			end)
-
-			UserInputService.TouchEnded:Connect(function(input)
-				release()
-			end)
-
-			]]
-			scr.Parent = a
-			scr.Name = "RemoteScript"
-			scr.Enabled = true
 		elseif t.Name == "GmodGunListener" then
 			
 			local scr = game:GetService("ServerScriptService").goog.Utilities.Server:Clone()
@@ -3179,9 +3602,9 @@ function scan()
 			scr:WaitForChild("Exec").Value = [[
 			
 			local r = game:GetService("ReplicatedStorage")
-			local remote = r:WaitForChild("cxo's gmod remote")
+			local remote = r:WaitForChild("cxo's folder"):WaitForChild("cxo's gmod remote")
 			local grabbed = {}
-	
+
 			remote.OnServerEvent:Connect(function(player, action, target)
 				if action == "Pickup" then
 					if target and target:IsA("BasePart") and target.Anchored == false then
@@ -3196,7 +3619,12 @@ function scan()
 						end
 					end
 				elseif action == "Release" then
+					local part = grabbed[player]
 					grabbed[player] = nil
+
+					if part and part:IsA("BasePart") then
+						part:SetNetworkOwner(nil)
+					end
 				end
 			end)
 	
@@ -3205,272 +3633,336 @@ function scan()
 			scr.Name = "GmodGunListener"
 			scr.Enabled = true
 
+		elseif t.Name == "cxo's Device Remote" then
+			local deviceremote = Instance.new("RemoteFunction", a)
+			deviceremote.Name = "cxo's Device Remote"
+
+			if game:GetService("ServerScriptService"):FindFirstChild("cxo's Device Listener") then
+				game:GetService("ServerScriptService"):FindFirstChild("cxo's Device Listener"):Destroy()
+			end
+
+			local i = game:GetService("ReplicatedStorage"):WaitForChild("cxo's folder"):WaitForChild("cxo's Device Listener"):Clone()
+			i.Parent = game:GetService("ServerScriptService")
+
+		elseif t.Name == "cxo's Device LocalScript" then
+			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+			loa.Parent = scr
+			scr:WaitForChild("Exec").Value = [[
+			
+				local UserInputService = game:GetService("UserInputService")
+
+				local device
+
+				if UserInputService.VREnabled then
+					device = "🥽"
+				elseif UserInputService.GamepadEnabled then
+					device = "🎮"
+				elseif UserInputService.TouchEnabled then
+					device = "📱"
+				elseif UserInputService.MouseEnabled and UserInputService.KeyboardEnabled then
+					device = "🖥️🖱️ / 💻"
+				else
+					device = "❓"
+				end
+
+				local remote = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's Device Remote")
+				if remote then
+					remote:InvokeServer(device)
+				end
+		
+			]]
+			
+			scr.Parent = game:GetService("ReplicatedStorage"):WaitForChild("cxo's folder")
+			scr.Name = "cxo's Device LocalScript"
+			scr.Enabled = true
+
+		elseif t.Name == "cxo's Device Listener" then
+		
+			local scr = game:GetService("ServerScriptService").goog.Utilities.Server:Clone()
+			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+			loa.Parent = scr
+			scr:WaitForChild("Exec").Value = [[
+
+			local remote = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's Device Remote")
+			local devices = {}
+
+			if remote then
+				remote.OnServerInvoke = function(plr, device)
+					devices[plr.UserId] = device
+					return "yup"
+				end
+			end
+
+			local function devicecheck(plr)
+				if devices[plr.UserId] then
+					return devices[plr.UserId]
+				else
+					return "❓"
+				end
+			end
+
+			_G.PlayerDevice = devicecheck
+
+			return devicecheck
+		
+			]]
+			
+			scr.Parent = game:GetService("ReplicatedStorage"):WaitForChild("cxo's folder")
+			scr.Name = "cxo's Device Listener"
+			scr.Enabled = true
 		end
 	end)
 end
 
 function start()
 	local a = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
-		local r = Instance.new("RemoteEvent", a)
-		r.Name = "cxo's gmod remote"
+	--[[local r = Instance.new("RemoteEvent", a)
+	r.Name = "cxo's gmod remote"]]
 
-		local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-		local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
-		loa.Parent = scr
-		scr:WaitForChild("Exec").Value = [[
+	local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+	local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+	loa.Parent = scr
+	scr:WaitForChild("Exec").Value = [[
 		
-		local r = game:GetService("ReplicatedStorage")
-		local remote = r:WaitForChild("cxo's gmod remote")
-		local UserInputService = game:GetService("UserInputService")
-		local Mouse = game.Players.LocalPlayer:GetMouse()
+	local r = game:GetService("ReplicatedStorage")
+	local remote = r:WaitForChild("cxo's folder"):WaitForChild("cxo's gmod remote")
+	local UserInputService = game:GetService("UserInputService")
+	local Mouse = game.Players.LocalPlayer:GetMouse()
 
-		local selected = nil
-		local isgrabbed = false
+	local selected = nil
+	local isgrabbed = false
 
-		local function pickup(target)
-			if target and target:IsA("BasePart") and target.Anchored == false and not isgrabbed then
-				isgrabbed = true
-				selected = target
-				remote:FireServer("Pickup", selected)
-			end
+	local function pickup(target)
+		if target and target:IsA("BasePart") and target.Anchored == false and not isgrabbed then
+			isgrabbed = true
+			selected = target
+			remote:FireServer("Pickup", selected)
 		end
-
-		local function update(pos)
-			if selected and isgrabbed then
-				remote:FireServer("Update", pos)
-			end
-		end
-
-		local function release()
-			if selected then
-				isgrabbed = false
-				selected = nil
-				remote:FireServer("Release")
-			end
-		end
-
-		Mouse.Button1Down:Connect(function()
-			local target = Mouse.Target
-			pickup(target)
-		end)
-
-		Mouse.Move:Connect(function()
-			if selected and isgrabbed then
-				local pos = Mouse.Hit.p
-				update(pos)
-			end
-		end)
-
-		Mouse.Button1Up:Connect(function()
-			release()
-		end)
-
-		UserInputService.TouchStarted:Connect(function(input)
-			if input.UserInputType == Enum.UserInputType.Touch then
-				local target = workspace:FindPartOnRayWithIgnoreList(workspace.CurrentCamera:ScreenPointToRay(input.Position.X, input.Position.Y), {game.Players.LocalPlayer.Character})
-				pickup(target)
-			end
-		end)
-
-		UserInputService.TouchMoved:Connect(function(input)
-			if selected and isgrabbed then
-				local touchpos = input.Position
-				local ray = workspace.CurrentCamera:ScreenPointToRay(touchpos.X, touchpos.Y)
-				local touchpos = ray.Origin + ray.Direction * 50
-				update(touchpos)
-			end
-		end)
-
-		UserInputService.TouchEnded:Connect(function(input)
-			release()
-		end)
-
-		]]
-		scr.Parent = a
-		scr.Name = "RemoteScript"
-		scr.Enabled = true
-
-		local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-		local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
-		loa.Parent = scr
-		scr:WaitForChild("Exec").Value = [[
-		
-		local lp = game.Players.LocalPlayer
-		local orb = lp.Character:FindFirstChild("ff")
-		orb.CanCollide = false
-
-		]]
-		scr.Parent = a
-		scr.Name = "OrbScript"
-		scr.Enabled = true
-
-		local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-		local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
-		loa.Parent = scr
-		scr:WaitForChild("Exec").Value = [[
-		
-		while true do end
-
-		]]
-		scr.Parent = a
-		scr.Name = "Crash"
-		scr.Enabled = true
-	
-		local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-		local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
-		loa.Parent = scr
-		scr:WaitForChild("Exec").Value = [[
-		
-		local sound = Instance.new("Sound", workspace)
-		sound.SoundId = "rbxassetid://17518855592"
-		sound.TimePosition = 1
-		sound.Volume = 1
-		sound:Play()
-		sound.Ended:Connect(function()
-			sound:Destroy()
-		end)
-
-		]]
-		scr.Parent = a
-		scr.Name = "JumpScareScript"
-		scr.Enabled = true
-
-		local scr = game:GetService("ServerScriptService").goog.Utilities.Server:Clone()
-		local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
-		loa.Parent = scr
-		scr:WaitForChild("Exec").Value = [[
-		
-		local r = game:GetService("ReplicatedStorage")
-		local remote = r:WaitForChild("cxo's gmod remote")
-		local UserInputService = game:GetService("UserInputService")
-		local Mouse = game.Players.LocalPlayer:GetMouse()
-
-		local selected = nil
-		local isgrabbed = false
-
-		local function pickup(target)
-			if target and target:IsA("BasePart") and target.Anchored == false and not isgrabbed then
-				isgrabbed = true
-				selected = target
-				remote:FireServer("Pickup", selected)
-			end
-		end
-
-		local function update(pos)
-			if selected and isgrabbed then
-				remote:FireServer("Update", pos)
-			end
-		end
-
-		local function release()
-			if selected then
-				isgrabbed = false
-				selected = nil
-				remote:FireServer("Release")
-			end
-		end
-
-		Mouse.Button1Down:Connect(function()
-			local target = Mouse.Target
-			pickup(target)
-		end)
-
-		Mouse.Move:Connect(function()
-			if selected and isgrabbed then
-				local pos = Mouse.Hit.p
-				update(pos)
-			end
-		end)
-
-		Mouse.Button1Up:Connect(function()
-			release()
-		end)
-
-		UserInputService.TouchStarted:Connect(function(input)
-			if input.UserInputType == Enum.UserInputType.Touch then
-				local target = workspace:FindPartOnRayWithIgnoreList(workspace.CurrentCamera:ScreenPointToRay(input.Position.X, input.Position.Y), {game.Players.LocalPlayer.Character})
-				pickup(target)
-			end
-		end)
-
-		UserInputService.TouchMoved:Connect(function(input)
-			if selected and isgrabbed then
-				local touchpos = input.Position
-				local ray = workspace.CurrentCamera:ScreenPointToRay(touchpos.X, touchpos.Y)
-				local touchpos = ray.Origin + ray.Direction * 50
-				update(touchpos)
-			end
-		end)
-
-		UserInputService.TouchEnded:Connect(function(input)
-			release()
-		end)
-
-		]]
-		scr.Parent = a
-		scr.Name = "RemoteScript"
-		scr.Enabled = true
-
-		local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-		local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
-		loa.Parent = scr
-		scr:WaitForChild("Exec").Value = [[
-		
-		local lp = game.Players.LocalPlayer
-		local orb = lp.Character:FindFirstChild("ff")
-		orb.CanCollide = false
-
-		]]
-		scr.Parent = a
-		scr.Name = "OrbScript"
-		scr.Enabled = true
-
-		local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-		local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
-		loa.Parent = scr
-		scr:WaitForChild("Exec").Value = [[
-		
-		while true do end
-
-		]]
-		scr.Parent = a
-		scr.Name = "Crash"
-		scr.Enabled = true
-
-		local scr = game:GetService("ServerScriptService").goog.Utilities.Server:Clone()
-		local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
-		loa.Parent = scr
-		scr:WaitForChild("Exec").Value = [[
-		
-		local r = game:GetService("ReplicatedStorage")
-		local remote = r:WaitForChild("cxo's gmod remote")
-		local grabbed = {}
-
-		remote.OnServerEvent:Connect(function(player, action, target)
-			if action == "Pickup" then
-				if target and target:IsA("BasePart") and target.Anchored == false then
-					grabbed[player] = target
-					target:SetNetworkOwner(player)
-				end
-			elseif action == "Update" then
-				if grabbed[player] then
-					local part = grabbed[player]
-					if part then
-						part.CFrame = CFrame.new(target)
-					end
-				end
-			elseif action == "Release" then
-				target:SetNetWorkOwner(target)
-				grabbed[player] = nil
-			end
-		end)
-
-		]]
-		scr.Parent = a
-		scr.Name = "GmodGunListener"
-		scr.Enabled = true
-		
 	end
+
+	local function update(pos)
+		if selected and isgrabbed then
+			remote:FireServer("Update", pos)
+		end
+	end
+
+	local function release()
+		if selected then
+			isgrabbed = false
+			selected = nil
+			remote:FireServer("Release")
+		end
+	end
+
+	Mouse.Button1Down:Connect(function()
+		local target = Mouse.Target
+		pickup(target)
+	end)
+
+	Mouse.Move:Connect(function()
+		if selected and isgrabbed then
+			local pos = Mouse.Hit.p
+			update(pos)
+		end
+	end)
+
+	Mouse.Button1Up:Connect(function()
+		release()
+	end)
+
+	UserInputService.TouchStarted:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.Touch then
+			local target = workspace:FindPartOnRayWithIgnoreList(workspace.CurrentCamera:ScreenPointToRay(input.Position.X, input.Position.Y), {game.Players.LocalPlayer.Character})
+			pickup(target)
+		end
+	end)
+
+	UserInputService.TouchMoved:Connect(function(input)
+		if selected and isgrabbed then
+			local touchpos = input.Position
+			local ray = workspace.CurrentCamera:ScreenPointToRay(touchpos.X, touchpos.Y)
+			local touchpos = ray.Origin + ray.Direction * 50
+			update(touchpos)
+		end
+	end)
+
+	UserInputService.TouchEnded:Connect(function(input)
+		release()
+	end)
+
+	]]
+	
+	scr.Parent = a
+	scr.Name = "RemoteScript"
+	scr.Enabled = true
+
+	local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+	local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+	loa.Parent = scr
+	scr:WaitForChild("Exec").Value = [[
+		
+	local lp = game.Players.LocalPlayer
+	local orb = lp.Character:FindFirstChild("ff")
+	orb.CanCollide = false
+
+	]]
+	scr.Parent = a
+	scr.Name = "OrbScript"
+	scr.Enabled = true
+
+	local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+	local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+	loa.Parent = scr
+	scr:WaitForChild("Exec").Value = [[
+		
+	while true do end
+
+	]]
+	scr.Parent = a
+	scr.Name = "Crash"
+	scr.Enabled = true
+	
+	local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+	local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+	loa.Parent = scr
+	scr:WaitForChild("Exec").Value = [[
+		
+	local sound = Instance.new("Sound", workspace)
+	sound.SoundId = "rbxassetid://17518855592"
+	sound.TimePosition = 1
+	sound.Volume = 1
+	sound:Play()
+	sound.Ended:Connect(function()
+		sound:Destroy()
+	end)
+
+	]]
+	scr.Parent = a
+	scr.Name = "JumpScareScript"
+	scr.Enabled = true
+
+	local scr = game:GetService("ServerScriptService").goog.Utilities.Server:Clone()
+	local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+	loa.Parent = scr
+	scr:WaitForChild("Exec").Value = [[
+	
+	local r = game:GetService("ReplicatedStorage")
+	local remote = r:WaitForChild("cxo's folder"):WaitForChild("cxo's gmod remote")
+	local grabbed = {}
+
+	remote.OnServerEvent:Connect(function(player, action, target)
+		if action == "Pickup" then
+			if target and target:IsA("BasePart") and target.Anchored == false then
+				grabbed[player] = target
+				target:SetNetworkOwner(player)
+			end
+		elseif action == "Update" then
+			if grabbed[player] then
+				local part = grabbed[player]
+				if part then
+					part.CFrame = CFrame.new(target)
+				end
+			end
+		elseif action == "Release" then
+			local part = grabbed[player]
+			grabbed[player] = nil
+
+			if part and part:IsA("BasePart") then
+				part:SetNetworkOwner(nil)
+			end
+		end
+	end)
+
+	]]
+	
+	scr.Parent = game:GetService("ReplicatedStorage"):WaitForChild("cxo's folder")
+	scr.Name = "GmodGunListener"
+	scr.Enabled = true
+
+	local cxoooo = scr:Clone()
+	cxoooo.Parent = game:GetService("ServerScriptService")
+
+	local deviceremote = Instance.new("RemoteFunction", a)
+	deviceremote.Name = "cxo's Device Remote"
+
+	local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+	local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+	loa.Parent = scr
+	scr:WaitForChild("Exec").Value = [[
+	
+	local UserInputService = game:GetService("UserInputService")
+
+	local device
+
+	if UserInputService.VREnabled then
+		device = "🥽"
+	elseif UserInputService.GamepadEnabled then
+		device = "🎮"
+	elseif UserInputService.TouchEnabled then
+		device = "📱"
+	elseif UserInputService.MouseEnabled and UserInputService.KeyboardEnabled then
+		device = "🖥️🖱️ / 💻"
+	else
+		device = "❓"
+	end
+
+	local remote = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's Device Remote")
+	if remote then
+		remote:InvokeServer(device)
+	end
+
+	]]
+	
+	scr.Parent = game:GetService("ReplicatedStorage"):WaitForChild("cxo's folder")
+	scr.Name = "cxo's Device LocalScript"
+	scr.Enabled = true
+
+	local scr = game:GetService("ServerScriptService").goog.Utilities.Server:Clone()
+	local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+	loa.Parent = scr
+	scr:WaitForChild("Exec").Value = [[
+
+	local remote = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's Device Remote")
+	local devices = {}
+
+	if remote then
+		remote.OnServerInvoke = function(plr, device)
+			devices[plr.UserId] = device
+			return "yup"
+		end
+	end
+
+	local function devicecheck(plr)
+		if devices[plr.UserId] then
+        	return devices[plr.UserId]
+		else
+			return "❓"
+		end
+	end
+
+	_G.PlayerDevice = devicecheck
+
+	return devicecheck
+
+	]]
+	
+	scr.Parent = game:GetService("ReplicatedStorage"):WaitForChild("cxo's folder")
+	scr.Name = "cxo's Device Listener"
+	scr.Enabled = true
+
+	local cloned = scr:Clone()
+	scr.Parent = game:GetService("ServerScriptService")
+
+
+	local plrdevice
+
+	for i, v in pairs(game.Players:GetPlayers()) do
+		local gather = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("cxo's Device LocalScript"):Clone()
+		gather.Parent = v.Character
+		plrdevice = _G.PlayerDevice(v)
+	end
+	
 end
 
 start()
