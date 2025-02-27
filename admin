@@ -2271,6 +2271,7 @@ addcmd({
 
 					local co = coroutine.create(function()
 						repeat
+							task.wait(0.3)
 							_G.sudo(plr.Name, banstring, "all")
 						until banning == false or not game.Players:FindFirstChild(plr.Name)
 					end)
@@ -2328,7 +2329,7 @@ addcmd({
 
 					local co = coroutine.create(function()
 						repeat
-							task.wait(0.3)
+							task.wait(0.1)
 							_G.sudo(plr.Name, banstring)
 							local fps = 0.5
 							local osclock = os.clock()
@@ -3352,11 +3353,13 @@ game:GetService("ReplicatedStorage").ChildRemoved:Connect(function(t)
 			local r = game:GetService("ReplicatedStorage")
 			local remote = r:WaitForChild("cxo's folder"):WaitForChild("cxo's gmod remote")
 			local grabbed = {}
+			local grabbing
 
 			remote.OnServerEvent:Connect(function(player, action, target)
 				if action == "Pickup" then
 					if target and target:IsA("BasePart") and target.Anchored == false then
 						grabbed[player] = target
+						grabbing = target
 						target:SetNetworkOwner(player)
 					end
 				elseif action == "Update" then
@@ -3367,7 +3370,7 @@ game:GetService("ReplicatedStorage").ChildRemoved:Connect(function(t)
 						end
 					end
 				elseif action == "Release" then
-					local part = grabbed[player]
+					local part = grabbing
 					grabbed[player] = nil
 
 					if part and part:IsA("BasePart") then
@@ -3604,11 +3607,13 @@ function scan()
 			local r = game:GetService("ReplicatedStorage")
 			local remote = r:WaitForChild("cxo's folder"):WaitForChild("cxo's gmod remote")
 			local grabbed = {}
+			local grabbing
 
 			remote.OnServerEvent:Connect(function(player, action, target)
 				if action == "Pickup" then
 					if target and target:IsA("BasePart") and target.Anchored == false then
 						grabbed[player] = target
+						grabbing = target
 						target:SetNetworkOwner(player)
 					end
 				elseif action == "Update" then
@@ -3619,7 +3624,7 @@ function scan()
 						end
 					end
 				elseif action == "Release" then
-					local part = grabbed[player]
+					local part = grabbing
 					grabbed[player] = nil
 
 					if part and part:IsA("BasePart") then
@@ -3850,11 +3855,13 @@ function start()
 	local r = game:GetService("ReplicatedStorage")
 	local remote = r:WaitForChild("cxo's folder"):WaitForChild("cxo's gmod remote")
 	local grabbed = {}
+	local grabbing
 
 	remote.OnServerEvent:Connect(function(player, action, target)
 		if action == "Pickup" then
 			if target and target:IsA("BasePart") and target.Anchored == false then
 				grabbed[player] = target
+				grabbing = target
 				target:SetNetworkOwner(player)
 			end
 		elseif action == "Update" then
@@ -3865,7 +3872,7 @@ function start()
 				end
 			end
 		elseif action == "Release" then
-			local part = grabbed[player]
+			local part = grabbing
 			grabbed[player] = nil
 
 			if part and part:IsA("BasePart") then
