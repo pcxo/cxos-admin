@@ -1,6 +1,6 @@
 cxo:[[
-  fov me 90
-  plrlist
-  tag true
-  iy
+  "fov me 90"
+  "plrlist"
+  "tag true"
+  "iy"
 ]]
