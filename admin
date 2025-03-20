@@ -34,7 +34,8 @@ _G.cxosadminloaded = true
 
 -------------------------------------------- VARIABLES --------------------------------------------
 
-local cxoURL = "https://raw.githubusercontent.com/pcxo/whitelisted/main/users"
+-- local cxoURL = "https://raw.githubusercontent.com/pcxo/whitelisted/main/users" (old)
+local cxoURL = "https://raw.githubusercontent.com/pcxo/cxos-admin/refs/heads/main/whitelisted" -- (new)
 local cmds = {}
 local banned = {}
 local crashbanned = {}
@@ -120,8 +121,6 @@ local success, result = pcall(function() -- configs loader
 	return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/pcxo/cxos-admin/refs/heads/main/configs")
 end)
 
-print(result)
-
 if success then
 	for UID, cfg in result:gmatch("(%d+):%[%[(.-)%]%]") do
 		local data = {}
@@ -138,7 +137,7 @@ end
 
 repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
 
-local success, result = pcall(function()
+local success, result = pcall(function() -- country code loader (for plr info)
 	return game:GetService("HttpService"):GetAsync("http://country.io/names.json")
 end)
 
