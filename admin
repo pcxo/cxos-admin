@@ -42,7 +42,7 @@ local crashbanned = {}
 local countries = {}
 local chats = {}
 local TempWhitelist = {}
-local autore = {}
+local AutoRespawn = {}
 local fpslooped = {}
 local googul = {}
 local frames = {}
@@ -3845,14 +3845,14 @@ addcmd({
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
 
-			if not table.find(autore, plr.Name) then
-				table.insert(autore, plr.Name)
+			if not table.find(AutoRespawn, plr.Name) then
+				table.insert(AutoRespawn, plr.Name)
 			else
 				notfi(sender, "cxo's admin", plr.Name .. " already has antikill enabled!")
 				return
 			end
 
-			antikill(plr)
+			AntiKill(plr)
 
 		end
 	end
@@ -3864,8 +3864,8 @@ addcmd({
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
 			
-			if table.find(autore, plr.Name) then
-				table.remove(autore, table.find(autore, plr.Name))
+			if table.find(AutoRespawn, plr.Name) then
+				table.remove(AutoRespawn, table.find(AutoRespawn, plr.Name))
 			end
 
 		end
@@ -4176,6 +4176,22 @@ addcmd({
 
 			if fail then
 				notfi(sender, "cxo's admin", "Motorcycle failed to load: ".. fail)
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "tools",
+	Aliases = {"gears"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			local success, fail = pcall(function()
+				require(16052382566).PoopToolsV2(plr.Name)
+			end)
+
+			if fail then
+				notfi(sender, "cxo's admin", "tools failed to load: ".. fail)
 			end
 		end
 	end
@@ -6063,34 +6079,27 @@ addcmd({
 	Aliases = {},
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
-			--[[local van = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Van")
-
-			if not van then
-				notfi(sender, "cxo's admin", "Van not found, someone probably deleted it!")
-			end]]
-
 			if plr.Character and plr.Character:FindFirstChild("Torso") and plr.Character:FindFirstChild("Humanoid") then
-
-				_G.Victim = plr.Name
-
-				local success, result = pcall(function() -- clown van script
-					return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/pcxo/cxos-admin/refs/heads/main/clownvan")
-				end)
-				
-				if success then
-					local content = result
-					local loaded, fail = loadstring(content)
-					if loaded then
-						loaded()
+				if not _G.kidnap then
+					local success, result = pcall(function() -- clown van script
+						return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/pcxo/cxos-admin/refs/heads/main/clownvan")
+					end)
+					
+					if success then
+						local content = result
+						local loaded, fail = loadstring(content)
+						if loaded then
+							loaded()
+						else
+							notfi(sender, "cxo's admin", "Failed to load the clown van")
+						end
 					else
 						notfi(sender, "cxo's admin", "Failed to load the clown van")
 					end
 				else
-					notfi(sender, "cxo's admin", "Failed to load the clown van")
+					_G.kidnap(plr)
 				end
-
 			end
-
 		end
 	end
 })
@@ -6313,36 +6322,6 @@ addcmd({
 })
 
 -------------------------------------------- FUNCTIONS --------------------------------------------
-
-function antikill(plr)
-	task.spawn(function()
-		plr.Character.Humanoid.Died:Connect(function()
-			if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and table.find(autore, plr.Name) then
-				local rnpos = plr.Character.HumanoidRootPart.CFrame
-				plr:LoadCharacter()
-				repeat task.wait() until plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") or not game.Players:FindFirstChild(plr.Name)
-				plr.Character.HumanoidRootPart.CFrame = rnpos
-			end
-		end)
-
-		plr.CharacterAdded:Connect(function()
-			if table.find(autore, plr.Name) then
-				repeat task.wait() until plr and plr.Character or not game.Players:FindFirstChild(plr.Name)
-				antikill(plr)
-			end
-		end)
-
-		game.Players.ChildAdded:Connect(function(playr)
-			if table.find(autore, plr.Name) then
-				if playr.Name == plr.Name then
-					repeat task.wait() until plr and plr.Character or not game.Players:FindFirstChild(plr.Name)
-					antikill(plr)
-				end
-			end
-		end)
-
-	end)
-end
 
 function scanfordevice()
 	local remote = game:GetService("ReplicatedStorage"):WaitForChild("cxo's folder"):WaitForChild("cxo's Device Remote")
@@ -6769,6 +6748,73 @@ function ftag()
 	end))
 end
 
+--[[ Decryptionite made a betr antikill 4 this script so i used it thx decryptionite#1337 ]]
+function onDeath(Character:Model)
+	if Character and Character:FindFirstChild("HumanoidRootPart") then
+		local DeathPosition = Character.HumanoidRootPart.CFrame
+
+		if AutoRespawn[Character.Name] then
+
+			local Player = game.Players[Character.Name]
+			Player:LoadCharacter()
+
+			Player.Character:WaitForChild("HumanoidRootPart",3)
+			Player.Character.HumanoidRootPart.CFrame = DeathPosition
+
+		end
+	end
+end
+
+function onCharacterAdded(Character:Model)
+    
+    Character.Humanoid.Died:Once(function()
+        
+        onDeath(Character)
+    end)
+    
+end
+
+function AntiKill(Player:Player)
+    
+    if not Player then
+        return
+    end
+    
+    AutoRespawn[Player.Name] = Player.CharacterAdded:Connect(onCharacterAdded)
+    
+    -- For their current character.
+    onCharacterAdded(Player.Character)
+    
+end
+--[[
+function antikill(plr)
+	task.spawn(function()
+		local antikillering
+		local rnpos
+		if plr.Character and plr.Character:FindFirstChild("Humanoid") then
+			plr.Character.Humanoid.Died:Connect(function()
+				if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and table.find(autore, plr.Name) then
+					rnpos = plr.Character.HumanoidRootPart.CFrame
+					plr:LoadCharacter()
+					repeat task.wait() until plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") or not game.Players:FindFirstChild(plr.Name)
+					plr.Character.HumanoidRootPart.CFrame = rnpos
+				end
+			end)
+	
+			antikillering = plr.CharacterAdded:Connect(function()
+				if table.find(autore, plr.Name) then
+					repeat task.wait() until plr and plr.Character or not game.Players:FindFirstChild(plr.Name)
+					antikill(plr)
+					antikillering:Disconnect()
+				end
+			end)
+		else
+			plr.CharacterAdded:Wait()
+			antikill(plr)
+		end
+	end)
+end
+]]
 -------------------------------------------- CONNECTIONS --------------------------------------------
 
 for i,v in pairs(game.Players:GetPlayers()) do
@@ -6838,8 +6884,8 @@ game.Players.PlayerAdded:Connect(function(player)
 		notfi(player, "cxo's admin", "You are whitelisted! prefix is ".. prefix)
 	end
 
-	if table.find(autore, player.Name) then
-		antikill(player)
+	if table.find(AutoRespawn, player.Name) then
+		AntiKill(player)
 	end
 
 	if locked == true and not table.find(Whitelist, tostring(player.UserId)) and not table.find(TempWhitelist, player.UserId) then
