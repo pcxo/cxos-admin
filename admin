@@ -102,7 +102,7 @@ else
 end
 
 local success, result = pcall(function() -- decryptionite's build loader
-	return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/decryptionite/streaming/refs/heads/main/Kohls%20Admin%20House%20NP/unlocked_buildload.lua")
+	return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/decryptionite/streaming/refs/heads/main/Kohls%20Admin%20House%20NP/unlocked_buildload_v1.lua")
 end)
 
 if success then
@@ -6860,7 +6860,8 @@ function gmodlistener()
 	remote.OnServerEvent:Connect(function(player, action, target)
 
 		if not table.find(gmodded, player.UserId) then
-			player:Kick("[ANTICHEAT] cxo's admin | this remote is protected.")
+			notfi(player, "cxo's admin", "This remote is protected.")
+			return
 		end
 
 		if action == "Pickup" and table.find(gmodded, player.UserId) then
@@ -6904,7 +6905,8 @@ function remotelistener()
 	remote.OnServerEvent:Connect(function(player, choice, command, target, target2, extra)
 
 		if not table.find(panelanticheat, player.UserId) then
-			player:Kick("[ANTICHEAT] cxo's admin | this remote is protected.")
+			notfi(player, "cxo's admin", "This remote is protected.")
+			return
 		end
 		
 		if choice == "PanelCMD" and table.find(panelanticheat, player.UserId) then
