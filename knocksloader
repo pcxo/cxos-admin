@@ -1,5 +1,5 @@
 print("knocks loadered!!!!")
 
---[[local scr = game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/blueskykah/Kohls-Admin-House-NP/refs/heads/main/Main")
+local scr = game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/blueskykah/Kohls-Admin-House-NP/refs/heads/main/Main")
 
-loadstring(scr)()]]
+loadstring(scr)()
