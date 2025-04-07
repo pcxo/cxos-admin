@@ -1,4 +1,4 @@
-local obj = Instance.new('Folder')
+local obj = Instance.new('Model')
 obj.Name = "Jail"
 obj.Parent = game.Workspace
 
@@ -1110,3 +1110,9 @@ obj93.Color = Color3.fromRGB(248, 248, 248)
 obj93.Material = Enum.Material.Plastic
 obj93.Orientation = Vector3.new(0.00, -90.00, 0.00)
 obj93.Parent = obj
+
+obj.PrimaryPart = obj84
+
+for i,v in pairs(obj:GetChildren()) do
+	v.Locked = true
+end -- forgot to make it log the locked property and i cant be bothered re opening studio D:
