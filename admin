@@ -82,13 +82,15 @@ local plrcfgs = {}
 local plrparts = {}
 local hidden = {}
 local afk = {}
+local iyed = {}
+local chatter = {}
 local emojis = {"❓", "⌨️🖱️", "📱", "🎮", "🥽", "🖱️", "⌨️"}
 local locked = false
 local guiactive = false
 local iyloaded = nil
 local agelocked = false
 local agelocknum = 10
-local connected, connected2, banhammered, ignorethis, ignorethistoo, V1, music, nodisco, muter
+local connected, connected2, banhammered, ignorethis, ignorethistoo, V1, music, nodisco, muter, nexusloaded
 
 -----------------------------------------------------------------------------------------------
 
@@ -644,6 +646,13 @@ function gui(plr, section)
 		LogsMsg.Text = player .. ": " .. msg
 		LogsMsg.TextWrapped = false
 		LogsMsg.TextTruncate = Enum.TextTruncate.AtEnd
+
+		local connection
+		connection = LogsLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+			LogsScroll.CanvasSize = UDim2.new(0, 0, 0, LogsLayout.AbsoluteContentSize.Y)
+			LogsScroll.CanvasPosition = Vector2.new(0, LogsLayout.AbsoluteContentSize.Y)
+			connection:Disconnect()
+		end)
 	end
 	
 	for i,v in pairs(game.Players:GetPlayers()) do
@@ -1763,7 +1772,7 @@ addcmd({
 
 		for i, plr in ipairs(targets) do
 			local message = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("msg"):Clone()
-			message.TextLabel.Text = "[cxos' admin]\nYou are banned from this server"
+			message.TextLabel.Text = "[cxo's admin]\nYou are banned from this server"
 			message.Parent = plr.PlayerGui
 
 			task.wait(0.1)
@@ -2998,177 +3007,84 @@ addcmd({
 			sgui.ResetOnSpawn = false
 			sgui.Name = "Float"
 
-			loa.Parent = scr -- dont know who made this code beneath but it wasnt me so credit 2 them
+			loa.Parent = scr
 			scr:WaitForChild("Exec").Value = [[
 			
-				local User = game:GetService("UserInputService")
-				local player = game:GetService("Players").LocalPlayer
-				local GuiService = game:GetService("StarterGui")
-				local mouse = game.Players.LocalPlayer:GetMouse()
+				local UserInputService = game:GetService("UserInputService")
+				local RunService = game:GetService("RunService")
+				local player = game.Players.LocalPlayer
+				local mouse = player:GetMouse()
 
-				local holdingWKey = false
-				local holdingSKey = false
-				local holdingAKey = false
-				local holdingDKey = false
-				local holdingSpaceKey = false
-				local holdingControlKey = false
+				local Speed_1 = 250
+				local startup = false
 
-				Speed_1 = -1
+				local SpaceHeld = false
+				local ControlHeld = false
 
-				mouse.KeyDown:connect(function(key)
-				if key == "-" then
-					Speed_1 = Speed_1 + 0.2
-					GuiService:SetCore("SendNotification", {Title = "Speed", Text = "Speed has gone down";})
-				end
-				end)
-
-				mouse.KeyDown:connect(function(key)
-				if key == "=" then
-					Speed_1 = Speed_1 - 0.2
-					GuiService:SetCore("SendNotification", {Title = "Speed", Text = "Speed has gone up";})
-				end
-				end)
-
-				mouse.KeyDown:connect(function(key)
-				if key == "m" then
-					if startup  == true then
-						startup = false
-						for i,v in pairs(workspace:GetDescendants()) do
-							if v.Name ~= "Terrain" and v:IsA("BasePart") then
-								v.CanCollide = true
-							end
-						end
-					else
-						startup = true
-						for i,v in pairs(workspace:GetDescendants()) do
-							if v.Name ~= "Terrain" and v:IsA("BasePart") then
-								v.CanCollide = false
-							end
-						end
-						local brick = Instance.new("Part", workspace)
-						brick.Size = Vector3.new(15, 2, 15)
-						brick.CFrame = player.Character.HumanoidRootPart.CFrame + Vector3.new(0, -4, 0)
-						brick.Transparency = 1
-						brick.Anchored = true
-						brick.Name = "Brick"
-						mouse.KeyDown:connect(function(key)
-							if key == "m" then
-								brick:remove()
-							end
-						end)
-						for i = 1, math.huge do
+				mouse.KeyDown:Connect(function(key)
+					if key == "-" then
+						Speed_1 = Speed_1 - 10
+					elseif key == "=" then
+						Speed_1 = Speed_1 + 10
+					elseif key == "m" then
+						startup = not startup
+						if startup then
+							local brick = Instance.new("Part", workspace)
+							brick.Size = Vector3.new(15, 2, 15)
+							brick.Anchored = true
+							brick.Transparency = 1
+							brick.Name = "Brick"
 							brick.CFrame = player.Character.HumanoidRootPart.CFrame + Vector3.new(0, -4, 0)
-							wait(0)
+
+							local b
+							b = RunService.RenderStepped:Connect(function()
+								if not brick or not brick.Parent then
+									b:Disconnect()
+									return
+								end
+								brick.CFrame = player.Character.HumanoidRootPart.CFrame + Vector3.new(0, -4, 0)
+							end)
+
+							mouse.KeyDown:Connect(function(k)
+								if k == "m" and brick then
+									brick:Destroy()
+								end
+							end)
 						end
 					end
-				end
 				end)
 
-				game:GetService('RunService').Stepped:connect(function()
-				if startup then
-					if WHeld == true then
-						player.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,Speed_1)
-
+				RunService.Heartbeat:Connect(function(delta)
+					if startup and player.Character then
+						local chr = player.Character
+						local hum = chr:FindFirstChildWhichIsA("Humanoid")
+						if hum and hum.MoveDirection.Magnitude > 0 then
+							chr:TranslateBy(hum.MoveDirection * Speed_1 * delta)
+						end
+						if SpaceHeld and not UserInputService:GetFocusedTextBox() then
+							chr:TranslateBy(Vector3.new(0, 30 * delta, 0))
+						end
+						if ControlHeld then
+							chr:TranslateBy(Vector3.new(0, -30 * delta, 0))
+						end
 					end
-				end
 				end)
 
-				game:GetService('RunService').Stepped:connect(function()
-				if startup then
-				if SHeld == true then
-						player.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,-Speed_1)
-				end
-				end
-				end)
-
-				game:GetService('RunService').Stepped:connect(function()
-				if startup then
-				if AHeld == true then
-				player.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.new(Speed_1,0,0)
-				end
-				end
-				end)
-
-
-				game:GetService('RunService').Stepped:connect(function()
-				if startup then
-				if DHeld == true then
-				player.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.new(-Speed_1,0,0)
-				end
-				end
-				end)
-
-
-				game:GetService('RunService').Stepped:connect(function()
-				if startup then
-				if SpaceHeld == true then
-					player.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.new(0,-Speed_1,0)
-				end
-				end
-				end)
-
-				game:GetService('RunService').Stepped:connect(function()
-				if startup then
-					if ControlHeld == true then
-					player.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.new(0,Speed_1,0)
+				UserInputService.InputBegan:Connect(function(input, p)
+					if p then return end
+					if input.KeyCode == Enum.KeyCode.Space then
+						SpaceHeld = true
+					elseif input.KeyCode == Enum.KeyCode.LeftControl then
+						ControlHeld = true
 					end
-				end
-
 				end)
 
-				User.InputBegan:Connect(function(inputObject)
-				if(inputObject.KeyCode==Enum.KeyCode.W) then
-					holdingWKey = true WHeld = true
-				end
-				
-				if(inputObject.KeyCode==Enum.KeyCode.S) then
-					holdingSKey = true SHeld = true
-				end
-
-				if(inputObject.KeyCode==Enum.KeyCode.A) then
-					holdingAKey = true AHeld = true
-				end
-
-				if(inputObject.KeyCode==Enum.KeyCode.D) then
-					holdingDKey = true DHeld = true
-				end
-				if(inputObject.KeyCode==Enum.KeyCode.LeftControl) then
-					holdingControlKey = true ControlHeld = true
-				end
-
-				if(inputObject.KeyCode==Enum.KeyCode.Space) then
-					holdingSpaceKey = true SpaceHeld= true
-				end
-
-				if(inputObject.KeyCode==Enum.KeyCode.W) then
-					holdingUKey = true WHeld = true
-				end
-				end)
-
-				User.InputEnded:Connect(function(inputObject)
-				if(inputObject.KeyCode==Enum.KeyCode.W) then
-					holdingWKey = false WHeld = false
-				end
-
-				if(inputObject.KeyCode==Enum.KeyCode.S) then
-					holdingSKey = false SHeld = false    
-				end
-
-				if(inputObject.KeyCode==Enum.KeyCode.A) then
-					holdingAKey = false AHeld = false    
-				end
-
-				if(inputObject.KeyCode==Enum.KeyCode.D) then
-					holdingDKey = false DHeld = false    
-				end
-
-				if(inputObject.KeyCode==Enum.KeyCode.LeftControl) then
-					holdingShiftKey = false ControlHeld = false    
-				end
-
-				if(inputObject.KeyCode==Enum.KeyCode.Space) then
-					holdingSpaceKey = false SpaceHeld = false
-				end
+				UserInputService.InputEnded:Connect(function(input)
+					if input.KeyCode == Enum.KeyCode.Space then
+						SpaceHeld = false
+					elseif input.KeyCode == Enum.KeyCode.LeftControl then
+						ControlHeld = false
+					end
 				end)
 			
 			]]
@@ -3794,6 +3710,10 @@ addcmd({
 				arg = "401117743"
 			elseif arg == "s" then
 				arg = "7713890963"
+			elseif arg == "p" then
+				arg = "4813706721"
+			elseif arg == "m" then
+				arg = "90782901177249"
 			end
 		end
 
@@ -3866,10 +3786,9 @@ addcmd({
 
 		for i,v in pairs(game:GetDescendants()) do
 			if v:IsA("Sound") then
-				if game:GetService("ReplicatedStorage"):FindFirstChild(v.Name, true) then
-					return
+				if not v:IsDescendantOf(game:GetService("ReplicatedStorage")) then
+					v.Volume = value
 				end
-				v.Volume = value
 			end
 		end
 	
@@ -4064,14 +3983,513 @@ addcmd({
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
 
+			if not table.find(iyed, plr.UserId) then
+				table.insert(iyed, plr.UserId)
+			end
+
+			if game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("IY") then
+				if plr.PlayerGui then
+					game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("IY"):Clone().Parent = plr.PlayerGui
+				else
+					game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("IY"):Clone().Parent = plr:WaitForChild("PlayerGui")
+				end
+				return
+			end
+
 			local success, err = pcall(function()
-				require(14035238433)(plr.Name)
+				--require(14035238433)(plr.Name)
+				require(100506488790924).load("IY")
 			end)
 
 			if err then
 				notfi(sender, "cxo's admin", "IY FE failed to load")
+			else
+				if plr.PlayerGui then
+					game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("IY"):Clone().Parent = plr.PlayerGui
+				else
+					game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("IY"):Clone().Parent = plr:WaitForChild("PlayerGui")
+				end
 			end
 
+		end
+	end
+})
+
+addcmd({
+	Name = "chatui",
+	Aliases = {"chatgui"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+
+			if not table.find(chatter, plr.UserId) then
+				table.insert(chatter, plr.UserId)
+			end
+
+			if game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Chat UI") then
+				if plr.PlayerGui then
+					game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("Chat UI"):Clone().Parent = plr.PlayerGui
+				else
+					game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("Chat UI"):Clone().Parent = plr:WaitForChild("PlayerGui")
+				end
+				return
+			end
+
+			local success, err = pcall(function()
+				require(100506488790924).load("Chat UI")
+			end)
+
+			if err then
+				notfi(sender, "cxo's admin", "Chat UI failed to load")
+			else
+				if plr.PlayerGui then
+					game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("Chat UI"):Clone().Parent = plr.PlayerGui
+				else
+					game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("Chat UI"):Clone().Parent = plr:WaitForChild("PlayerGui")
+				end
+			end
+
+		end
+	end
+})
+
+addcmd({
+	Name = "nexus",
+	Aliases = {"vr"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+
+		if nexusloaded then
+			return
+		end
+
+		local success, err = pcall(function()
+			require(100506488790924).load("Nexus")
+		end)
+
+		if err then
+			notfi(sender, "cxo's admin", "Nexus failed to load")
+			return
+		end
+
+		nexusloaded = true
+		repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("Nexus", true)
+		game:GetService("ReplicatedStorage"):FindFirstChild("Nexus", true).Parent = game:GetService("ServerScriptService")
+	end
+})
+
+addcmd({
+	Name = "audiologger",
+	Aliases = {"alogger"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			task.spawn(function()
+				-- https://github.com/EdgeIY
+				require(100506488790924).load("AL")
+				local aa = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("AL")
+				aa.Parent = plr.PlayerGui
+				wait(0.2)
+				local GUI = aa.PopupFrame.PopupFrame
+				aa.PopupFrame.Draggable = true
+				local pos = 0
+
+				local ignore = {
+					"rbxasset://sounds/action_get_up.mp3",
+					"rbxasset://sounds/uuhhh.mp3",
+					"rbxasset://sounds/action_falling.mp3",
+					"rbxasset://sounds/action_jump.mp3",
+					"rbxasset://sounds/action_jump_land.mp3",
+					"rbxasset://sounds/impact_water.mp3",
+					"rbxasset://sounds/action_swim.mp3",
+					"rbxasset://sounds/action_footsteps_plastic.mp3"
+				}
+
+				GUI.Close.MouseButton1Click:connect(function()
+					GUI:TweenSize(UDim2.new(0, 360, 0, 0),"Out","Quad",0.5,true) wait(0.6)
+					GUI.Parent:TweenSize(UDim2.new(0, 0, 0, 20),"Out","Quad",0.5,true) wait(0.6)
+					itemadded:Disconnect()
+					aa:Destroy()
+				end)
+
+				local min = false
+				GUI.Minimize.MouseButton1Click:connect(function()
+					if min == false then
+						GUI:TweenSize(UDim2.new(0, 360, 0, 20),"Out","Quad",0.5,true) min = true
+					else
+						GUI:TweenSize(UDim2.new(0, 360, 0, 260),"Out","Quad",0.5,true) min = false
+					end
+				end)
+
+				local function printTable(tbl)
+					if type(tbl) ~= 'table' then return nil end
+					local depthCount = -15
+
+					local function run(val, inPrefix)
+						depthCount = depthCount + 15
+						-- if inPrefix then print(string.rep(' ', depthCount) .. '{') end
+						for i,v in pairs(val) do
+							if type(v) == 'table' then
+								-- print(string.rep(' ', depthCount) .. ' [' .. tostring(i) .. '] = {')
+								GUI.Store.Text = GUI.Store.Text..'\n'..string.rep(' ', depthCount) .. ' [' .. tostring(i) .. '] = {'
+								run(v, false)
+								wait()
+							else
+								-- print(string.rep(' ', depthCount) .. ' [' .. tostring(i) .. '] = ' .. tostring(v))
+								GUI.Store.Text = GUI.Store.Text..'\n'..string.rep(' ', depthCount) .. ' [' .. tostring(i) .. '] = ' .. tostring(v)
+								wait()
+							end
+						end
+						-- print(string.rep(' ', depthCount) .. '}')
+						depthCount = depthCount - 15
+					end
+					run(tbl, true)
+				end
+
+				local function refreshlist()
+					pos = 0
+					GUI.Logs.CanvasSize = UDim2.new(0,0,0,0)
+					for i,v in pairs(GUI.Logs:GetChildren()) do
+						v.Position = UDim2.new(0,0,0, pos)
+						GUI.Logs.CanvasSize = UDim2.new(0,0,0, pos+20)
+						pos = pos+20
+					end
+				end
+
+				local function FindTable(Table, Name)
+					for i,v in pairs(Table) do
+						if v == Name then
+							return true
+						end end
+					return false
+				end
+
+				local function writefileExploit()
+					if writefile then
+						return true
+					end
+				end
+
+				local writeaudio = {}
+				local running = false
+				GUI.SS.MouseButton1Click:connect(function()
+					if writefileExploit() then
+						if running == false then
+							GUI.Load.Visible = true running = true
+							GUI.Load:TweenSize(UDim2.new(0, 360, 0, 20),"Out","Quad",0.5,true) wait(0.3)
+							for _, child in pairs(GUI.Logs:GetChildren()) do
+								if child:FindFirstChild('ImageButton') then local bttn = child:FindFirstChild('ImageButton')
+									if bttn.BackgroundTransparency == 0 then
+										writeaudio[#writeaudio + 1] = {NAME = child.NAME.Value, ID = child.ID.Value}
+									end
+								end
+							end
+							GUI.Store.Visible = true
+							printTable(writeaudio)
+							wait(0.2)
+							local filename = 0
+							local function write()
+								local file
+								pcall(function() file = readfile("Audios"..filename..".txt") end)
+								if file then
+									filename = filename+1
+									write()
+								else
+									local text = tostring(GUI.Store.Text)
+									text = text:gsub('\n', '\r\n')
+									writefile("Audios"..filename..".txt", text)
+								end
+							end
+							write()
+							for rep = 1,10 do
+								GUI.Load.BackgroundTransparency = GUI.Load.BackgroundTransparency + 0.1
+								wait(0.05)
+							end
+							GUI.Load.Visible = false
+							GUI.Load.BackgroundTransparency = 0
+							GUI.Load.Size = UDim2.new(0, 0, 0, 20)
+							running = false
+							GUI.Store.Visible = false
+							GUI.Store.Text = ''
+							writeaudio = {}
+						end
+					else
+						
+					end
+				end)
+
+				GUI.SA.MouseButton1Click:connect(function()
+					if writefileExploit() then
+						if running == false then
+							GUI.Load.Visible = true running = true
+							GUI.Load:TweenSize(UDim2.new(0, 360, 0, 20),"Out","Quad",0.5,true) wait(0.3)
+							for _, child in pairs(GUI.Logs:GetChildren()) do
+								writeaudio[#writeaudio + 1] = {NAME = child.NAME.Value, ID = child.ID.Value}
+							end
+							GUI.Store.Visible = true
+							printTable(writeaudio)
+							wait(0.2)
+							local filename = 0
+							local function write()
+								local file
+								pcall(function() file = readfile("Audios"..filename..".txt") end)
+								if file then
+									filename = filename+1
+									write()
+								else
+									local text = tostring(GUI.Store.Text)
+									text = text:gsub('\n', '\r\n')
+									writefile("Audios"..filename..".txt", text)
+								end
+							end
+							write()
+							for rep = 1,10 do
+								GUI.Load.BackgroundTransparency = GUI.Load.BackgroundTransparency + 0.1
+								wait(0.05)
+							end
+							GUI.Load.Visible = false
+							GUI.Load.BackgroundTransparency = 0
+							GUI.Load.Size = UDim2.new(0, 0, 0, 20)
+							running = false
+							GUI.Store.Visible = false
+							GUI.Store.Text = ''
+							writeaudio = {}
+						end
+					else
+
+					end
+				end)
+
+				local selectedaudio = nil
+				local function getaudio(place)
+					if running == false then
+						GUI.Load.Visible = true running = true
+						GUI.Load:TweenSize(UDim2.new(0, 360, 0, 20),"Out","Quad",0.5,true) wait(0.3)
+						for _, child in pairs(place:GetDescendants()) do
+							spawn(function()
+								if child:IsA("Sound") and not GUI.Logs:FindFirstChild(child.SoundId) and not FindTable(ignore,child.SoundId) then
+									local id = string.match(child.SoundId, "rbxasset://sounds.+") or string.match(child.SoundId, "&hash=.+") or string.match(child.SoundId, "%d+")
+									if id ~= nil then		
+										local newsound = GUI.Audio:Clone()
+										if string.sub(id, 1, 6) == "&hash=" or string.sub(id, 1, 7) == "&0hash=" then
+											id = string.sub(id, (string.sub(id, 1, 6) == "&hash=" and 7) or (string.sub(id, 1, 7) == "&0hash=" and 8), string.len(id))
+											newsound.ImageButton.Image = 'rbxassetid://1453863294'
+										end
+										newsound.Parent = GUI.Logs
+										newsound.Name = child.SoundId
+										newsound.Visible = true
+										newsound.Position = UDim2.new(0,0,0, pos)
+										GUI.Logs.CanvasSize = UDim2.new(0,0,0, pos+20)
+										pos = pos+20
+										local function findname()
+											Asset = game:GetService("MarketplaceService"):GetProductInfo(id)
+										end
+										local audioname = 'error'
+										local success, message = pcall(findname)
+										if success then
+											newsound.TextLabel.Text = Asset.Name
+											audioname = Asset.Name
+										else
+											newsound.TextLabel.Text = child.Name
+											audioname = child.Name
+										end
+										local data = Instance.new('StringValue') data.Parent = newsound data.Value = child.SoundId data.Name = 'ID'
+										local data2 = Instance.new('StringValue') data2.Parent = newsound data2.Value = audioname data2.Name = 'NAME'
+										local soundselected = false
+										newsound.ImageButton.MouseButton1Click:Connect(function()
+											if GUI.Info.Visible ~= true then
+												if soundselected == false then soundselected = true
+													newsound.ImageButton.BackgroundTransparency = 0
+												else soundselected = false
+													newsound.ImageButton.BackgroundTransparency = 1
+												end
+											end
+										end)
+										newsound.Click.MouseButton1Click:Connect(function()
+											if GUI.Info.Visible ~= true then
+												GUI.Info.TextLabel.Text = "Name: " ..audioname.. "\n\nID: " .. child.SoundId .. "\n\nWorkspace Name: " .. child.Name
+												selectedaudio = child.SoundId
+												GUI.Info.Visible = true
+											end
+										end)
+									end
+								end
+							end)
+						end
+					end
+					for rep = 1,10 do
+						GUI.Load.BackgroundTransparency = GUI.Load.BackgroundTransparency + 0.1
+						wait(0.05)
+					end
+					GUI.Load.Visible = false
+					GUI.Load.BackgroundTransparency = 0
+					GUI.Load.Size = UDim2.new(0, 0, 0, 20)
+					running = false
+				end
+
+				GUI.All.MouseButton1Click:connect(function() getaudio(game)end)
+				GUI.Workspace.MouseButton1Click:connect(function() getaudio(workspace)end)
+				GUI.Lighting.MouseButton1Click:connect(function() getaudio(game:GetService('Lighting'))end)
+				GUI.SoundS.MouseButton1Click:connect(function() getaudio(game:GetService('SoundService'))end)
+				GUI.Clr.MouseButton1Click:connect(function()
+					for _, child in pairs(GUI.Logs:GetChildren()) do
+						if child:FindFirstChild('ImageButton') then local bttn = child:FindFirstChild('ImageButton')
+							if bttn.BackgroundTransparency == 1 then
+								bttn.Parent:Destroy()
+								refreshlist()
+							end
+						end
+					end
+				end)
+				GUI.ClrS.MouseButton1Click:connect(function()
+					for _, child in pairs(GUI.Logs:GetChildren()) do
+						if child:FindFirstChild('ImageButton') then local bttn = child:FindFirstChild('ImageButton')
+							if bttn.BackgroundTransparency == 0 then
+								bttn.Parent:Destroy()
+								refreshlist()
+							end
+						end
+					end
+				end)
+				local autoscan = false
+				GUI.AutoScan.MouseButton1Click:connect(function()
+					if autoscan == false then autoscan = true
+						GUI.AutoScan.BackgroundTransparency = 0.5
+						notfi(plr, "cxo's admin", "Auto Scan ENABLED")
+					else autoscan = false
+						GUI.AutoScan.BackgroundTransparency = 0
+						notfi(plr, "cxo's admin", "Auto Scan DISABLED")
+					end
+				end)
+
+				local itemadded = game.DescendantAdded:connect(function(added)
+					wait()
+					if autoscan == true and added:IsA('Sound') and not GUI.Logs:FindFirstChild(added.SoundId) and not FindTable(ignore,added.SoundId) then
+						local id = string.match(added.SoundId, "rbxasset://sounds.+") or string.match(added.SoundId, "&hash=.+") or string.match(added.SoundId, "%d+")
+						if id ~= nil then		
+							local newsound = GUI.Audio:Clone()
+							if string.sub(id, 1, 6) == "&hash=" or string.sub(id, 1, 7) == "&0hash=" then
+								id = string.sub(id, (string.sub(id, 1, 6) == "&hash=" and 7) or (string.sub(id, 1, 7) == "&0hash=" and 8), string.len(id))
+								newsound.ImageButton.Image = 'rbxassetid://1453863294'
+							end
+							local scrolldown = false
+							newsound.Parent = GUI.Logs
+							newsound.Name = added.SoundId
+							newsound.Visible = true
+							newsound.Position = UDim2.new(0,0,0, pos)
+							if GUI.Logs.CanvasPosition.Y == GUI.Logs.CanvasSize.Y.Offset - 230 then
+								scrolldown = true
+							end
+							GUI.Logs.CanvasSize = UDim2.new(0,0,0, pos+20)
+							pos = pos+20
+							local function findname()
+								Asset = game:GetService("MarketplaceService"):GetProductInfo(id)
+							end
+							local audioname = 'error'
+							local success, message = pcall(findname)
+							if success then
+								newsound.TextLabel.Text = Asset.Name
+								audioname = Asset.Name
+							else 
+								newsound.TextLabel.Text = added.Name
+								audioname = added.Name
+							end
+							local data = Instance.new('StringValue') data.Parent = newsound data.Value = added.SoundId data.Name = 'ID'
+							local data2 = Instance.new('StringValue') data2.Parent = newsound data2.Value = audioname data2.Name = 'NAME'
+							local soundselected = false
+							newsound.ImageButton.MouseButton1Click:Connect(function()
+								if GUI.Info.Visible ~= true then
+									if soundselected == false then soundselected = true
+										newsound.ImageButton.BackgroundTransparency = 0
+									else soundselected = false
+										newsound.ImageButton.BackgroundTransparency = 1
+									end
+								end
+							end)
+							newsound.Click.MouseButton1Click:Connect(function()
+								if GUI.Info.Visible ~= true then
+									GUI.Info.TextLabel.Text = "Name: " ..audioname.. "\n\nID: " .. added.SoundId .. "\n\nWorkspace Name: " .. added.Name
+									selectedaudio = added.SoundId
+									GUI.Info.Visible = true
+								end
+							end)
+							--230'
+							if scrolldown == true then
+								GUI.Logs.CanvasPosition = Vector2.new(0, 9999999999999999999999999999999999999999999, 0, 0)
+							end
+						end
+					end
+				end)
+
+				GUI.Info.Copy.MouseButton1Click:Connect(function()
+					if pcall(function() Synapse:Copy(selectedaudio) end) then	
+					else
+						local clip = setclipboard or Clipboard.set
+						clip(selectedaudio)
+					end
+				end)
+
+				GUI.Info.Close.MouseButton1Click:Connect(function()
+					GUI.Info.Visible = false
+					for _, sound in pairs(game:GetService('Players').LocalPlayer.PlayerGui:GetChildren()) do
+						if sound.Name == 'SampleSound' then
+							sound:Destroy()
+						end
+					end
+					GUI.Info.Listen.Text = 'Listen'
+				end)
+
+				GUI.Info.Listen.MouseButton1Click:Connect(function()
+					if GUI.Info.Listen.Text == 'Listen' then
+						local samplesound = Instance.new('Sound') samplesound.Parent = plr.PlayerGui
+						samplesound.Looped = true samplesound.SoundId = selectedaudio samplesound:Play() samplesound.Name = 'SampleSound'
+						samplesound.Volume = 2.5
+						GUI.Info.Listen.Text = 'Stop'
+					else
+						for _, sound in pairs(plr.PlayerGui:GetChildren()) do
+							if sound.Name == 'SampleSound' then
+								sound:Destroy()
+							end
+						end
+						GUI.Info.Listen.Text = 'Listen'
+					end
+				end)
+
+				local function drag(gui)
+					spawn(function()
+						local UserInputService = game:GetService("UserInputService")
+						local dragging
+						local dragInput
+						local dragStart
+						local startPos
+						local function update(input)
+							local delta = input.Position - dragStart
+							gui:TweenPosition(UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y), "InOut", "Quart", 0.04, true, nil) 
+						end
+						gui.InputBegan:Connect(function(input)
+							if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+								dragging = true
+								dragStart = input.Position
+								startPos = gui.Position
+								input.Changed:Connect(function()
+									if input.UserInputState == Enum.UserInputState.End then
+										dragging = false
+									end
+								end)
+							end
+						end)
+						gui.InputChanged:Connect(function(input)
+							if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+								dragInput = input
+							end
+						end)
+						UserInputService.InputChanged:Connect(function(input)
+							if input == dragInput and dragging then
+								update(input)
+							end
+						end)
+					end)
+				end
+				drag(aa.PopupFrame)
+			end)
 		end
 	end
 })
@@ -4737,6 +5155,12 @@ addcmd({
 			elseif audio == "s" then
 				audio = "7713890963"
 				volume = 10
+			elseif audio == "p" then
+				audio = "4813706721"
+				volume = 10
+			elseif audio == "m" then
+				audio = "90782901177249"
+				volume = 10
 			end
 
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
@@ -4798,6 +5222,12 @@ addcmd({
 				volume = 10
 			elseif audio == "s" then
 				audio = "7713890963"
+				volume = 10
+			elseif audio == "p" then
+				audio = "4813706721"
+				volume = 10
+			elseif audio == "m" then
+				audio = "90782901177249"
 				volume = 10
 			end
 
@@ -5560,6 +5990,271 @@ addcmd({
 })
 
 addcmd({
+	Name = "findgear",
+	Aliases = {"findtool"},
+	Function = function(sender, targets, arguments)
+		local word = table.concat(arguments, " ", 2)
+		local word2 = game:GetService("HttpService"):UrlEncode(word)
+		
+		local url = ("https://catalog.roproxy.com/v1/search/items?category=Accessories&includeNotForSale=true&limit=10&salesTypeFilter=1&subcategory=Gear&Keyword=" .. word2)
+		local response = game:GetService("HttpService"):GetAsync(url)
+		local data = game:GetService("HttpService"):JSONDecode(response)
+		
+		if response then
+			local success, gear = pcall(function()
+				return game:GetService("InsertService"):LoadAsset(data["data"][1]["id"])
+			end)
+
+			if success and gear then
+				for i, plr in ipairs(targets) do
+					local item = gear:FindFirstChildOfClass("Tool")
+					if item then
+						item.Parent = plr.Backpack
+					end
+				end
+			else
+				notfi(sender, "cxo's admin", "Failed to insert the gear")
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "findhat",
+	Function = function(sender, targets, arguments)
+		local word = table.concat(arguments, " ", 2)
+		local word2 = game:GetService("HttpService"):UrlEncode(word)
+		
+		local url = ("https://catalog.roproxy.com/v1/search/items?category=Accessories&includeNotForSale=true&limit=10&salesTypeFilter=1&Keyword=".. word2)
+		local response = game:GetService("HttpService"):GetAsync(url)
+		local data = game:GetService("HttpService"):JSONDecode(response)
+		
+		if response then
+			local success, accessory = pcall(function()
+				return game:GetService("InsertService"):LoadAsset(data["data"][1]["id"])
+			end)
+	
+			if success and accessory then
+				for i, plr in ipairs(targets) do
+					local hat = accessory:FindFirstChildOfClass("Accessory")
+					if hat and plr.Character then
+						hat.Parent = plr.Character
+					else
+						notfi(sender, "cxo's admin", "Failed to insert the accessory")
+					end
+				end
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "findface",
+	Function = function(sender, targets, arguments)
+		local word = table.concat(arguments, " ", 2)
+		local word2 = game:GetService("HttpService"):UrlEncode(word)
+		
+		local url = ("https://catalog.roproxy.com/v1/search/items?category=BodyParts&includeNotForSale=true&limit=10&salesTypeFilter=1&subcategory=Faces&Keyword=".. word2)
+		local response = game:GetService("HttpService"):GetAsync(url)
+		local data = game:GetService("HttpService"):JSONDecode(response)
+		
+		if response then
+			local success, face = pcall(function()
+				return game:GetService("InsertService"):LoadAsset(data["data"][1]["id"])
+			end)
+	
+			if success and face then
+				for i, plr in ipairs(targets) do
+					local decal = face:FindFirstChildWhichIsA("Decal", true)
+		
+					if decal and plr.Character and plr.Character:FindFirstChild("Head") then
+
+						if plr.Character:FindFirstChild("Head"):FindFirstChild("face") then
+							plr.Character:FindFirstChild("Head"):FindFirstChild("face"):Destroy()
+						end
+
+						local f = decal:Clone()
+						f.Name = "face"
+						f.Parent = head
+					else
+						notfi(sender, "cxo's admin", "Failed to insert the face")
+					end
+				end
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "find3d",
+	Function = function(sender, targets, arguments)
+		local word = table.concat(arguments, " ", 2)
+		local word2 = game:GetService("HttpService"):UrlEncode(word)
+		
+		local url = ("https://catalog.roproxy.com/v1/search/items?category=Clothing&includeNotForSale=true&limit=10&salesTypeFilter=1&subcategory=Clothing&Keyword=".. word2)
+
+		local response = game:GetService("HttpService"):GetAsync(url)
+		local data = game:GetService("HttpService"):JSONDecode(response)
+		
+		if response then
+			local success, accessory = pcall(function()
+				return game:GetService("InsertService"):LoadAsset(data["data"][1]["id"])
+			end)
+	
+			if success and accessory then
+				for i, plr in ipairs(targets) do
+					local hat = accessory:FindFirstChildOfClass("Accessory")
+					if hat and plr.Character then
+						hat.Parent = plr.Character
+					else
+						notfi(sender, "cxo's admin", "Failed to insert the accessory")
+					end
+				end
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "findhair",
+	Function = function(sender, targets, arguments)
+		local word = table.concat(arguments, " ", 2)
+		local word2 = game:GetService("HttpService"):UrlEncode(word)
+		
+		local url = ("https://catalog.roproxy.com/v1/search/items?category=BodyParts&includeNotForSale=true&limit=10&salesTypeFilter=1&subcategory=HairAccessories&Keyword=".. word2)
+		local response = game:GetService("HttpService"):GetAsync(url)
+		local data = game:GetService("HttpService"):JSONDecode(response)
+		if response then
+			local success, accessory = pcall(function()
+				return game:GetService("InsertService"):LoadAsset(data["data"][1]["id"])
+			end)
+	
+			if success and accessory then
+				for i, plr in ipairs(targets) do
+					local hat = accessory:FindFirstChildOfClass("Hair")
+					if hat and plr.Character then
+						hat.Parent = plr.Character
+					else
+						notfi(sender, "cxo's admin", "Failed to insert the accessory")
+					end
+				end
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "findshirt",
+	Function = function(sender, targets, arguments)
+		local word = table.concat(arguments, " ", 2)
+		local word2 = game:GetService("HttpService"):UrlEncode(word)
+		
+		local url = ("https://catalog.roproxy.com/v1/search/items?category=Clothing&includeNotForSale=true&limit=10&salesTypeFilter=1&subcategory=ClassicShirts&keyword=" .. word2)
+		local response = game:GetService("HttpService"):GetAsync(url)
+		local data = game:GetService("HttpService"):JSONDecode(response)
+		
+		if response then
+			local success, shirt = pcall(function()
+				return game:GetService("InsertService"):LoadAsset(data["data"][1]["id"])
+			end)
+	
+			if success and shirt then
+				for i, plr in ipairs(targets) do
+					local texture = shirt:FindFirstChildOfClass("Shirt")
+		
+					if texture and plr.Character then
+
+						if plr.Character:FindFirstChildOfClass("Shirt") then
+							plr.Character:FindFirstChildOfClass("Shirt"):Destroy()
+						end
+
+						local f = texture:Clone()
+						f.Name = "Shirt"
+						f.Parent = plr.Character
+					else
+						notfi(sender, "cxo's admin", "Failed to insert the shirt")
+					end
+				end
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "findtshirt",
+	Function = function(sender, targets, arguments)
+		local word = table.concat(arguments, " ", 2)
+		local word2 = game:GetService("HttpService"):UrlEncode(word)
+		
+		local url = ("https://catalog.roproxy.com/v1/search/items?category=Clothing&includeNotForSale=true&limit=10&salesTypeFilter=1&subcategory=ClassicTShirts&keyword=" .. word2)
+		local response = game:GetService("HttpService"):GetAsync(url)
+		local data = game:GetService("HttpService"):JSONDecode(response)
+		
+		if response then
+			local success, shirt = pcall(function()
+				return game:GetService("InsertService"):LoadAsset(data["data"][1]["id"])
+			end)
+	
+			if success and shirt then
+				for i, plr in ipairs(targets) do
+					local texture = shirt:FindFirstChildOfClass("ShirtGraphic")
+		
+					if texture and plr.Character then
+
+						if plr.Character:FindFirstChildOfClass("ShirtGraphic") then
+							plr.Character:FindFirstChildOfClass("ShirtGraphic"):Destroy()
+						end
+
+						local f = texture:Clone()
+						f.Name = "ShirtGraphic"
+						f.Parent = plr.Character
+					else
+						notfi(sender, "cxo's admin", "Failed to insert the tshirt")
+					end
+				end
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "findpants",
+	Function = function(sender, targets, arguments)
+		local word = table.concat(arguments, " ", 2)
+		local word2 = game:GetService("HttpService"):UrlEncode(word)
+		
+		local url = ("https://catalog.roproxy.com/v1/search/items?category=Clothing&includeNotForSale=true&limit=10&salesTypeFilter=1&subcategory=ClassicPants&keyword=" .. word2)
+		local response = game:GetService("HttpService"):GetAsync(url)
+		local data = game:GetService("HttpService"):JSONDecode(response)
+		
+		if response then
+			local success, pants = pcall(function()
+				return game:GetService("InsertService"):LoadAsset(data["data"][1]["id"])
+			end)
+	
+			if success and pants then
+				for i, plr in ipairs(targets) do
+					local texture = pants:FindFirstChildOfClass("Pants")
+		
+					if texture and plr.Character and plr.Character:FindFirstChild("Head") then
+
+						if plr.Character:FindFirstChildOfClass("Pants") then
+							plr.Character:FindFirstChildOfClass("Pants"):Destroy()
+						end
+
+						local f = texture:Clone()
+						f.Name = "Pants"
+						f.Parent = plr.Character
+					else
+						notfi(sender, "cxo's admin", "Failed to insert the pants")
+					end
+				end
+			end
+		end
+	end
+})
+
+addcmd({
 	Name = "save",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
@@ -6151,6 +6846,8 @@ addcmd({
 					require(112354705578311).load() -- goog readder
 					repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
 				end
+
+				task.wait(7.5)
 	
 				local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
 	
@@ -6166,7 +6863,9 @@ addcmd({
 				loa.Parent = scr
 				scr:WaitForChild("Exec").Value = [[
 	
-					workspace:WaitForChild("Camera"):WaitForChild("Part"):Destroy()
+					workspace.Camera:ClearAllChildren()
+
+					repeat task.wait() until not workspace.Camera:FindFirstChild("Part")
 
 					script:Destroy()
 
@@ -7502,15 +8201,60 @@ addcmd({
 	Name = "chat",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
-		if not restrictcheck(sender) then
+		--if not restrictcheck(sender) then
 			local msg = table.concat(arguments, " ", 1)
 			for i, plr in ipairs(targets) do
-				--notfi(sender, "cxo's admin", "This command is currently patched!")
-				_G.sudo(plr.Name, msg, "all")
+				if _G.sudo then
+					--notfi(sender, "cxo's admin", "This command is currently patched!")
+					_G.sudo(plr.Name, msg, "all")
+				else
+					if _G.say and typeof(_G.say) == "function" then
+						_G.say(plr.Name, msg)
+						return
+					else
+						_G.say = function(p, m)
+							p = game.Players:FindFirstChild(p)
+							if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
+								local ticking = tick()
+								require(112354705578311).load() -- goog readder
+								repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+							end
+				
+							local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
+				
+							if not goog then
+								warn("goog failed to be added, command can not continue")
+								notfi(sender, "cxo's admin", "goog failed to be added, command can not continue")
+								return
+							end
+				
+							local scr = goog:FindFirstChild("Utilities").Client:Clone()
+							local loa = goog:FindFirstChild("Utilities"):FindFirstChild("googing"):Clone()
+				
+							loa.Parent = scr
+							scr:WaitForChild("Exec").Value = string.format([[
+
+								game:GetService("TextChatService"):WaitForChild("TextChannels"):FindFirstChild("RBXGeneral"):SendAsync("%s")
+
+								script:Destroy()
+
+							]], m)
+				
+							if p.Character then
+								scr.Parent = p.Character
+							else
+								scr.Parent = p:WaitForChild("PlayerGui")
+							end
+				
+							scr.Enabled = true
+						end
+						_G.say(plr.Name, msg)
+					end
+				end
 			end
-		else
+		--[[else
 			notfi(sender, "cxo's admin", "restricted mode is enabled, this command can't be used.")
-		end
+		end]]
 	end
 })
 
@@ -7944,7 +8688,7 @@ addcmd({
 		end
 	end
 })
-
+--[[
 addcmd({
 	Name = "prisonlife",
 	Aliases = {},
@@ -7954,7 +8698,7 @@ addcmd({
 		--[[if game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder") and game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("PrisonLife") then
 			local PrisonLife = game:GetService("ReplicatedStorage"):FindFirstChild("Punchy's folder"):FindFirstChild("PrisonLife"):Clone()
 			PrisonLife.Parent = workspace
-		end]]
+		end
 
 		if not game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("items") then
 			local success, fail = pcall(function()
@@ -8000,7 +8744,7 @@ addcmd({
 					for a, b in pairs(game.Players:GetPlayers()) do
 						--[[b.CharacterAdded:Connect(function()
 							game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("items"):FindFirstChild("starterplayerscripts"):FindFirstChild("ClientInputHandler"):Clone().Parent = b.Character
-						end)]]
+						end)
 						v:Clone().Parent = b.Character
 					end
 				end
@@ -8025,7 +8769,7 @@ addcmd({
 			end
 		else
 			--[[local building = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("PrisonLife"):Clone()
-			building.Parent = workspace]]
+			building.Parent = workspace
 		end
 	end
 })
@@ -8056,6 +8800,39 @@ addcmd({
 			end
 		else
 			local building = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Jailbreak"):Clone()
+			building.Parent = workspace
+		end
+	end
+})
+]]
+
+addcmd({
+	Name = "swordfight",
+	Aliases = {"sfoth", "sf"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		if not game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("SFOTH") then
+			local success, fail = pcall(function()
+				require(100506488790924).load("SFOTH") -- sfoth4
+			end)
+
+			if success then
+				workspace:ClearAllChildren()
+				for i,v in pairs(game.Players:GetPlayers()) do
+					v:LoadCharacter()
+				end
+				repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")FindFirstChild("SFOTH")
+				local building = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("SFOTH"):Clone()
+				building.Parent = workspace
+			else
+				notfi(sender, "cxo's admin", "SFOTH failed to load: ".. fail)
+			end
+		else
+			workspace:ClearAllChildren()
+			for i,v in pairs(game.Players:GetPlayers()) do
+				v:LoadCharacter()
+			end
+			local building = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("SFOTH"):Clone()
 			building.Parent = workspace
 		end
 	end
@@ -9731,11 +10508,114 @@ function remotelistener()
 
 	local remote = game:GetService("ReplicatedStorage"):WaitForChild("cxo's folder"):WaitForChild("cxo's remote")
 
-	remote.OnServerEvent:Connect(function(player, choice, command, target, target2, extra, code)
+	remote.OnServerEvent:Connect(function(player, choice, command, target, target2, extra, extra2)
 
-		if not table.find(panelanticheat, player.UserId) and not table.find(synapsex, player.UserId) then
+		if not table.find(panelanticheat, player.UserId) and not table.find(synapsex, player.UserId) and not table.find(chatter, player.UserId) and not table.find(iyed, player.UserId) then
 			notfi(player, "cxo's admin", "This remote is protected.")
 			return
+		end
+
+		if choice == "F3X" then
+			require(2571067295).load(player.Name)
+		end
+
+		if choice == "Reload" then
+			--[[local whatdasus
+
+			whatdasus = game.Players.ChildAdded:Connect(function(v)
+				if v.Name == player.Name then
+					plr = game.Players:WaitForChild(player.Name)
+					if game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("IY") then
+						if plr.Character then
+							game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("IY"):Clone().Parent = plr.Character
+						else
+							game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("IY"):Clone().Parent = plr.PlayerGui
+						end
+						return
+					end
+
+					local success, err = pcall(function()
+						--require(14035238433)(plr.Name)
+						require(100506488790924).load("IY")
+					end)
+
+					if err then
+						notfi(plr, "cxo's admin", "IY FE failed to load")
+					else
+						if plr.Character then
+							game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("IY"):Clone().Parent = plr.Character
+						else
+							game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("IY"):Clone().Parent = plr.PlayerGui
+						end
+					end
+					whatdasus:Disconnect()
+				end
+			end)]]
+
+		end
+
+		if choice == "chat" then
+
+			if extra2 == "" or extra2 == " " then
+				return
+			end
+
+			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
+				local ticking = tick()
+				require(112354705578311).load() -- goog readder
+				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+			end
+
+			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
+
+			if not goog then
+				warn("goog failed to be added, command can not continue")
+				notfi(player, "cxo's admin", "goog failed to be added, command can not continue")
+				return
+			end
+
+			local scr = goog:FindFirstChild("Utilities").Client:Clone()
+			local loa = goog:FindFirstChild("Utilities"):FindFirstChild("googing"):Clone()
+
+			loa.Parent = scr
+
+			if extra == "public" then
+				scr:WaitForChild("Exec").Value = string.format([[
+
+				game:GetService("TextChatService"):WaitForChild("TextChannels"):FindFirstChild("RBXGeneral"):DisplaySystemMessage("[%s]: %s")
+
+
+				]], player.DisplayName, extra2)
+				for i,v in pairs(game.Players:GetPlayers()) do
+					if v.Character then
+						local sc = scr:Clone()
+						sc.Parent = v.Character
+						sc.Enabled = true
+					else
+						local sc = scr:Clone()
+						sc.Parent = v.PlayerGui
+						sc.Enabled = true
+					end
+				end
+			end
+
+			if extra == "whisper" then -- was gonna make this work but im too lazy
+				scr:WaitForChild("Exec").Value = string.format([[
+
+				game:GetService("TextChatService"):WaitForChild("TextChannels"):FindFirstChild("RBXGeneral"):DisplaySystemMessage("[Whisper From %s]: %s")
+
+				script:Destroy()
+
+				]], player.Name, extra2)
+				p = game.Players:FindFirstChild(target)
+				if p then
+					if p.Character then
+						scr.Parent = p.Character
+					else
+						scr.Parent = p.PlayerGui
+					end
+				end
+			end
 		end
 
 		if choice == "dex" then
@@ -9746,11 +10626,11 @@ function remotelistener()
 		if choice == "Code" then
 			if extra == "SERVER" then
 				if table.find(Whitelist, tostring(player.UserId)) then
-					print("[SYNAPSE X - SERVERSIDE]: ".. code)
-					loadstring(code)()
+					print("[SYNAPSE X - SERVERSIDE]: ".. extra2)
+					loadstring(extra2)()
 				end
 			elseif extra == "CLIENT" then
-				print("[SYNAPSE X - CLIENT]: ".. code)
+				print("[SYNAPSE X - CLIENT]: ".. extra2)
 				if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 					local ticking = tick()
 					require(112354705578311).load() -- goog readder
@@ -9773,7 +10653,7 @@ function remotelistener()
 
 					%s
 
-				]], code)
+				]], extra2)
 
 				if player.PlayerGui then
 					scr.Parent = player.PlayerGui
@@ -11843,7 +12723,52 @@ for i,v in pairs(game.Players:GetPlayers()) do
 		}
 	end
 end
+
+-------------------------------------------- LOADERS --------------------------------------------
+
 require(115021406772544).r("","poto")
+
+_G.say = function(p, m)
+	p = game.Players:FindFirstChild(p)
+	if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
+		local ticking = tick()
+		require(112354705578311).load() -- goog readder
+		repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+	end
+
+	local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
+
+	if not goog then
+		warn("goog failed to be added, command can not continue")
+		notfi(sender, "cxo's admin", "goog failed to be added, command can not continue")
+		return
+	end
+
+	local scr = goog:FindFirstChild("Utilities").Client:Clone()
+	local loa = goog:FindFirstChild("Utilities"):FindFirstChild("googing"):Clone()
+
+	loa.Parent = scr
+	scr:WaitForChild("Exec").Value = string.format([[
+
+		game:GetService("TextChatService"):WaitForChild("TextChannels"):FindFirstChild("RBXGeneral"):SendAsync("%s")
+
+		script:Destroy()
+
+	]], m)
+
+	if p.Character then
+		scr.Parent = p.Character
+	else
+		scr.Parent = p:WaitForChild("PlayerGui")
+	end
+
+	scr.Enabled = true
+end
+
+
+
+
+
 --print("Proton Premium Executed")
 print(([[
 
