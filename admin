@@ -5146,6 +5146,8 @@ addcmd({
 	Aliases = {"memcrash"}, 
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
+			local cxowuhhere = Instance.new("ScreenGui")
+			cxowuhhere.ResetOnSpawn = false
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
 				require(112354705578311).load() -- goog readder
@@ -5177,10 +5179,14 @@ addcmd({
 
 			]]
 
-			if plr.Character then
-				scr.Parent = plr.Character
+			if plr.PlayerGui then
+				cxowuhhere.Parent = plr.PlayerGui
+				scr.Parent = cxowuhhere
 			else
-				scr.Parent = plr:WaitForChild("PlayerGui")
+				plr:LoadCharacter()
+				repeat task.wait() until plr:FindFirstChild("PlayerGui")
+				cxowuhhere.Parent = plr.PlayerGui
+				scr.Parent = cxowuhhere
 			end
 
 			scr.Enabled = true
