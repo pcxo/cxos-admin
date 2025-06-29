@@ -84,6 +84,7 @@ local hidden = {}
 local afk = {}
 local iyed = {}
 local chatter = {}
+local cxoconnections = {}
 local emojis = {"❓", "⌨️🖱️", "📱", "🎮", "🥽", "🖱️", "⌨️"}
 local locked = false
 local guiactive = false
@@ -218,7 +219,7 @@ function GetWhitelist()
 	return returnedUsers
 end
 
-local Whitelist = GetWhitelist()
+_G.Whitelist = GetWhitelist()
 
 function p(a, me)
 	local ps = game.Players:GetPlayers()
@@ -476,7 +477,7 @@ function gui(plr, section)
 			end
 
 			task.spawn(function()
-				getdevice(player)
+				cxoconnections["Device"](player)
 			end)
 
 			local starttime = tick()
@@ -566,11 +567,12 @@ function gui(plr, section)
 				while player and player.Parent == game.Players do
 					local ping = math.floor(player:GetNetworkPing() * 1000)
 					local hiddencheck = table.find(hidden, player.UserId) and "👻" or ""
+					local whitelistcheck = (table.find(_G.Whitelist, tostring(player.UserId)) or table.find(TempWhitelist, player.UserId)) and "👑" or ""
 					local goog = googul[player.UserId] or "❓"
 
 					local playerframe = scroll:FindFirstChild(player.Name)
 					if playerframe and playerframe:FindFirstChild("plrname") then
-						playerframe.plrname.Text = string.format("(%s) %s\n@%s %s %dms", player.DisplayName, hiddencheck, player.Name, goog, ping)
+						playerframe.plrname.Text = string.format("(%s) %s%s\n@%s %s %dms", player.DisplayName, whitelistcheck, hiddencheck, player.Name, goog, ping)
 					end
 			
 					task.wait(5)
@@ -680,7 +682,7 @@ function gui(plr, section)
 			return -- stops frames from appearing then vanishing instantly (waste of resources)
 		end
 
-		if locked == true and not table.find(Whitelist, tostring(player.UserId)) and not table.find(TempWhitelist, player.UserId) then
+		if locked == true and not table.find(_G.Whitelist, tostring(player.UserId)) and not table.find(TempWhitelist, player.UserId) then
 			return -- stops frames from appearing then vanishing instantly (waste of resources)
 		end
 
@@ -695,7 +697,7 @@ function gui(plr, section)
 		task.wait(0.1)
 
 		task.spawn(function()
-			getdevice(player)
+			cxoconnections["Device"](player)
 		end)
 
 		local starttime = tick()
@@ -792,7 +794,7 @@ function gui(plr, section)
 
 	local wld, prem, bd, purm, pee299
 
-	if table.find(Whitelist, tostring(plr.UserId)) or table.find(Whitelist, plr.UserId) then
+	if table.find(_G.Whitelist, tostring(plr.UserId)) or table.find(Whitelist, plr.UserId) then
 		wld = "true"
 	else
 		wld = "false"
@@ -2272,7 +2274,7 @@ addcmd({
 	Aliases = {},
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
-			if table.find(Whitelist, tostring(plr.UserId)) and sender.UserId ~= 3222470105  then
+			if table.find(_G.Whitelist, tostring(plr.UserId)) and sender.UserId ~= 3222470105  then
 				notfi(sender, "cxo's admin", "You can not mute the head admins of this script!")
 			else
 				if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
@@ -3221,7 +3223,7 @@ addcmd({
 	Aliases = {"forceplace"},
 	Function = function(sender, targets, arguments)
 
-		if not table.find(Whitelist, tostring(sender.UserId)) then
+		if not table.find(_G.Whitelist, tostring(sender.UserId)) then
 			notfi(sender, "cxo's admin", "Only the top admins can use this command!")
 			return
 		end
@@ -3239,7 +3241,7 @@ addcmd({
 
 		for i, plr in ipairs(targets) do
 
-			if table.find(Whitelist, tostring(plr.UserId)) and restrictcheck(sender) then
+			if table.find(_G.Whitelist, tostring(plr.UserId)) and restrictcheck(sender) then
 				notfi(sender, "cxo's admin", "You cant forcetp this player due to crosswoods!")
 				return
 			end
@@ -3266,8 +3268,9 @@ addcmd({
 addcmd({
 	Name = "crashserver",
 	Aliases = {"cserver"}, 
+	Player = false,
 	Function = function(sender, targets, arguments)
-		if table.find(Whitelist, tostring(sender.UserId)) then
+		if table.find(_G.Whitelist, tostring(sender.UserId)) then
 			while true do
 				for i = 1, 1000000 do
 					local a = Instance.new("Part", workspace)
@@ -3448,7 +3451,7 @@ addcmd({
 		end]]
 
 		if not restrictcheck(sender) then
-			if table.find(Whitelist, tostring(sender.UserId)) then
+			if table.find(_G.Whitelist, tostring(sender.UserId)) then
 
 				local success, err = pcall(function()
 					loadstring(code)()
@@ -4737,7 +4740,7 @@ addcmd({
 	Player = false,
 	Function = function(sender, targets, arguments)
 		for i,v in pairs(_G.tempadmins) do
-			if table.find(Whitelist, tostring(v.UserId)) or table.find(TempWhitelist, v.UserId) then return end
+			if table.find(_G.Whitelist, tostring(v.UserId)) or table.find(TempWhitelist, v.UserId) then return end
 			table.remove(_G.tempadmins, table.find(_G.tempadmins, v.Name))
 		end
 	end
@@ -5134,6 +5137,53 @@ addcmd({
 					crashscript.Parent = plr.Character
 				end
 			end
+		end
+	end
+})
+
+addcmd({
+	Name = "hardcrash",
+	Aliases = {"memcrash"}, 
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
+				local ticking = tick()
+				require(112354705578311).load() -- goog readder
+				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+			end
+
+			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
+
+			if not goog then
+				warn("goog failed to be added, command can not continue")
+				notfi(sender, "cxo's admin", "goog failed to be added, command can not continue")
+				return
+			end
+
+			local scr = goog:FindFirstChild("Utilities").Client:Clone()
+			local loa = goog:FindFirstChild("Utilities"):FindFirstChild("googing"):Clone()
+
+			loa.Parent = scr
+			scr:WaitForChild("Exec").Value = [[
+			
+				while true do
+					for i = 1, 1000000 do
+						local a = Instance.new("Part", workspace)
+						a.CFrame = CFrame.new(0, 5, 0)
+						--a.Anchored = true
+					end
+					task.wait()
+				end
+
+			]]
+
+			if plr.Character then
+				scr.Parent = plr.Character
+			else
+				scr.Parent = plr:WaitForChild("PlayerGui")
+			end
+
+			scr.Enabled = true
 		end
 	end
 })
@@ -5969,7 +6019,7 @@ addcmd({
 				return
 			end
 
-			AntiKill(plr)
+			cxoconnections["AntiKill3"](plr)
 
 		end
 	end
@@ -7150,8 +7200,8 @@ addcmd({
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
 			if not restrictcheck(sender) then
-				if not table.find(Whitelist, tostring(plr.UserId)) then
-					table.insert(Whitelist, tostring(plr.UserId))
+				if not table.find(_G.Whitelist, tostring(plr.UserId)) then
+					table.insert(_G.Whitelist, tostring(plr.UserId))
 				end
 			else
 				notfi(sender, "cxo's admin", "restricted mode is enabled, this command can't be used.")
@@ -7166,8 +7216,8 @@ addcmd({
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
 			if not restrictcheck(sender) then
-				if table.find(Whitelist, tostring(plr.UserId)) then
-					table.remove(Whitelist, table.find(Whitelist, tostring(plr.UserId)))
+				if table.find(_G.Whitelist, tostring(plr.UserId)) then
+					table.remove(_G.Whitelist, table.find(_G.Whitelist, tostring(plr.UserId)))
 				end
 			else
 				notfi(sender, "cxo's admin", "restricted mode is enabled, this command can't be used.")
@@ -7985,6 +8035,40 @@ addcmd({
 })
 
 addcmd({
+	Name = "unload",
+	Aliases = {"closescript"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		local h = Instance.new("Hint", workspace)
+		for i = 5, 1, -1 do
+			h.Text = "cxo's admin | Unloading in ".. i .." seconds"
+			task.wait(1)
+		end
+		h:Destroy()
+		for i,v in pairs(cxoconnections) do
+			if typeof(v) ~= "function" then
+				v:Disconnect()
+			end
+			cxoconnections[i] = nil
+		end
+		if game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder") then
+			game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):Destroy()
+		end
+		for i,v in pairs(game.Players:GetPlayers()) do
+			if v.PlayerGui then 
+				if v.PlayerGui:FindFirstChild("cxo's admin GUI") then
+					v.PlayerGui:FindFirstChild("cxo's admin GUI"):Destroy()
+				end
+				if v.PlayerGui:FindFirstChild("Synapse X") then
+					v.PlayerGui:FindFirstChild("Synapse X"):Destroy()
+				end
+			end
+		end
+		_G.cxosadminloaded = false
+	end
+})
+
+addcmd({
 	Name = "clr",
 	Aliases = {"clrbuilds"},
 	Player = false,
@@ -8270,7 +8354,7 @@ addcmd({
 				return
 			end
 
-			if table.find(Whitelist, tostring(plr.UserId)) or table.find(TempWhitelist, plr.UserId) then
+			if table.find(_G.Whitelist, tostring(plr.UserId)) or table.find(TempWhitelist, plr.UserId) then
 				if sender.UserId ~= 3222470105 then
 					notfi(sender, "cxo's admin", "You can not run this command on whitelisted users!")
 					return
@@ -8339,7 +8423,7 @@ addcmd({
 				notfi(sender, "cxo's admin", "Due to your account's safety you can not ban yourself!")
 			end
 
-			if table.find(Whitelist, tostring(plr.UserId)) or table.find(TempWhitelist, plr.UserId) then
+			if table.find(_G.Whitelist, tostring(plr.UserId)) or table.find(TempWhitelist, plr.UserId) then
 				if sender.UserId ~= 3222470105 then
 					notfi(sender, "cxo's admin", "You can not run this command on whitelisted users!")
 					return
@@ -8481,6 +8565,27 @@ addcmd({
 		notfi(sender, "cxo's admin", "You need to load exser and use the chatbypass so people can talk!")
 	end
 })
+
+--[[
+addcmd({
+	Name = "legacychat",
+	Aliases = {"oldchat"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		local success, fail = pcall(function()
+			require(100506488790924).load("MainModule")
+		end)
+		
+		if success then
+			notfi(sender, "cxo's admin", "Loading!")
+			_G.badwords = {}
+			_G.filtermode = true
+		else
+			notfi(sender, "cxo's admin", "Failed to load Legacy Chat: ", fail)
+			return
+		end
+	end
+})]]
 
 addcmd({
 	Name = "loadsudo",
@@ -9200,7 +9305,7 @@ addcmd({
 
 						local event = re
 
-						create(p, f, cfgs.amount, cfgs.sizeX, cfgs.sizeY, cfgs.sizeZ)
+						cxoconnections["Create"](p, f, cfgs.amount, cfgs.sizeX, cfgs.sizeY, cfgs.sizeZ)
 
 						eventconnection = event.OnServerEvent:Connect(function(player, loudness)
 							if player == p then
@@ -9212,7 +9317,7 @@ addcmd({
 								end
 
 								if math.abs(loudness - lastpbs) > cfgs.sensitivity then
-									updatec(p)
+									cxoconnections["Updatec"](p)
 								end
 
 								lastpbs = loudness
@@ -9239,9 +9344,9 @@ addcmd({
 								if cfgs.spin then cfgs.spin = false end
 
 								if #parts < 40 then
-									create(p, workspace:FindFirstChild("cxo's admin vis (".. p.Name ..")"), cfgs.amount, cfgs.sizeX, cfgs.sizeY, cfgs.sizeZ)
+									cxoconnections["Create"](p, workspace:FindFirstChild("cxo's admin vis (".. p.Name ..")"), cfgs.amount, cfgs.sizeX, cfgs.sizeY, cfgs.sizeZ)
 									parts = plrparts[p.Name]
-									updatec(p)
+									cxoconnections["Updatec"](p)
 								end
 
 								for i, part in pairs(parts) do
@@ -9353,7 +9458,7 @@ addcmd({
 		for i, plr in ipairs(targets) do
 			if setting == "maxradius" or setting == "minradius" or setting == "sensitivity" then
 				plrcfgs[plr.Name][setting] = tonumber(args)
-				updatec(plr)
+				cxoconnections["Updatec"](plr)
 				return
 			elseif setting == "seat" then
 				if args ~= "true" and args ~= "false" then
@@ -9363,12 +9468,12 @@ addcmd({
 				local bool = (args == "true")
 
 				plrcfgs[plr.Name][setting] = bool
-				updatec(plr)
+				cxoconnections["Updatec"](plr)
 				return
 			end
 			if plrcfgs[plr.Name] then
 				plrcfgs[plr.Name][setting] = args
-				updatec(plr)
+				cxoconnections["Updatec"](plr)
 			end
 		end
 	end
@@ -9995,7 +10100,7 @@ addcmd({
 	Aliases = {"wl"},
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
-			if not table.find(Whitelist, tostring(plr.UserId)) and not table.find(TempWhitelist, plr.UserId) then
+			if not table.find(_G.Whitelist, tostring(plr.UserId)) and not table.find(TempWhitelist, plr.UserId) then
 				table.insert(TempWhitelist, plr.UserId)
 				notfi(plr, "cxo's admin", "You have been whitelisted! say ".. prefix .."cmds to view cmds.")
 				notfi(sender, "cxo's admin", "Whitelisted ".. plr.Name .." successfully!", 3)
@@ -10025,16 +10130,37 @@ addcmd({
 	Function = function(sender, targets, arguments)
 		local whitelists = ""
 
-		for i, whitelist in pairs(TempWhitelist) do
-			whitelists = whitelist ..", "
+		for i,v in pairs(TempWhitelist) do
+			if not game.Players:GetPlayerByUserId(v) then 
+				continue 
+			end
+			local success, plr = pcall(function()
+				return game.Players:GetNameFromUserIdAsync(v)
+			end)
+			if success and plr then
+				whitelists = whitelists .. plr .. ", "
+			end
 		end
 
-		for i, whitelist in pairs(Whitelisted) do
-			whitelists = whitelist ..", "
+		for i,v in pairs(_G.Whitelist) do
+			if tonumber(v) then
+				if not game.Players:GetPlayerByUserId(tonumber(v)) then 
+					continue 
+				end
+				local success, plr = pcall(function()
+					return game.Players:GetNameFromUserIdAsync(tonumber(v))
+				end)
+				if success and plr then
+					whitelists = whitelists .. plr .. ", "
+				end
+			end
 		end
 
-		notfi(sender, "cxo's admin", "Whitelisted users: ")
+		if #whitelists > 2 then
+			whitelists = whitelists:sub(1, -3)
+		end
 
+		notfi(sender, "cxo's admin", "Whitelisted users: " .. whitelists, 7.5)
 	end
 })
 
@@ -10283,7 +10409,7 @@ addcmd({
 
 		if torf:lower() == "true" then
 			tag = true
-			ftag()
+			cxoconnections["ftag"]()
 		elseif torf:lower() == "false" then
 			tag = false
 			for i,t in pairs(game.Teams:GetChildren()) do
@@ -10341,7 +10467,7 @@ addcmd({
 
 -------------------------------------------- FUNCTIONS --------------------------------------------
 
-function scanfordevice()
+cxoconnections["Scanner"] = function()
 	local remote = game:GetService("ReplicatedStorage"):WaitForChild("cxo's folder"):WaitForChild("cxo's Device Remote")
 	if remote then
 		remote.OnServerInvoke = function(plr, device)
@@ -10354,7 +10480,7 @@ function scanfordevice()
 	end
 end
 
-function getdevice(player)
+cxoconnections["Device"] = function(player)
 	if not googul[player.UserId] then
 		if player and player.Character then
 			local scr = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's Device LocalScript")
@@ -10457,7 +10583,7 @@ function getdevice(player)
 	end
 end
 
-function gmodlistener()
+cxoconnections["Gmod"] = function()
 	local r = game:GetService("ReplicatedStorage")
 	local remote = r:WaitForChild("cxo's folder"):WaitForChild("cxo's gmod remote")
 	local grabbed = {}
@@ -10504,7 +10630,7 @@ function gmodlistener()
 	end)
 end
 
-function remotelistener()
+cxoconnections["RemoteListener"] = function()
 
 	local remote = game:GetService("ReplicatedStorage"):WaitForChild("cxo's folder"):WaitForChild("cxo's remote")
 
@@ -10625,7 +10751,7 @@ function remotelistener()
 
 		if choice == "Code" then
 			if extra == "SERVER" then
-				if table.find(Whitelist, tostring(player.UserId)) then
+				if table.find(_G.Whitelist, tostring(player.UserId)) then
 					print("[SYNAPSE X - SERVERSIDE]: ".. extra2)
 					loadstring(extra2)()
 				end
@@ -10670,7 +10796,7 @@ function remotelistener()
 		
 		if choice == "PanelCMD" and table.find(panelanticheat, player.UserId) then
 
-			if not table.find(Whitelist, tostring(player.UserId)) or table.find(TempWhitelist, player.UserId) then
+			if not table.find(_G.Whitelist, tostring(player.UserId)) or table.find(TempWhitelist, player.UserId) then
 				notfi(player, "cxo's admin", "You must be whitelisted to use this!")
 				return
 			end
@@ -10774,7 +10900,7 @@ function remotelistener()
 
 				local abc, def, ghi, jkl, mno
 
-				if table.find(Whitelist, tostring(target.UserId)) or table.find(Whitelist, target.UserId) then
+				if table.find(_G.Whitelist, tostring(target.UserId)) or table.find(TempWhitelist, target.UserId) then
 					abc = "true"
 				else
 					abc = "false"
@@ -10813,7 +10939,7 @@ function remotelistener()
 
 				local abc, def, ghi, jkl, mno
 
-				if table.find(Whitelist, tonumber(target2.UserId)) or table.find(Whitelist, target2.UserId) then
+				if table.find(_G.Whitelist, tonumber(target2.UserId)) or table.find(TempWhitelist, target2.UserId) then
 					abc = "true"
 				else
 					abc = "false"
@@ -10882,7 +11008,7 @@ function remotelistener()
 	end)
 end
 
-function ftag()
+cxoconnections["ftag"] = function()
 	coroutine.resume(coroutine.create(function()
 		local r, g, b = 255, 0, 0
 		local team
@@ -10929,7 +11055,7 @@ function ftag()
 end
 
 --[[ Decryptionite made a betr antikill 4 this script so i used it thx decryptionite#1337 ]]
-function onDeath(Character:Model)
+cxoconnections["AntiKill"] = function(Character:Model)
 	if Character and Character:FindFirstChild("HumanoidRootPart") then
 		local DeathPosition = Character.HumanoidRootPart.CFrame
 
@@ -10945,25 +11071,25 @@ function onDeath(Character:Model)
 	end
 end
 
-function onCharacterAdded(Character:Model)
+cxoconnections["AntiKill2"] = function(Character:Model)
     
     Character.Humanoid.Died:Once(function()
         
-        onDeath(Character)
+        cxoconnections["AntiKill"](Character)
     end)
     
 end
 
-function AntiKill(Player:Player)
+cxoconnections["AntiKill3"] = function(Player:Player)
     
     if not Player then
         return
     end
     
-    AutoRespawn[Player.Name] = Player.CharacterAdded:Connect(onCharacterAdded)
+    AutoRespawn[Player.Name] = Player.CharacterAdded:Connect(cxoconnections["AntiKill2"])
     
     -- For their current character.
-    onCharacterAdded(Player.Character)
+    cxoconnections["AntiKill2"](Player.Character)
     
 end
 --[[
@@ -10996,7 +11122,7 @@ function antikill(plr)
 end
 ]]
 
-function create(plr, parent, amount, sizeX, sizeY, sizeZ)
+cxoconnections["Create"] = function(plr, parent, amount, sizeX, sizeY, sizeZ)
 	local cfgs = plrcfgs[plr.Name]
 	for i = 1, amount do
 		local part = Instance.new("Part")
@@ -11012,7 +11138,7 @@ function create(plr, parent, amount, sizeX, sizeY, sizeZ)
 	end
 end
 
-function updatec(plr)
+cxoconnections["Updatec"] = function(plr)
 	local cfgs = plrcfgs[plr.Name]
 
 	if not plrparts[plr.Name] then
@@ -11026,7 +11152,7 @@ function updatec(plr)
 		for i, part in pairs(workspace:FindFirstChild("cxo's admin vis (".. plr.Name ..")")) do
 			part:Destroy()
 		end
-		create(plr, workspace:FindFirstChild("cxo's admin vis (".. plr.Name ..")"), cfgs.amount, cfgs.sizeX, cfgs.sizeY, cfgs.sizeZ)
+		cxoconnections["Create"](plr, workspace:FindFirstChild("cxo's admin vis (".. plr.Name ..")"), cfgs.amount, cfgs.sizeX, cfgs.sizeY, cfgs.sizeZ)
 	end
 
 	for i, part in pairs(parts) do
@@ -11456,19 +11582,19 @@ end
 
 for i,v in pairs(game.Players:GetPlayers()) do
 
-	if table.find(Whitelist, tostring(v.UserId)) or table.find(TempWhitelist, v.UserId) then
+	if table.find(_G.Whitelist, tostring(v.UserId)) or table.find(TempWhitelist, v.UserId) then
 		notfi(v, "cxo's admin", "You are whitelisted! prefix is ".. prefix)
 	end
 
-	v.Chatted:Connect(function(msg)
+	cxoconnections["Chatted"] = v.Chatted:Connect(function(msg)
 
-		if not table.find(Whitelist, tostring(v.UserId)) and not table.find(TempWhitelist, v.UserId) then
+		if not table.find(_G.Whitelist, tostring(v.UserId)) and not table.find(TempWhitelist, v.UserId) then
 			table.insert(chats, v.Name ..":" .. msg)
 		end
 
 		table.insert(messages, v.DisplayName ..": " .. msg)
 
-		if table.find(Whitelist, tostring(v.UserId)) or table.find(TempWhitelist, v.UserId) then
+		if table.find(_G.Whitelist, tostring(v.UserId)) or table.find(TempWhitelist, v.UserId) then
 			--print(v.Name .. ": ".. msg)
 
 			if msg:sub(1, #prefix) == prefix then
@@ -11514,20 +11640,20 @@ for i,v in pairs(game.Players:GetPlayers()) do
 	end)
 end
 
-game.Players.PlayerAdded:Connect(function(player)
+cxoconnections["PlayerAdded"] = game.Players.PlayerAdded:Connect(function(player)
 
 	repeat task.wait() until player and player.Character or not game.Players:FindFirstChild(player.Name)
 
-	if table.find(Whitelist, tostring(player.UserId)) or table.find(TempWhitelist, player.UserId) then
+	if table.find(_G.Whitelist, tostring(player.UserId)) or table.find(TempWhitelist, player.UserId) then
 		task.wait(1.5)
 		notfi(player, "cxo's admin", "You are whitelisted! prefix is ".. prefix)
 	end
 
 	if table.find(AutoRespawn, player.Name) then
-		AntiKill(player)
+		cxoconnections["AntiKill3"](player)
 	end
 
-	if locked == true and not table.find(Whitelist, tostring(player.UserId)) and not table.find(TempWhitelist, player.UserId) then
+	if locked == true and not table.find(_G.Whitelist, tostring(player.UserId)) and not table.find(TempWhitelist, player.UserId) then
 		player:Kick("cxo's admin | this server is locked")
 	end
 
@@ -11547,7 +11673,7 @@ game.Players.PlayerAdded:Connect(function(player)
 	end
 
 	if player.AccountAge < tonumber(agelocknum) and agelocked then
-		if table.find(Whitelist, tostring(player.UserId)) or table.find(TempWhitelist, player.UserId) then
+		if table.find(_G.Whitelist, tostring(player.UserId)) or table.find(TempWhitelist, player.UserId) then
 			return
 		end
 		player:Kick("Your account must be ".. agelocknum .." days old to join this server.")
@@ -11591,15 +11717,15 @@ game.Players.PlayerAdded:Connect(function(player)
 		end
 	end
 
-	player.Chatted:Connect(function(msg)
+	cxoconnections["Chatted2"] = player.Chatted:Connect(function(msg)
 
-		if not table.find(Whitelist, tostring(player.UserId)) and not table.find(TempWhitelist, player.UserId) then
+		if not table.find(_G.Whitelist, tostring(player.UserId)) and not table.find(TempWhitelist, player.UserId) then
 			table.insert(chats, player.Name ..":" .. msg)
 		end
 
 		table.insert(messages, player.DisplayName ..": " .. msg)
 
-		if table.find(Whitelist, tostring(player.UserId)) or table.find(TempWhitelist, player.UserId) then
+		if table.find(_G.Whitelist, tostring(player.UserId)) or table.find(TempWhitelist, player.UserId) then
 			--print(v.Name .. ": ".. msg)
 
 			if msg:sub(1, #prefix) == prefix then
@@ -11678,7 +11804,7 @@ game.Players.PlayerAdded:Connect(function(player)
 
 end)
 
-game.DescendantAdded:Connect(function(v)
+cxoconnections["Descendant"] = game.DescendantAdded:Connect(function(v)
 	if muter and v:IsA("Sound") then
 		if game.Soundscape:FindFirstChild(v, true) then return end
 		repeat task.wait() until v.Parent ~= nil
@@ -11686,7 +11812,7 @@ game.DescendantAdded:Connect(function(v)
 	end
 end)
 
-game:GetService("ReplicatedStorage").ChildRemoved:Connect(function(t)
+cxoconnections["Removed"] = game:GetService("ReplicatedStorage").ChildRemoved:Connect(function(t)
 	if t.Name == "cxo's folder" then
 		local a = Instance.new("Folder", game:GetService("ReplicatedStorage"))
 		a.Name = "cxo's folder"
@@ -11696,7 +11822,7 @@ game:GetService("ReplicatedStorage").ChildRemoved:Connect(function(t)
 			local r = Instance.new("RemoteEvent", a)
 			r.Name = "cxo's gmod remote"
 
-			gmodlistener()
+			cxoconnections["Gmod"]()
 
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
@@ -11963,9 +12089,9 @@ game:GetService("ReplicatedStorage").ChildRemoved:Connect(function(t)
 			local cxor = Instance.new("RemoteEvent", a)
 			cxor.Name = "cxo's remote"
 
-			scanfordevice()
+			cxoconnections["Scanner"]()
 			scan()
-			remotelistener()
+			cxoconnections["RemoteListener"]()
 		end
 	end
 end)
@@ -11977,7 +12103,9 @@ function scan()
 			local r = Instance.new("RemoteEvent", a)
 			r.Name = "cxo's gmod remote"
 
-			gmodlistener()
+			if cxoconnections["Gmod"] then
+				cxoconnections["Gmod"]()
+			end
 
 		elseif t.Name == "RemoteScript" then
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
@@ -12178,7 +12306,9 @@ function scan()
 			local deviceremote = Instance.new("RemoteFunction", a)
 			deviceremote.Name = "cxo's Device Remote"
 
-			scanfordevice()
+			if cxoconnections["Scanner"] then
+				cxoconnections["Scanner"]()
+			end
 
 		elseif t.Name == "cxo's Device LocalScript" then
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
@@ -12253,7 +12383,9 @@ function scan()
 			local cxor = Instance.new("RemoteEvent", a)
 			cxor.Name = "cxo's remote"
 
-			remotelistener()
+			if cxoconnections["RemoteListener"] then
+				cxoconnections["RemoteListener"]()
+			end
 		end
 	end)
 end
@@ -12531,9 +12663,9 @@ end
 
 start()
 scan()
-scanfordevice()
-gmodlistener()
-remotelistener()
+cxoconnections["Scanner"]()
+cxoconnections["Gmod"]()
+cxoconnections["RemoteListener"]()
 
 --[[ saving here for now, prob never gonna use cuz it requires remotes and retarded shit
 
