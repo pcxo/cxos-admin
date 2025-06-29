@@ -10130,18 +10130,6 @@ addcmd({
 	Function = function(sender, targets, arguments)
 		local whitelists = ""
 
-		for i,v in pairs(TempWhitelist) do
-			if not game.Players:GetPlayerByUserId(v) then 
-				continue 
-			end
-			local success, plr = pcall(function()
-				return game.Players:GetNameFromUserIdAsync(v)
-			end)
-			if success and plr then
-				whitelists = whitelists .. plr .. ", "
-			end
-		end
-
 		for i,v in pairs(_G.Whitelist) do
 			if tonumber(v) then
 				if not game.Players:GetPlayerByUserId(tonumber(v)) then 
@@ -10153,6 +10141,18 @@ addcmd({
 				if success and plr then
 					whitelists = whitelists .. plr .. ", "
 				end
+			end
+		end
+
+		for i,v in pairs(TempWhitelist) do
+			if not game.Players:GetPlayerByUserId(v) then 
+				continue 
+			end
+			local success, plr = pcall(function()
+				return game.Players:GetNameFromUserIdAsync(v)
+			end)
+			if success and plr then
+				whitelists = whitelists .. plr .. ", "
 			end
 		end
 
