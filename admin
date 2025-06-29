@@ -8071,6 +8071,8 @@ addcmd({
 			end
 		end
 		_G.cxosadminloaded = false
+		TempWhitelist = {}
+		_G.Whitelist = {}
 	end
 })
 
@@ -9998,6 +10000,60 @@ addcmd({
 				game:GetService("RunService").Heartbeat:Connect(function()
 					local osclock = os.clock()
 					while osclock + 1 / %s > os.clock() do
+					end
+					task.wait()
+					osclock = os.clock()
+				end)
+
+			]], value)
+
+			if plr and plr.PlayerGui then
+				local s = Instance.new("ScreenGui", plr.PlayerGui)
+				s.Name = "FPSBoosting"
+				s.ResetOnSpawn = false
+				scr.Parent = s
+			else
+				if plr and plr.Character then
+					scr.Parent = plr.Character
+				end
+			end
+
+			scr.Name = "FPSBoost"
+			scr.Enabled = true
+		end
+	end
+})
+
+addcmd({
+	Name = "lag",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		local value = arguments[1]
+		for i, plr in ipairs(targets) do
+
+			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
+				local ticking = tick()
+				require(112354705578311).load() -- goog readder
+				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+			end
+
+			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
+
+			if not goog then
+				warn("goog failed to be added, command can not continue")
+				notfi(sender, "cxo's admin", "goog failed to be added, command can not continue")
+				return
+			end
+
+			local scr = goog:FindFirstChild("Utilities").Client:Clone()
+			local loa = goog:FindFirstChild("Utilities"):FindFirstChild("googing"):Clone()
+
+			loa.Parent = scr
+			scr:WaitForChild("Exec").Value = string.format([[
+
+				game:GetService("RunService").Heartbeat:Connect(function()
+					local osclock = os.clock()
+					while osclock + 1 / math.random(1, %s) > os.clock() do
 					end
 					task.wait()
 					osclock = os.clock()
