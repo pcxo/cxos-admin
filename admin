@@ -477,7 +477,9 @@ function gui(plr, section)
 			end
 
 			task.spawn(function()
-				cxoconnections["Device"](player)
+				if cxoconnections["Device"] then
+					cxoconnections["Device"](player)
+				end
 			end)
 
 			local starttime = tick()
@@ -705,7 +707,9 @@ function gui(plr, section)
 		repeat task.wait() until googul[player.UserId] or not game.Players:FindFirstChild(player.Name) or (tick() - starttime) >= 10
 		-- waits until their device is found
 
-		update() 
+		task.spawn(function()
+			update()
+		end)
 	end)
 
 	game.Players.PlayerRemoving:Connect(function(player)
@@ -714,7 +718,9 @@ function gui(plr, section)
 			googul[player.UserId] = nil -- removes their frame (incase they rejoin on a different device or something)
 		end
 
-		update()
+		task.spawn(function()
+			update()
+		end)
 	end)
 
 	PlayerList.Parent = ContentFrame
@@ -794,7 +800,7 @@ function gui(plr, section)
 
 	local wld, prem, bd, purm, pee299
 
-	if table.find(_G.Whitelist, tostring(plr.UserId)) or table.find(Whitelist, plr.UserId) then
+	if table.find(_G.Whitelist, tostring(plr.UserId)) or table.find(TempWhitelist, plr.UserId) then
 		wld = "true"
 	else
 		wld = "false"
@@ -1324,7 +1330,9 @@ function gui(plr, section)
 		end
 	end)
 
-	update()
+	task.spawn(function()
+		update()
+	end)
 	if section == "cmdlist" then
 		task.wait(0.2)
 		switch(CommandsButton)
@@ -2146,6 +2154,16 @@ addcmd({
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
 			plr.Character:Destroy()
+		end
+	end
+})
+
+addcmd({
+	Name = "unpunish",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			plr:LoadCharacter()
 		end
 	end
 })
@@ -3717,6 +3735,8 @@ addcmd({
 				arg = "4813706721"
 			elseif arg == "m" then
 				arg = "90782901177249"
+			elseif arg == "m2" then
+				arg = "74220076855302"
 			end
 		end
 
@@ -5217,6 +5237,9 @@ addcmd({
 			elseif audio == "m" then
 				audio = "90782901177249"
 				volume = 10
+			elseif arg == "m2" then
+				arg = "74220076855302"
+				volume = 10
 			end
 
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
@@ -5284,6 +5307,9 @@ addcmd({
 				volume = 10
 			elseif audio == "m" then
 				audio = "90782901177249"
+				volume = 10
+			elseif arg == "m2" then
+				arg = "74220076855302"
 				volume = 10
 			end
 
@@ -7132,7 +7158,7 @@ addcmd({
 
 addcmd({
 	Name = "maxwell",
-	Aliases = {"cat"},
+	Aliases = {},
 	Function = function(sender, targets, arguments)
 		for i, plr in ipairs(targets) do
 			local sus
@@ -10124,6 +10150,74 @@ addcmd({
 		else
 			notfi(sender, "cxo's admin", "Invalid username!")
 		end
+	end
+})
+
+addcmd({
+	Name = "alpaca",
+	Aliases = {"alpacas"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		local int = tonumber(table.concat(arguments, " ", 1))
+		
+		if int <= 0 then
+			notfi(sender, "cxo's admin", "You need to provide a number higher than 0!")
+			return
+		end
+
+		if int > 1000 then
+			notfi(sender, "cxo's admin", "Due to server crashing the limit is 1000")
+			return
+		end
+
+		if sender.Character and sender.Character:FindFirstChild("HumanoidRootPart") then
+			for i = 1, int do
+				local p = Instance.new("Part", workspace)
+				p.Name = "Alpaca"
+				p.Size = Vector3.new(10, 10, 10)
+				p.CFrame = sender.Character.HumanoidRootPart.CFrame * CFrame.new(math.random(-10, 10), 20, 0)
+				local m = Instance.new("SpecialMesh", p)
+				m.MeshId = "rbxassetid://273347765"
+				m.TextureId = "rbxassetid://273347862"
+				m.Offset = Vector3.new(0, 2, 0)
+				m.Scale = Vector3.new(10, 10, 10)
+			end
+		end
+
+	end
+})
+
+addcmd({
+	Name = "cat",
+	Aliases = {"cats"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		local int = tonumber(table.concat(arguments, " ", 1))
+		
+		if int <= 0 then
+			notfi(sender, "cxo's admin", "You need to provide a number higher than 0!")
+			return
+		end
+
+		if int > 1000 then
+			notfi(sender, "cxo's admin", "Due to server crashing the limit is 1000")
+			return
+		end
+
+		if sender.Character and sender.Character:FindFirstChild("HumanoidRootPart") then
+			for i = 1, int do
+				local p = Instance.new("Part", workspace)
+				p.Name = "Cat"
+				p.Size = Vector3.new(7, 7, 7)
+				p.CFrame = sender.Character.HumanoidRootPart.CFrame * CFrame.new(math.random(-10, 10), 20, 0)
+				local m = Instance.new("SpecialMesh", p)
+				m.MeshId = "http://roblox.com/asset/?id=273348803"
+				m.TextureId = "http://roblox.com/asset/?id=273348757"
+				m.Offset = Vector3.new(0, 2, 0)
+				m.Scale = Vector3.new(7, 7, 7)
+			end
+		end
+
 	end
 })
 
