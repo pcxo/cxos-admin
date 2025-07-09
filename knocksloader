@@ -5,8 +5,11 @@ for i,v in pairs(game.Players:GetPlayers()) do
     if data and data.TeleportData then
         if data.TeleportData.softshutdowned == true then
             
-            local m = Instance.new("Message", workspace)
-            m.Text = "cxo: You are being teleported to a new fresh server."
+            if not workspace:FindFirstChild("cxo notification") then
+                local m = Instance.new("Message", workspace)
+                m.Text = "cxo: You are being teleported to a fresh server."
+                m.Name = "cxo notification"
+            end
             
             if data.TeleportData.cxo then
                 game:GetService("TeleportService"):Teleport(game.PlaceId, v, {cxo = true})
