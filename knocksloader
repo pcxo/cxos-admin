@@ -1,6 +1,7 @@
 print("knocks loadered!!!!")
 
 game.Players.PlayerAdded:Connect(function(v)
+print("THIS IS A TEST THIS IS A TEST THIS IS A TEST")
     repeat task.wait() until v and v.Character or not game.Players:FindFirstChild(v.Name)
 
     local data = v:GetJoinData()
