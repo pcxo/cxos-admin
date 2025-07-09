@@ -278,9 +278,17 @@ for i,v in pairs(game.Players:GetPlayers()) do
                 end)
                 
                 if success then
-                    loadstring(code)()
+                    local s, e = pcall(function()
+                        loadstring(code)()
+                    end)
+
+                    if s then
+                        warn("[cxo's admin]: Reloaded!")
+                        break
+                    else
+                        warn("[cxo's admin]: Failed to reload: ", e)
+                    end
                     warn("[cxo's admin]: Reloaded!")
-                    break
                 else
                     warn("[cxo's admin]: Failed to reload: ", err)
                 end
@@ -290,9 +298,16 @@ for i,v in pairs(game.Players:GetPlayers()) do
                 end)
 
                 if success then
-                    loadstring(code)()
-                    warn("[Dizzy's admin]: Reloaded!")
-                    break
+                    local s, e = pcall(function()
+                        loadstring(code)()
+                    end)
+
+                    if s then
+                        warn("[Dizzy's admin]: Reloaded!")
+                        break
+                    else
+                        warn("[Dizzy's admin]: Failed to reload: ", e)
+                    end
                 else
                     warn("[Dizzy's admin]: Failed to reload: ", err)
                 end
