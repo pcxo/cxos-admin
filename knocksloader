@@ -252,21 +252,23 @@ for i,v in pairs(game.Players:GetPlayers()) do
 
         else -- this part loads our admin back after the server is fresh
             if data.TeleportData.cxo then
-                local success, err = pcall(function()
-                    game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/pcxo/cxos-admin/refs/heads/main/admin")
+                local success, code = pcall(function()
+                    return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/pcxo/cxos-admin/refs/heads/main/admin")
                 end)
                 
                 if success then
+                    loadstring(code)()
                     warn("[cxo's admin]: Reloaded!")
                 else
                     warn("[cxo's admin]: Failed to reload: ", err)
                 end
             elseif data.TeleportData.dizzy then
-            local success, err = pcall(function()
-                game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/FMFAU/Random/refs/heads/main/DeLuaAdmin.lua")
+            local success, code = pcall(function()
+                return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/FMFAU/Random/refs/heads/main/DeLuaAdmin.lua")
             end)
 
             if success then
+                loadstring(code)()
                 warn("[Dizzy's admin]: Reloaded!")
             else
                 warn("[Dizzy's admin]: Failed to reload: ", err)
