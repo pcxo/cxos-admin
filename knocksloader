@@ -1,8 +1,7 @@
 print("knocks loadered!!!!")
 
-local data = v:GetJoinData()
-
 for i,v in pairs(game.Players:GetPlayers()) do
+    local data = v:GetJoinData()
     if data and data.TeleportData then
         if data.TeleportData.softshutdowned == true then
             
