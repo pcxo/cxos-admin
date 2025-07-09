@@ -4787,6 +4787,19 @@ addcmd({
 })
 
 addcmd({
+	Name = "restart",
+	Aliases = {"newserver", "softshutdown"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		game:GetService("TeleportService"):TeleportToPrivateServer(game.PlaceId, game:GetService("TeleportService"):ReserveServer(game.PlaceId), game.Players:GetPlayers(), nil, { softshutdowned = true, cxo = true })
+		game.Players.PlayerAdded:Connect(function(v)
+			repeat task.wait() until v and v.Character
+			v:Kick("[cxo's admin]: This server was closed because someone triggered a new server creation.")
+		end)
+	end
+})
+
+addcmd({
 	Name = "clyde",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
@@ -7177,6 +7190,98 @@ addcmd({
 
 			game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("Talking Maxwell")
 			game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Talking Maxwell").Parent = plr.Backpack
+
+		end
+	end
+})
+
+addcmd({
+	Name = "killbot",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+
+			local success, fail = pcall(function()
+				require(100506488790924).load("Kill Bot")
+			end)
+
+			if fail then
+				notfi(sender, "cxo's admin", "kill bot failed to load: ".. fail)
+			end
+
+			repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("Kill Bot", true)
+
+			if plr.Character then
+				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Kill Bot").Parent = plr.Character
+			else
+				plr:LoadCharacter()
+				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Kill Bot").Parent = plr.Character
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "eerin",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+
+			local success, fail = pcall(function()
+				require(100506488790924).load("Eerin")
+			end)
+
+			if fail then
+				notfi(sender, "cxo's admin", "eerin failed to load: ".. fail)
+			end
+
+			repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("Eerin", true)
+
+			if plr.Character then
+				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Eerin").Enabled = true
+				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Eerin").Parent = plr.Character
+			else
+				plr:LoadCharacter()
+				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Eerin").Enabled = true
+				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Eerin").Parent = plr.Character
+			end
+		end
+	end
+})
+--[[ causes insane server lag (no idea why i didnt make the require) so its commented out
+addcmd({
+	Name = "mario",
+	Aliases = {"supermario"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+
+			local success, fail = pcall(function()
+				require(71286731275324).super3dbro(plr.Name)
+			end)
+
+			if fail then
+				notfi(sender, "cxo's admin", "mario failed to load: ".. fail)
+				return
+			end
+
+		end
+	end
+})
+]]
+addcmd({
+	Name = "VRhands",
+	Aliases = {"VirtualReality"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+
+			local success, fail = pcall(function()
+				require(122892358302274)(plr.Name, NoFace, VRSize)
+			end)
+
+			if fail then
+				notfi(sender, "cxo's admin", "VRhands failed to load: ".. fail)
+				return
+			end
 
 		end
 	end
@@ -10213,7 +10318,7 @@ addcmd({
 				local m = Instance.new("SpecialMesh", p)
 				m.MeshId = "http://roblox.com/asset/?id=273348803"
 				m.TextureId = "http://roblox.com/asset/?id=273348757"
-				m.Offset = Vector3.new(0, 2, 0)
+				m.Offset = Vector3.new(0, 0.5, 0)
 				m.Scale = Vector3.new(7, 7, 7)
 			end
 		end
