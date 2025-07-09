@@ -230,6 +230,8 @@ loadstring(scr)()
 
 local SSD = false
 
+task.wait(2.5)
+
 for i,v in pairs(game.Players:GetPlayers()) do
     local data = v:GetJoinData()
     if data and data.TeleportData then
@@ -303,7 +305,7 @@ for i,v in pairs(game.Players:GetPlayers()) do
                     warn("[PUNCHSIDE]: Failed to reload: ", err)
                 end
             end
-            return
+            break
         end
     end
 end
