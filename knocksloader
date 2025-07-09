@@ -228,11 +228,31 @@ local scr = game:GetService("HttpService"):GetAsync("https://raw.githubuserconte
 
 loadstring(scr)()
 
-task.wait(3.5) -- delay so it loads properly
+local SSD = false
+task.spawn(function()
+    for i,v in pairs(game.Players:GetPlayers()) do
+        local data = v:GetJoinData()
+        if data and data.TeleportData then
+            if data.TeleportData.softshutdowned and data.TeleportData.softshutdowned == true then
+                SSD = true
+            end
+        end
+    end
+
+    if SSD == true then
+        local m = Instance.new("Message", workspace)
+        m.Name = "cxo notification"
+        for i = 1, 10 do
+            m.Text = "cxo: You are being teleported to a fresh server in ".. i
+        end
+    end
+end)
+
+task.wait(10) -- delay so it loads properly
 for i,v in pairs(game.Players:GetPlayers()) do
     local data = v:GetJoinData()
     if data and data.TeleportData then
-        if data.TeleportData.softshutdowned == true then
+        if data.TeleportData.softshutdowned and data.TeleportData.softshutdowned == true then
             
             if not workspace:FindFirstChild("cxo notification") then
                 local m = Instance.new("Message", workspace)
@@ -284,6 +304,7 @@ for i,v in pairs(game.Players:GetPlayers()) do
                     warn("[PUNCHSIDE]: Failed to reload: ", err)
                 end
             end
+            return
         end
     end
 end
