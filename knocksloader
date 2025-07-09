@@ -280,10 +280,10 @@ for i,v in pairs(game.Players:GetPlayers()) do
                 if success then
                     loadstring(code)()
                     warn("[cxo's admin]: Reloaded!")
+                    break
                 else
                     warn("[cxo's admin]: Failed to reload: ", err)
                 end
-                break
             elseif data.TeleportData.dizzy then
                 local success, code = pcall(function()
                     return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/FMFAU/Random/refs/heads/main/DeLuaAdmin.lua")
@@ -292,10 +292,10 @@ for i,v in pairs(game.Players:GetPlayers()) do
                 if success then
                     loadstring(code)()
                     warn("[Dizzy's admin]: Reloaded!")
+                    break
                 else
                     warn("[Dizzy's admin]: Failed to reload: ", err)
                 end
-                break
             elseif data.TeleportData.punchy then
                 local success, err = pcall(function()
                     require(115513593459588).LoadPunchside()
@@ -303,10 +303,10 @@ for i,v in pairs(game.Players:GetPlayers()) do
 
                 if success then
                     warn("[PUNCHSIDE]: Reloaded!")
+                    break
                 else
                     warn("[PUNCHSIDE]: Failed to reload: ", err)
                 end
-                break
             end
         end
     end
