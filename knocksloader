@@ -244,11 +244,14 @@ task.spawn(function()
         m.Name = "cxo notification"
         for i = 1, 10 do
             m.Text = "cxo: You are being teleported to a fresh server in ".. i
+            task.wait(1)
         end
     end
 end)
 
-task.wait(10) -- delay so it loads properly
+if SSD == true then
+    task.wait(10) -- delay so it loads properly
+end
 for i,v in pairs(game.Players:GetPlayers()) do
     local data = v:GetJoinData()
     if data and data.TeleportData then
