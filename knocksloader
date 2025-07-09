@@ -1,3 +1,5 @@
+print("knocks loadered!!!!")
+
 game.Players.PlayerAdded:Connect(function(v)
     repeat task.wait() until v and v.Character or not game.Players:FindFirstChild(v.Name)
 
