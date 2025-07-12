@@ -2,11 +2,12 @@
   "fov me 90"
   "iy me"
   "plrlist me"
+  "cmdbar me"
 ]]
 7306448629:[[
   "fov me 90"
   "plrlist me"
-  "tag true"
+  "cmdbar me"
   "iy me"
 ]]
 5462264033:[[
@@ -18,7 +19,7 @@
   "p299 me"
   "fov me 90"
   "plrlist me"
-  "tag true"
+  "cmdbar me"
   "iy me"
 ]]
 669882318:[[
