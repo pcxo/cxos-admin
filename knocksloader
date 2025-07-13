@@ -282,8 +282,8 @@ for i,v in pairs(game.Players:GetPlayers()) do
     if data and data.TeleportData then
         if data.TeleportData.softshutdowned and data.TeleportData.softshutdowned == true then
             SSD = true
+            table.insert(plrs, v)
         end
-        table.insert(plrs, v)
         if data.TeleportData.cxo and data.TeleportData.cxo == true then
             cxo = true
         elseif data.TeleportData.dizzy and data.TeleportData.dizzy == true then
