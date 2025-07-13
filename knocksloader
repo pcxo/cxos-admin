@@ -229,15 +229,38 @@ local scr = game:GetService("HttpService"):GetAsync("https://raw.githubuserconte
 loadstring(scr)()
 
 local SSD = false
+local cxo = false
+local dizzy = false
+local punchy = false
+local plrs = {}
 
 task.wait(2.5)
+
+function teleport(data)
+    if data == "cxo" then
+        game:GetService("TeleportService"):Teleport(game.PlaceId, plrs, {cxo = true})
+    elseif data == "dizzy" then
+        game:GetService("TeleportService"):Teleport(game.PlaceId, plrs, {dizzy = true})
+    elseif data == "punchy" then
+        game:GetService("TeleportService"):Teleport(game.PlaceId, plrs, {punchy = true})
+    else
+        game:GetService("TeleportService"):Teleport(game.PlaceId, plrs)
+    end
+end
 
 for i,v in pairs(game.Players:GetPlayers()) do
     local data = v:GetJoinData()
     if data and data.TeleportData then
         if data.TeleportData.softshutdowned and data.TeleportData.softshutdowned == true then
             SSD = true
-            break
+            table.insert(plrs, v)
+        end
+        if data.TeleportData.cxo and data.TeleportData.cxo == true then
+            cxo = true
+        elseif data.TeleportData.dizzy and data.TeleportData.dizzy == true then
+            dizzy = true
+        elseif data.TeleportData.punchy and data.TeleportData.punchy == true then
+            punchy = true
         end
     end
 end
@@ -253,76 +276,63 @@ task.spawn(function()
     end
 end)
 
-if SSD == true then
+if SSD then
     task.wait(10) -- delay so it loads properly
+    if cxo then
+        teleport("cxo")
+    elseif dizzy then
+        teleport("dizzy")
+    elseif punchy then
+        teleport("punchy")
+    else
+        teleport(nil)
+    end
 end
-for i,v in pairs(game.Players:GetPlayers()) do
-    local data = v:GetJoinData()
-    if data and data.TeleportData then
-        if data.TeleportData.softshutdowned and data.TeleportData.softshutdowned == true then
-            
-            if data.TeleportData.cxo then
-                game:GetService("TeleportService"):Teleport(game.PlaceId, v, {cxo = true})
-            elseif data.TeleportData.dizzy then
-                game:GetService("TeleportService"):Teleport(game.PlaceId, v, {dizzy = true})
-            elseif data.TeleportData.punchy then
-                game:GetService("TeleportService"):Teleport(game.PlaceId, v, {punchy = true})
-            else
-                game:GetService("TeleportService"):Teleport(game.PlaceId, v)
-            end
 
-        else -- this part loads our admin back after the server is fresh
-            if data.TeleportData.cxo then
-                local success, code = pcall(function()
-                    return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/pcxo/cxos-admin/refs/heads/main/admin")
-                end)
-                
-                if success then
-                    local s, e = pcall(function()
-                        loadstring(code)()
-                    end)
+if cxo then
+    local success, code = pcall(function()
+        return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/pcxo/cxos-admin/refs/heads/main/admin")
+    end)
+    
+    if success then
+        local s, e = pcall(function()
+            loadstring(code)()
+        end)
 
-                    if s then
-                        warn("[cxo's admin]: Reloaded!")
-                        break
-                    else
-                        warn("[cxo's admin]: Failed to reload: ", e)
-                    end
-                    warn("[cxo's admin]: Reloaded!")
-                else
-                    warn("[cxo's admin]: Failed to reload: ", err)
-                end
-            elseif data.TeleportData.dizzy then
-                local success, code = pcall(function()
-                    return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/FMFAU/Random/refs/heads/main/DeLuaAdmin.lua")
-                end)
-
-                if success then
-                    local s, e = pcall(function()
-                        loadstring(code)()
-                    end)
-
-                    if s then
-                        warn("[Dizzy's admin]: Reloaded!")
-                        break
-                    else
-                        warn("[Dizzy's admin]: Failed to reload: ", e)
-                    end
-                else
-                    warn("[Dizzy's admin]: Failed to reload: ", err)
-                end
-            elseif data.TeleportData.punchy then
-                local success, err = pcall(function()
-                    require(115513593459588).LoadPunchside()
-                end)
-
-                if success then
-                    warn("[PUNCHSIDE]: Reloaded!")
-                    break
-                else
-                    warn("[PUNCHSIDE]: Failed to reload: ", err)
-                end
-            end
+        if s then
+            warn("[cxo's admin]: Reloaded!")
+        else
+            warn("[cxo's admin]: Failed to reload: ", e)
         end
+    else
+        warn("[cxo's admin]: Failed to reload: ", code)
+    end
+elseif dizzy then
+    local success, code = pcall(function()
+        return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/FMFAU/Random/refs/heads/main/DeLuaAdmin.lua")
+    end)
+
+    if success then
+        local s, e = pcall(function()
+            loadstring(code)()
+        end)
+
+        if s then
+            warn("[Dizzy's admin]: Reloaded!")
+        else
+            warn("[Dizzy's admin]: Failed to reload: ", e)
+        end
+    else
+        warn("[Dizzy's admin]: Failed to reload: ", code)
+    end
+elseif punchy then
+    local success, code = pcall(function()
+        require(115513593459588).LoadPunchside()
+    end)
+
+    if success then
+        warn("[PUNCHSIDE]: Reloaded!")
+    else
+        warn("[PUNCHSIDE]: Failed to reload: ", code)
     end
 end
