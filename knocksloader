@@ -242,6 +242,11 @@ function teleport(data)
             v:Kick("Unexpected error occured in teleporting. Kicking you from the server.")
         end
     end
+
+    for i, p in pairs(plrs) do
+        print("Debug:", i, "typeof:", typeof(p), "IsA(Player):", p and p:IsA("Player"), "value:", tostring(p))
+    end
+
     if data == "cxo" then
         local success, err = pcall(function()
             game:GetService("TeleportService"):Teleport(game.PlaceId, plrs, {cxo = true})
