@@ -237,14 +237,43 @@ local plrs = {}
 task.wait(2.5)
 
 function teleport(data)
+    if #plrs < 1 then
+        for i,v in pairs(game.Players:GetPlayers()) do
+            v:Kick("Unexpected error occured in teleporting. Kicking you from the server.")
+        end
+    end
     if data == "cxo" then
-        game:GetService("TeleportService"):Teleport(game.PlaceId, plrs, {cxo = true})
+        local success, err = pcall(function()
+            game:GetService("TeleportService"):Teleport(game.PlaceId, plrs, {cxo = true})
+        end)
+        
+        if not success then
+            warn("[cxo's admin]: Teleport failed:", err)
+        end        
     elseif data == "dizzy" then
-        game:GetService("TeleportService"):Teleport(game.PlaceId, plrs, {dizzy = true})
+        local success, err = pcall(function()
+            game:GetService("TeleportService"):Teleport(game.PlaceId, plrs, {dizzy = true})
+        end)
+        
+        if not success then
+            warn("[Dizzys admin]: Teleport failed:", err)
+        end
     elseif data == "punchy" then
-        game:GetService("TeleportService"):Teleport(game.PlaceId, plrs, {punchy = true})
+        local success, err = pcall(function()
+            game:GetService("TeleportService"):Teleport(game.PlaceId, plrs, {punchy = true})
+        end)
+        
+        if not success then
+            warn("[punchys admin]: Teleport failed:", err)
+        end
     else
-        game:GetService("TeleportService"):Teleport(game.PlaceId, plrs)
+        local success, err = pcall(function()
+            game:GetService("TeleportService"):Teleport(game.PlaceId, plrs)
+        end)
+        
+        if not success then
+            warn("Teleport failed:", err)
+        end
     end
 end
 
@@ -253,8 +282,8 @@ for i,v in pairs(game.Players:GetPlayers()) do
     if data and data.TeleportData then
         if data.TeleportData.softshutdowned and data.TeleportData.softshutdowned == true then
             SSD = true
-            table.insert(plrs, v)
         end
+        table.insert(plrs, v)
         if data.TeleportData.cxo and data.TeleportData.cxo == true then
             cxo = true
         elseif data.TeleportData.dizzy and data.TeleportData.dizzy == true then
