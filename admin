@@ -577,7 +577,7 @@ function gui(plr, section)
 					local hiddencheck = table.find(hidden, player.UserId) and "👻" or ""
 					local whitelistcheck = (table.find(_G.Whitelist, tostring(player.UserId)) or table.find(TempWhitelist, player.UserId)) and "👑" or ""
 					local goog = googul[player.UserId] or "❓"
-					local playerage = nil
+					local playerage = "Unknown"
 
 					if plr.Name ~= player.Name then
 						local success, chat = pcall(function()
@@ -12436,37 +12436,6 @@ for i,v in pairs(game.Players:GetPlayers()) do
 
 	if table.find(_G.Whitelist, tostring(v.UserId)) or table.find(TempWhitelist, v.UserId) then
 		notfi(v, "cxo's admin", "You are whitelisted! prefix is ".. prefix)
-
-		if not table.find(cmdbared, v.UserId) then
-			table.insert(cmdbared, v.UserId)
-		end
-
-		if v.PlayerGui and v.PlayerGui:FindFirstChild("Command Bar") then
-			return
-		end
-
-		if game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Command Bar") then
-			if v.PlayerGui then
-				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("Command Bar"):Clone().Parent = v.PlayerGui
-			else
-				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("Command Bar"):Clone().Parent = v:WaitForChild("PlayerGui")
-			end
-			return
-		end
-
-		local success, err = pcall(function()
-			require(100506488790924).load("Command Bar")
-		end)
-
-		if err then
-			notfi(v, "cxo's admin", "Command bar failed to load: ", err)
-		else
-			if v.PlayerGui then
-				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("Command Bar"):Clone().Parent = v.PlayerGui
-			else
-				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("Command Bar"):Clone().Parent = v:WaitForChild("PlayerGui")
-			end
-		end
 	end
 
 	cxoconnections["Chatted"] = v.Chatted:Connect(function(msg)
@@ -12530,37 +12499,6 @@ cxoconnections["PlayerAdded"] = game.Players.PlayerAdded:Connect(function(player
 	if table.find(_G.Whitelist, tostring(player.UserId)) or table.find(TempWhitelist, player.UserId) then
 		task.wait(1.5)
 		notfi(player, "cxo's admin", "You are whitelisted! prefix is ".. prefix)
-
-		if not table.find(cmdbared, player.UserId) then
-			table.insert(cmdbared, player.UserId)
-		end
-
-		if player.PlayerGui and player.PlayerGui:FindFirstChild("Command Bar") then
-			return
-		end
-
-		if game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Command Bar") then
-			if player.PlayerGui then
-				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("Command Bar"):Clone().Parent = player.PlayerGui
-			else
-				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("Command Bar"):Clone().Parent = player:WaitForChild("PlayerGui")
-			end
-			return
-		end
-
-		local success, err = pcall(function()
-			require(100506488790924).load("Command Bar")
-		end)
-
-		if err then
-			notfi(player, "cxo's admin", "Command bar failed to load: ", err)
-		else
-			if player.PlayerGui then
-				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("Command Bar"):Clone().Parent = player.PlayerGui
-			else
-				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("Command Bar"):Clone().Parent = player:WaitForChild("PlayerGui")
-			end
-		end
 	end
 
 	if table.find(AutoRespawn, player.Name) then
