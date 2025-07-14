@@ -243,29 +243,31 @@ function teleport(data)
         end
     end
 
-    for i, p in pairs(plrs) do
-        print("Debug:", i, "typeof:", typeof(p), "IsA(Player):", p and p:IsA("Player"), "value:", tostring(p))
-    end
-
     if data == "cxo" then
+        local data = Instance.new("TeleportOptions")
+        data:SetTeleportData({cxo = true})
         local success, err = pcall(function()
-            game:GetService("TeleportService"):Teleport(game.PlaceId, plrs, {cxo = true})
+            game:GetService("TeleportService"):TeleportAsync(game.PlaceId, plrs, data)
         end)
         
         if not success then
             warn("[cxo's admin]: Teleport failed:", err)
         end        
     elseif data == "dizzy" then
+        local data = Instance.new("TeleportOptions")
+        data:SetTeleportData({dizzy = true})
         local success, err = pcall(function()
-            game:GetService("TeleportService"):Teleport(game.PlaceId, plrs, {dizzy = true})
+            game:GetService("TeleportService"):TeleportAsync(game.PlaceId, plrs, "dizzy")
         end)
         
         if not success then
             warn("[Dizzys admin]: Teleport failed:", err)
         end
     elseif data == "punchy" then
+        local data = Instance.new("TeleportOptions")
+        data:SetTeleportData({punchy = true})
         local success, err = pcall(function()
-            game:GetService("TeleportService"):Teleport(game.PlaceId, plrs, {punchy = true})
+            game:GetService("TeleportService"):TeleportAsync(game.PlaceId, plrs, "punchy")
         end)
         
         if not success then
@@ -273,7 +275,7 @@ function teleport(data)
         end
     else
         local success, err = pcall(function()
-            game:GetService("TeleportService"):Teleport(game.PlaceId, plrs)
+            game:GetService("TeleportService"):TeleportAsync(game.PlaceId, plrs)
         end)
         
         if not success then
