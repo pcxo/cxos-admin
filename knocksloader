@@ -257,7 +257,7 @@ function teleport(data)
         local data = Instance.new("TeleportOptions")
         data:SetTeleportData({dizzy = true})
         local success, err = pcall(function()
-            game:GetService("TeleportService"):TeleportAsync(game.PlaceId, plrs, "dizzy")
+            game:GetService("TeleportService"):TeleportAsync(game.PlaceId, plrs, data)
         end)
         
         if not success then
@@ -267,7 +267,7 @@ function teleport(data)
         local data = Instance.new("TeleportOptions")
         data:SetTeleportData({punchy = true})
         local success, err = pcall(function()
-            game:GetService("TeleportService"):TeleportAsync(game.PlaceId, plrs, "punchy")
+            game:GetService("TeleportService"):TeleportAsync(game.PlaceId, plrs, data)
         end)
         
         if not success then
