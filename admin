@@ -11,12 +11,13 @@
 
 	add:
 
-	add perm | p299 | whitelisted to the playerlist
 	vsettings gui
 	break cmd like og kah
 	optimize updatec()
-	torture room like doktors kurse one from r6
+	torture room
 	guiview
+	2015 playerlist
+	command logger [dedicated UI]
 
 	halo vis mode
 	non spin vis mode
@@ -24,6 +25,7 @@
 	flingtool maybe gun
 
 	Maybe store goog in memory so that it stops getting RAPED!!!!!!
+
 ]]
 
 if _G.cxosadminloaded == true then
@@ -63,7 +65,7 @@ local cmds = {}
 local banned = {}
 local countrybanned = {}
 local crashbanned = {}
-local countries = {}
+local countries = {["BD"] = "Bangladesh", ["BE"] = "Belgium", ["BF"] = "Burkina Faso", ["BG"] = "Bulgaria", ["BA"] = "Bosnia and Herzegovina", ["BB"] = "Barbados", ["WF"] = "Wallis and Futuna", ["BL"] = "Saint Barthelemy", ["BM"] = "Bermuda", ["BN"] = "Brunei", ["BO"] = "Bolivia", ["BH"] = "Bahrain", ["BI"] = "Burundi", ["BJ"] = "Benin", ["BT"] = "Bhutan", ["JM"] = "Jamaica", ["BV"] = "Bouvet Island", ["BW"] = "Botswana", ["WS"] = "Samoa", ["BQ"] = "Bonaire, Saint Eustatius and Saba ", ["BR"] = "Brazil", ["BS"] = "Bahamas", ["JE"] = "Jersey", ["BY"] = "Belarus", ["BZ"] = "Belize", ["RU"] = "Russia", ["RW"] = "Rwanda", ["RS"] = "Serbia", ["TL"] = "East Timor", ["RE"] = "Reunion", ["TM"] = "Turkmenistan", ["TJ"] = "Tajikistan", ["RO"] = "Romania", ["TK"] = "Tokelau", ["GW"] = "Guinea-Bissau", ["GU"] = "Guam", ["GT"] = "Guatemala", ["GS"] = "South Georgia and the South Sandwich Islands", ["GR"] = "Greece", ["GQ"] = "Equatorial Guinea", ["GP"] = "Guadeloupe", ["JP"] = "Japan", ["GY"] = "Guyana", ["GG"] = "Guernsey", ["GF"] = "French Guiana", ["GE"] = "Georgia", ["GD"] = "Grenada", ["GB"] = "United Kingdom", ["GA"] = "Gabon", ["SV"] = "El Salvador", ["GN"] = "Guinea", ["GM"] = "Gambia", ["GL"] = "Greenland", ["GI"] = "Gibraltar", ["GH"] = "Ghana", ["OM"] = "Oman", ["TN"] = "Tunisia", ["JO"] = "Jordan", ["HR"] = "Croatia", ["HT"] = "Haiti", ["HU"] = "Hungary", ["HK"] = "Hong Kong", ["HN"] = "Honduras", ["HM"] = "Heard Island and McDonald Islands", ["VE"] = "Venezuela", ["PR"] = "Puerto Rico", ["PS"] = "Palestinian Territory", ["PW"] = "Palau", ["PT"] = "Portugal", ["SJ"] = "Svalbard and Jan Mayen", ["PY"] = "Paraguay", ["IQ"] = "Iraq", ["PA"] = "Panama", ["PF"] = "French Polynesia", ["PG"] = "Papua New Guinea", ["PE"] = "Peru", ["PK"] = "Pakistan", ["PH"] = "Philippines", ["PN"] = "Pitcairn", ["PL"] = "Poland", ["PM"] = "Saint Pierre and Miquelon", ["ZM"] = "Zambia", ["EH"] = "Western Sahara", ["EE"] = "Estonia", ["EG"] = "Egypt", ["ZA"] = "South Africa", ["EC"] = "Ecuador", ["IT"] = "Italy", ["VN"] = "Vietnam", ["SB"] = "Solomon Islands", ["ET"] = "Ethiopia", ["SO"] = "Somalia", ["ZW"] = "Zimbabwe", ["SA"] = "Saudi Arabia", ["ES"] = "Spain", ["ER"] = "Eritrea", ["ME"] = "Montenegro", ["MD"] = "Moldova", ["MG"] = "Madagascar", ["MF"] = "Saint Martin", ["MA"] = "Morocco", ["MC"] = "Monaco", ["UZ"] = "Uzbekistan", ["MM"] = "Myanmar", ["ML"] = "Mali", ["MO"] = "Macao", ["MN"] = "Mongolia", ["MH"] = "Marshall Islands", ["MK"] = "Macedonia", ["MU"] = "Mauritius", ["MT"] = "Malta", ["MW"] = "Malawi", ["MV"] = "Maldives", ["MQ"] = "Martinique", ["MP"] = "Northern Mariana Islands", ["MS"] = "Montserrat", ["MR"] = "Mauritania", ["IM"] = "Isle of Man", ["UG"] = "Uganda", ["TZ"] = "Tanzania", ["MY"] = "Malaysia", ["MX"] = "Mexico", ["IL"] = "Israel", ["FR"] = "France", ["IO"] = "British Indian Ocean Territory", ["SH"] = "Saint Helena", ["FI"] = "Finland", ["FJ"] = "Fiji", ["FK"] = "Falkland Islands", ["FM"] = "Micronesia", ["FO"] = "Faroe Islands", ["NI"] = "Nicaragua", ["NL"] = "Netherlands", ["NO"] = "Norway", ["NA"] = "Namibia", ["VU"] = "Vanuatu", ["NC"] = "New Caledonia", ["NE"] = "Niger", ["NF"] = "Norfolk Island", ["NG"] = "Nigeria", ["NZ"] = "New Zealand", ["NP"] = "Nepal", ["NR"] = "Nauru", ["NU"] = "Niue", ["CK"] = "Cook Islands", ["XK"] = "Kosovo", ["CI"] = "Ivory Coast", ["CH"] = "Switzerland", ["CO"] = "Colombia", ["CN"] = "China", ["CM"] = "Cameroon", ["CL"] = "Chile", ["CC"] = "Cocos Islands", ["CA"] = "Canada", ["CG"] = "Republic of the Congo", ["CF"] = "Central African Republic", ["CD"] = "Democratic Republic of the Congo", ["CZ"] = "Czech Republic", ["CY"] = "Cyprus", ["CX"] = "Christmas Island", ["CR"] = "Costa Rica", ["CW"] = "Curacao", ["CV"] = "Cape Verde", ["CU"] = "Cuba", ["SZ"] = "Swaziland", ["SY"] = "Syria", ["SX"] = "Sint Maarten", ["KG"] = "Kyrgyzstan", ["KE"] = "Kenya", ["SS"] = "South Sudan", ["SR"] = "Suriname", ["KI"] = "Kiribati", ["KH"] = "Cambodia", ["KN"] = "Saint Kitts and Nevis", ["KM"] = "Comoros", ["ST"] = "Sao Tome and Principe", ["SK"] = "Slovakia", ["KR"] = "South Korea", ["SI"] = "Slovenia", ["KP"] = "North Korea", ["KW"] = "Kuwait", ["SN"] = "Senegal", ["SM"] = "San Marino", ["SL"] = "Sierra Leone", ["SC"] = "Seychelles", ["KZ"] = "Kazakhstan", ["KY"] = "Cayman Islands", ["SG"] = "Singapore", ["SE"] = "Sweden", ["SD"] = "Sudan", ["DO"] = "Dominican Republic", ["DM"] = "Dominica", ["DJ"] = "Djibouti", ["DK"] = "Denmark", ["VG"] = "British Virgin Islands", ["DE"] = "Germany", ["YE"] = "Yemen", ["DZ"] = "Algeria", ["US"] = "United States", ["UY"] = "Uruguay", ["YT"] = "Mayotte", ["UM"] = "United States Minor Outlying Islands", ["LB"] = "Lebanon", ["LC"] = "Saint Lucia", ["LA"] = "Laos", ["TV"] = "Tuvalu", ["TW"] = "Taiwan", ["TT"] = "Trinidad and Tobago", ["TR"] = "Turkey", ["LK"] = "Sri Lanka", ["LI"] = "Liechtenstein", ["LV"] = "Latvia", ["TO"] = "Tonga", ["LT"] = "Lithuania", ["LU"] = "Luxembourg", ["LR"] = "Liberia", ["LS"] = "Lesotho", ["TH"] = "Thailand", ["TF"] = "French Southern Territories", ["TG"] = "Togo", ["TD"] = "Chad", ["TC"] = "Turks and Caicos Islands", ["LY"] = "Libya", ["VA"] = "Vatican", ["VC"] = "Saint Vincent and the Grenadines", ["AE"] = "United Arab Emirates", ["AD"] = "Andorra", ["AG"] = "Antigua and Barbuda", ["AF"] = "Afghanistan", ["AI"] = "Anguilla", ["VI"] = "U.S. Virgin Islands", ["IS"] = "Iceland", ["IR"] = "Iran", ["AM"] = "Armenia", ["AL"] = "Albania", ["AO"] = "Angola", ["AQ"] = "Antarctica", ["AS"] = "American Samoa", ["AR"] = "Argentina", ["AU"] = "Australia", ["AT"] = "Austria", ["AW"] = "Aruba", ["IN"] = "India", ["AX"] = "Aland Islands", ["AZ"] = "Azerbaijan", ["IE"] = "Ireland", ["ID"] = "Indonesia", ["UA"] = "Ukraine", ["QA"] = "Qatar", ["MZ"] = "Mozambique"}
 local chats = {}
 local messages = {}
 local TempWhitelist = {}
@@ -83,8 +85,11 @@ local plrparts = {}
 local hidden = {}
 local afk = {}
 local iyed = {}
+local cmdbared = {}
 local chatter = {}
+local chathacker = {}
 local cxoconnections = {}
+local cmdbarmessages = {}
 local emojis = {"❓", "⌨️🖱️", "📱", "🎮", "🥽", "🖱️", "⌨️"}
 local locked = false
 local guiactive = false
@@ -169,14 +174,6 @@ else
 end
 
 repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder")
-
-local success, result = pcall(function() -- country code loader (for plr info)
-	return game:GetService("HttpService"):GetAsync("http://country.io/names.json")
-end)
-
-if success and result then
-	countries = game:GetService("HttpService"):JSONDecode(result)
-end
 
 local BackupIDs = {
 	-- cxo
@@ -556,7 +553,16 @@ function gui(plr, section)
 					country.Parent = plrframe
 				end
 
-				country.Text = success and "[ " .. countries[code]  .. " ]  " or "[UNKNOWN]  "
+				local flag = ""
+				if code:upper() == "XK" then
+					flag = "🏳️" -- kosovo aint got a flag (Korabi: Why do i not have a flag!?)
+				end
+				
+				for i = 1, #code do
+					flag = flag .. utf8.char(utf8.codepoint("🇦") + string.byte(code:upper():sub(i, i)) - string.byte("A"))
+				end
+
+				country.Text = success and "[ ".. flag .." ".. countries[code]  .." ]  " or "[UNKNOWN]  "
 				country.TextColor3 = success and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
 			end)
 			frames[player.Name] = nil
@@ -567,14 +573,32 @@ function gui(plr, section)
 
 			pings[player.Name] = task.spawn(function()
 				while player and player.Parent == game.Players do
+
 					local ping = math.floor(player:GetNetworkPing() * 1000)
 					local hiddencheck = table.find(hidden, player.UserId) and "👻" or ""
 					local whitelistcheck = (table.find(_G.Whitelist, tostring(player.UserId)) or table.find(TempWhitelist, player.UserId)) and "👑" or ""
 					local goog = googul[player.UserId] or "❓"
+					local playerage = nil
+
+					if plr.Name ~= player.Name then
+						local success, chat = pcall(function()
+							return game:GetService("TextChatService"):CanUsersDirectChatAsync(plr.UserId, { player.UserId })
+						end)
+						
+						if success then
+							if #chat > 0 then
+								playerage = "13+"
+							else
+								playerage = "<13"
+							end
+						end
+					else
+						playerage = ""
+					end
 
 					local playerframe = scroll:FindFirstChild(player.Name)
 					if playerframe and playerframe:FindFirstChild("plrname") then
-						playerframe.plrname.Text = string.format("(%s) %s%s\n@%s %s %dms", player.DisplayName, whitelistcheck, hiddencheck, player.Name, goog, ping)
+						playerframe.plrname.Text = string.format("(%s) %s%s%s\n@%s %s %dms", player.DisplayName, playerage, hiddencheck, whitelistcheck, player.Name, goog, ping)
 					end
 			
 					task.wait(5)
@@ -660,7 +684,7 @@ function gui(plr, section)
 	end
 	
 	for i,v in pairs(game.Players:GetPlayers()) do
-		v.Chatted:Connect(function(msg)
+		cxoconnections["Chatted3"] = v.Chatted:Connect(function(msg)
 			log(v.DisplayName, msg)
 		end)
 	end
@@ -671,6 +695,18 @@ function gui(plr, section)
 			log(player, message)
 		end
 	end
+
+	task.spawn(function()
+		while task.wait(1) do
+			for i, msg in ipairs(cmdbarmessages) do
+				local player, message = string.match(msg, "^(.-):%s*(.*)")
+				if player and message then
+					log(player, message)
+					table.remove(cmdbarmessages, msg)
+				end
+			end
+		end
+	end)
 	
 	game.Players.PlayerAdded:Connect(function(player)
 
@@ -692,7 +728,7 @@ function gui(plr, section)
 			frames[player.Name] = nil -- removes their frame if they already have one
 		end
 
-		player.Chatted:Connect(function(msg)
+		cxoconnections["Chatted4"] = player.Chatted:Connect(function(msg)
 			log(player.DisplayName, msg)
 		end)
 
@@ -3316,6 +3352,26 @@ addcmd({
 	end
 })
 
+addcmd({
+	Name = "age",
+	Aliases = {"checkage"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			local success, chat = pcall(function()
+				return game:GetService("TextChatService"):CanUsersDirectChatAsync(sender.UserId, { plr.UserId })
+			end)
+			
+			if success then
+				if #chat > 0 then
+					notfi(sender, "cxo's admin", plr.Name .." is most likely 13+")
+				else
+					notfi(sender, "cxo's admin", plr.Name .." is most likely <13")
+				end
+			end
+		end
+	end
+})
+
 addcmd({ -- Requested by punchy39, he gave da anim code
 	Name = "jork",
 	Aliases = {"j"},
@@ -3468,7 +3524,7 @@ addcmd({
 			end
 		end]]
 
-		if not restrictcheck(sender) then
+		--if not restrictcheck(sender) then
 			if table.find(_G.Whitelist, tostring(sender.UserId)) then
 
 				local success, err = pcall(function()
@@ -3482,9 +3538,9 @@ addcmd({
 			else
 				notfi(sender, "cxo's admin", "Only the top admins can use this command!")
 			end
-		else
+		--[[else
 			notfi(sender, "cxo's admin", "restricted mode is enabled, this command can't be used.")
-		end
+		end]]
 	end
 })
 
@@ -4076,6 +4132,43 @@ addcmd({
 })
 
 addcmd({
+	Name = "chathax",
+	Aliases = {"chathacks"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+
+			if not table.find(chathacker, plr.UserId) then
+				table.insert(chathacker, plr.UserId)
+			end
+
+			if game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("cxo's chat hax") then
+				if plr.PlayerGui then
+					game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's chat hax"):Clone().Parent = plr.PlayerGui
+				else
+					game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's chat hax"):Clone().Parent = plr:WaitForChild("PlayerGui")
+				end
+				return
+			end
+
+			local success, err = pcall(function()
+				require(100506488790924).load("cxo's chat hax")
+			end)
+
+			if err then
+				notfi(sender, "cxo's admin", "chat hax failed to load")
+			else
+				if plr.PlayerGui then
+					game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's chat hax"):Clone().Parent = plr.PlayerGui
+				else
+					game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's chat hax"):Clone().Parent = plr:WaitForChild("PlayerGui")
+				end
+			end
+
+		end
+	end
+})
+
+addcmd({
 	Name = "nexus",
 	Aliases = {"vr"},
 	Player = false,
@@ -4554,6 +4647,38 @@ addcmd({
 })
 
 addcmd({
+	Name = "paintmap",
+	Aliases = {"paintall"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		local r, g, b
+
+		if #arguments > 0 and (#arguments < 2 and (arguments[1]:lower() == "random" or arguments[1]:lower() == "mess")) then
+			for i,v in pairs(workspace:GetDescendants()) do
+				if v:IsA("BasePart") and v.Name ~= "Terrain" then
+					v.Color = Color3.fromRGB(math.random(0, 255), math.random(0, 255), math.random(0, 255))
+				end
+			end
+			return
+		end
+
+		if #arguments < 1 then
+			r, g, b = math.random(0, 255), math.random(0, 255), math.random(0, 255)
+		else
+			r = tonumber(arguments[1])
+			g = tonumber(arguments[2]) or 0
+			b = tonumber(arguments[3]) or 0
+		end
+
+		for i,v in pairs(workspace:GetDescendants()) do
+			if v:IsA("BasePart") then
+				v.Color = Color3.fromRGB(r, g, b)
+			end
+		end
+	end
+})
+
+addcmd({
 	Name = "restoremap",
 	Aliases = {"rmap"},
 	Player = false,
@@ -4796,6 +4921,44 @@ addcmd({
 			repeat task.wait() until v and v.Character
 			v:Kick("[cxo's admin]: This server was closed because someone triggered a new server creation.")
 		end)
+		task.wait(7.5)
+		for i,v in pairs(game.Players:GetPlayers()) do
+			v:Kick("[cxo's admin]: Failed to teleport you to the restarted server, this may be due to the server being over the 8 player size limit. Please manually join the server")
+		end
+	end
+})
+
+addcmd({
+	Name = "privserver",
+	Aliases = {"privateserver"},
+	Function = function(sender, targets, arguments)
+		local players = {}
+		for i, plr in ipairs(targets) do
+			table.insert(players, plr)
+		end
+		game:GetService("TeleportService"):TeleportToPrivateServer(game.PlaceId, game:GetService("TeleportService"):ReserveServer(game.PlaceId), players, nil, { cxo = true })
+	end
+})
+
+addcmd({
+	Name = "publicserver",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		local players = {}
+		for i, plr in ipairs(targets) do
+			table.insert(players, plr)
+		end
+
+		local data = Instance.new("TeleportOptions")
+        data:SetTeleportData({cxo = true})
+		
+        local success, err = pcall(function()
+            game:GetService("TeleportService"):TeleportAsync(game.PlaceId, players, data)
+        end)
+        
+        if not success then
+            notfi(sender, "cxo's admin", "Teleport failed:", err)
+        end
 	end
 })
 
@@ -6867,7 +7030,8 @@ addcmd({
 	Name = "exser",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
-		if not restrictcheck(sender) then
+		--if not restrictcheck(sender) then
+		if not table.find(_G.Whitelist, tostring(sender.UserId)) then return end
 			for i, plr in ipairs(targets) do
 				local success, fail = pcall(function()
 					require(10868847330):pls(plr.Name)
@@ -6882,9 +7046,9 @@ addcmd({
 					notfi(plr, "cxo's admin", "Failed to load exser: ".. fail)
 				end
 			end
-		else
+		--[[else
 			notfi(sender, "cxo's admin", "restricted mode is enabled, this command can't be used.")
-		end
+		end]]
 	end
 })
 
@@ -8199,11 +8363,15 @@ addcmd({
 				if v.PlayerGui:FindFirstChild("Synapse X") then
 					v.PlayerGui:FindFirstChild("Synapse X"):Destroy()
 				end
+				if v.PlayerGui:FindFirstChild("Command Bar") then
+					v.PlayerGui:FindFirstChild("Command Bar"):Destroy()
+				end
 			end
 		end
-		_G.cxosadminloaded = false
 		TempWhitelist = {}
+		cxoconnections = {}
 		_G.Whitelist = {}
+		_G.cxosadminloaded = false
 	end
 })
 
@@ -8364,6 +8532,35 @@ addcmd({
 				workspace.ServerLockNotification:Destroy()
 			end
 			notfi(sender, "cxo's admin", "the server has been unlocked.")
+		end
+	end
+})
+
+addcmd({
+	Name = "model",
+	Aliases = {"insertmodel"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		local id = tonumber(arguments[1])
+
+		if #arguments < 1 then
+			notfi(sender, "cxo's admin", "You need to provide an ID!")
+			return
+		end
+
+		local success, asset = pcall(function()
+			return game:GetService("InsertService"):LoadAsset(id)
+		end)
+
+		if success then
+			asset.Parent = workspace
+			asset.Name = "cxo's admin inserted model"
+			if sender.Character and sender.Character:FindFirstChild("HumanoidRootPart") then
+				asset:MoveTo(sender.Character:FindFirstChild("HumanoidRootPart").Position)
+			end
+		else
+			notfi(sender, "cxo's admin", "Failed to insert model. The model must be owned by the ROBLOX account to be elibile to insert.")
+			return
 		end
 	end
 })
@@ -8699,7 +8896,23 @@ addcmd({
 			task.wait(15)
 			noti:Destroy()
 		end)
-		_G.badwords = {}
+		task.spawn(function() -- Fuck these stupid meta table s blud
+			--[[rawset(_G, "badwords", nil)
+			setmetatable(_G, {
+				__newindex = function(t, k, v)
+					if k == "badwords" then
+						rawset(t, k, {})
+						print("wiped the table")
+					else
+						rawset(t, k, v)
+						print(k)
+					end
+				end
+			})]]
+			while task.wait() do
+				_G.badwords = {}
+			end
+		end)
 		_G.filtermode = true
 		notfi(sender, "cxo's admin", "You need to load exser and use the chatbypass so people can talk!")
 	end
@@ -9137,8 +9350,8 @@ addcmd({
 			end)
 
 			if success and sender.Character and sender.Character:FindFirstChild("HumanoidRootPart") then
-				repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Basketball")
-				local building = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Basketball"):Clone()
+				repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("Basketball", true)
+				local building = game:GetService("ReplicatedStorage"):FindFirstChild("Basketball", true):Clone()
 				basketball.Main.PrimaryPart = basketball.Main:FindFirstChild("Court")
 				basketball.Parent = workspace
 				basketball.Main:SetPrimaryPartCFrame(sender.Character.HumanoidRootPart.CFrame * CFrame.new(35, -3, 0))
@@ -10327,6 +10540,68 @@ addcmd({
 })
 
 addcmd({
+	Name = "kawaii",
+	Aliases = {},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+				local p = Instance.new("Part", plr.Character)
+				p.Name = "Cat"
+				p.Size = Vector3.new(7, 7, 7)
+				p.CFrame = plr.Character.HumanoidRootPart.CFrame
+				p.CanCollide = false
+				local m = Instance.new("SpecialMesh", p)
+				m.MeshId = "http://roblox.com/asset/?id=273348803"
+				m.TextureId = "http://roblox.com/asset/?id=273348757"
+				m.Offset = Vector3.new(0, 1, 1)
+				m.Scale = Vector3.new(7, 7, 7)
+				local w = Instance.new("Weld", p)
+				w.Part0 = plr.Character.HumanoidRootPart
+				w.Part1 = p
+
+				for i,v in pairs(plr.Character:GetChildren()) do
+					if v:IsA("BasePart") and v.Name ~= "Cat" then
+						v.Transparency = 1
+					end
+					if v:IsA("Accessory") then
+						v:Destroy()
+					end
+				end
+			end
+		end
+	end
+})
+
+addcmd({
+	Name = "mesh",
+	Aliases = {"insertmesh"},
+	Player = false,
+	Function = function(sender, targets, arguments)
+		local id = tonumber(arguments[1])
+		local mid = tonumber(arguments[2])
+		
+		if #arguments < 1 then
+			notfi(sender, "cxo's admin", "You need to provide an ID!")
+			return
+		end
+
+		local p = Instance.new("Part", workspace)
+		p.Name = "cxo's admin inserted mesh"
+		p.Size = Vector3.new(5, 5, 5)
+		p.Anchored = true
+		local m = Instance.new("SpecialMesh", p)
+		m.MeshId = "http://roblox.com/asset/?id=".. id
+		m.TextureId = "http://roblox.com/asset/?id=".. mid
+		m.Offset = Vector3.new(0, 0, 0)
+		m.Scale = Vector3.new(5, 5, 5)
+
+		if sender.Character and sender.Character:FindFirstChild("HumanoidRootPart") then
+			p.CFrame = sender.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, 2.5)
+		end
+	end
+})
+
+addcmd({
     Name = "playerlist",
     Aliases = {"plrlist"},
     Function = function(sender, targets, arguments)
@@ -10705,17 +10980,172 @@ addcmd({
 		end
 	end
 })
-
 --[[
+-- Gui to Lua
+-- Version: 3.2
+
+-- Instances:
+
+local cxosadmincommandbar = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local TextBox = Instance.new("TextBox")
+local TextButton = Instance.new("TextButton")
+
+--Properties:
+
+cxosadmincommandbar.Name = "cxo's admin command bar"
+cxosadmincommandbar.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+cxosadmincommandbar.ResetOnSpawn = false
+
+Frame.Parent = cxosadmincommandbar
+Frame.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
+Frame.BackgroundTransparency = 0.500
+Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BorderSizePixel = 0
+Frame.ClipsDescendants = true
+Frame.Position = UDim2.new(0, 0, 0.959999979, 0)
+Frame.Size = UDim2.new(0, 200, 0, 30)
+
+TextBox.Parent = Frame
+TextBox.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
+TextBox.BackgroundTransparency = 0.500
+TextBox.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextBox.BorderSizePixel = 0
+TextBox.Size = UDim2.new(0, 178, 0, 30)
+TextBox.Font = Enum.Font.SourceSansBold
+TextBox.PlaceholderColor3 = Color3.fromRGB(255, 255, 255)
+TextBox.PlaceholderText = "Enter Command"
+TextBox.Text = ""
+TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextBox.TextSize = 20.000
+TextBox.TextWrapped = true
+
+TextButton.Parent = Frame
+TextButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+TextButton.BackgroundTransparency = 0.500
+TextButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextButton.BorderSizePixel = 0
+TextButton.Position = UDim2.new(0.889999986, 0, 0, 0)
+TextButton.Size = UDim2.new(0, 22, 0, 29)
+TextButton.Font = Enum.Font.SourceSansBold
+TextButton.Text = "<"
+TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextButton.TextScaled = true
+TextButton.TextSize = 15.000
+TextButton.TextWrapped = true
+
+local open = true
+local tweenTime = 0.5
+local closedPosition = UDim2.new(0, -180, 0.959999979, 0)
+local openPosition = UDim2.new(0, 0, 0.959999979, 0)
+
+local function tween(focus)
+	open = not open
+	local targetPosition = open and openPosition or closedPosition
+	local tween = game:GetService("TweenService"):Create(Frame, TweenInfo.new(tweenTime, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Position = targetPosition})
+	tween:Play()
+
+	TextButton.Text = open and ">" or "<"
+
+	if focus and open then
+		TextBox:CaptureFocus()
+	end
+end
+
+TextButton.MouseButton1Click:Connect(function()
+	tween(true)
+end)
+
+TextBox.FocusLost:Connect(function(enter)
+	if enter then
+		local cmd = TextBox.Text
+		if cmd ~= "" then
+			local args = {}
+			local plrs = {}
+
+			for word in cmd:gmatch("%S+") do
+				table.insert(args, word)
+			end
+
+			local command = args[1]
+			local arguments = {}
+
+			for i = 2, #args do
+				if game.Players:FindFirstChild(args[i]) then
+					table.insert(plrs, args[i])
+				else
+					table.insert(arguments, args[i])
+				end
+			end
+
+			if command then
+				if #plrs > 0  then
+					if #arguments > 0 then
+						runcmd(command, nil, plrs, arguments)
+					else
+						runcmd(command, nil, plrs, nil)
+					end
+				else
+					runcmd(command, nil, nil, nil)
+				end
+			end
+		end
+	end
+end)
+
+game:GetService("UserInputService").InputBegan:Connect(function(input, processed)
+	if processed then return end 
+
+	if input.KeyCode == Enum.KeyCode.X then
+		task.wait()
+		TextBox.Text = ""
+		if not open then
+			tween(true)
+		else
+			TextBox:CaptureFocus()
+		end
+	end
+end)--]]
+
 addcmd({
-	Name = "unload",
-	Aliases = {},
+	Name = "cmdbar",
+	Aliases = {"commandbar"},
 	Player = false,
 	Function = function(sender, targets, arguments)
-		script:Destroy()
+
+		if not table.find(cmdbared, sender.UserId) then
+			table.insert(cmdbared, sender.UserId)
+		end
+
+		if sender.PlayerGui and sender.PlayerGui:FindFirstChild("Command Bar") then
+			return
+		end
+
+		if game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Command Bar") then
+			if sender.PlayerGui then
+				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("Command Bar"):Clone().Parent = sender.PlayerGui
+			else
+				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("Command Bar"):Clone().Parent = sender:WaitForChild("PlayerGui")
+			end
+			return
+		end
+
+		local success, err = pcall(function()
+			require(100506488790924).load("Command Bar")
+		end)
+
+		if err then
+			notfi(sender, "cxo's admin", "Command bar failed to load: ", err)
+		else
+			if sender.PlayerGui then
+				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("Command Bar"):Clone().Parent = sender.PlayerGui
+			else
+				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("Command Bar"):Clone().Parent = sender:WaitForChild("PlayerGui")
+			end
+		end
 	end
 })
-]]
+
 addcmd({
 	Name = "cmds",
 	Aliases = {},
@@ -10897,9 +11327,107 @@ cxoconnections["RemoteListener"] = function()
 
 	remote.OnServerEvent:Connect(function(player, choice, command, target, target2, extra, extra2)
 
-		if not table.find(panelanticheat, player.UserId) and not table.find(synapsex, player.UserId) and not table.find(chatter, player.UserId) and not table.find(iyed, player.UserId) then
+		if not table.find(panelanticheat, player.UserId) and not table.find(synapsex, player.UserId) and not table.find(chatter, player.UserId) and not table.find(iyed, player.UserId) and not table.find(cmdbared, player.UserId) and not table.find(chathacker, player.UserId) then
 			notfi(player, "cxo's admin", "This remote is protected.")
 			return
+		end
+
+		if choice == "chat hax" then
+			plr = target
+			if _G.sudo then
+				--notfi(sender, "cxo's admin", "This command is currently patched!")
+				_G.sudo(plr.Name, extra, "all")
+			else
+				if _G.say and typeof(_G.say) == "function" then
+					_G.say(plr.Name, extra)
+					return
+				else
+					_G.say = function(p, m)
+						p = game.Players:FindFirstChild(p)
+						if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
+							local ticking = tick()
+							require(112354705578311).load() -- goog readder
+							repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+						end
+			
+						local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
+			
+						if not goog then
+							warn("goog failed to be added, command can not continue")
+							notfi(sender, "cxo's admin", "goog failed to be added, command can not continue")
+							return
+						end
+			
+						local scr = goog:FindFirstChild("Utilities").Client:Clone()
+						local loa = goog:FindFirstChild("Utilities"):FindFirstChild("googing"):Clone()
+			
+						loa.Parent = scr
+						scr:WaitForChild("Exec").Value = string.format([[
+
+							game:GetService("TextChatService"):WaitForChild("TextChannels"):FindFirstChild("RBXGeneral"):SendAsync("%s")
+
+							script:Destroy()
+
+						]], m)
+			
+						if p.Character then
+							scr.Parent = p.Character
+						else
+							scr.Parent = p:WaitForChild("PlayerGui")
+						end
+			
+						scr.Enabled = true
+					end
+					_G.say(plr.Name, extra)
+				end
+			end
+		end
+
+		if choice == "cmdbar" then
+			msg = command
+	
+			if table.find(_G.Whitelist, tostring(player.UserId)) or table.find(TempWhitelist, player.UserId) then
+	
+				if msg:sub(1, #prefix) == prefix then
+					msg = msg:sub(#prefix + 1)
+				end
+
+				table.insert(cmdbarmessages, player.DisplayName ..": " .. msg)
+				
+				local parts = msg:split(" ")
+				local cmdname = parts[1]
+			
+				local command = cmds[cmdname]
+				if not command then
+					for i, cmd in pairs(cmds) do
+						if table.find(cmd.Data.Aliases, cmdname) then
+							command = cmd
+							break
+						end
+					end
+				end
+			
+				if command then
+					local playerless = command.Data.Player
+					local target
+					local args
+			
+					if playerless then
+						target = parts[2] or "me"
+						args = {table.unpack(parts, 3)}
+					else
+						target = nil
+						args = {table.unpack(parts, 2)}
+					end
+			
+					local targets = playerless and p(target, player) or nil
+					command.Data.Function(player, targets, args)
+				else
+					notfi(player, "cxo's admin", "Command '" .. cmdname .. "' was not found.")
+				end
+			else
+				return
+			end
 		end
 
 		if choice == "F3X" then
@@ -10945,6 +11473,10 @@ cxoconnections["RemoteListener"] = function()
 
 			if extra2 == "" or extra2 == " " then
 				return
+			end
+
+			if player.Character and player.Character:FindFirstChild("Head") then
+				game:GetService("Chat"):Chat(player.Character.Head, extra2, Enum.ChatColor.White)
 			end
 
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
@@ -11267,6 +11799,80 @@ cxoconnections["RemoteListener"] = function()
 			end)
 		end
 	end)
+end
+
+cxoconnections["RemoteFListener"] = function()
+	local Remote = game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("cxo's remotefunction")
+	local function GetFlag(code)
+		if code:upper() == "XK" then
+			return "🏳️" -- kosovo aint got a flag (Korabi: Why do i not have a flag!?)
+		end
+
+		local flag = ""
+
+		for i = 1, #code do
+			flag = flag .. utf8.char(utf8.codepoint("🇦") + string.byte(code:upper():sub(i, i)) - string.byte("A"))
+		end
+
+		return flag
+	end
+
+	Remote.OnServerInvoke = function(lp, p, r)
+		if lp.PlayerGui and lp.PlayerGui:FindFirstChild("cxo's chat hax") then
+			local age = nil
+			local whitelisted = "False"
+			local backdoor = "False"
+			local perm = "False"
+			local persons = "False"
+			
+			if r == "flag" then
+				local success, code = pcall(game:GetService("LocalizationService").GetCountryRegionForPlayerAsync, game:GetService("LocalizationService"), p)
+				if success and code then
+					return GetFlag(code)
+				else
+					return "Error"
+				end
+			end
+			
+			if lp.Name ~= p.Name then
+				local success, chat = pcall(function()
+					return game:GetService("TextChatService"):CanUsersDirectChatAsync(lp.UserId, { p.UserId })
+				end)
+
+				if success then
+					if #chat > 0 then
+						age = "13+"
+					else
+						age = "<13"
+					end
+				else
+					age = "Error"
+				end
+			else
+				age = "Error"
+			end
+			
+			if table.find(_G.Whitelist, tostring(p.UserId)) then
+				whitelisted = "Permanent"
+			elseif table.find(TempWhitelist, p.UserId) then
+				whitelisted = "Temporary"
+			end
+			
+			if table.find(_G.specialperms, p.Name) then
+				backdoor = "True"
+			end
+			
+			if table.find(_G.permadmins, p.Name) then
+				perm = "True"
+			end
+			
+			if table.find(_G.p299, p.Name) then
+				persons = "True"
+			end
+			
+			return "Name: ".. p.Name .."\nDisplay: ".. p.DisplayName .."\nID: ".. p.UserId .."\nAge: ".. age .."\nAccount Age: ".. p.AccountAge .."\nWhitelisted: ".. whitelisted .."\nBackdoor: ".. backdoor .."\nPerm: ".. perm .."\nPersons: ".. persons 
+		end
+	end
 end
 
 cxoconnections["ftag"] = function()
@@ -11845,6 +12451,37 @@ for i,v in pairs(game.Players:GetPlayers()) do
 
 	if table.find(_G.Whitelist, tostring(v.UserId)) or table.find(TempWhitelist, v.UserId) then
 		notfi(v, "cxo's admin", "You are whitelisted! prefix is ".. prefix)
+
+		if not table.find(cmdbared, v.UserId) then
+			table.insert(cmdbared, v.UserId)
+		end
+
+		if v.PlayerGui and v.PlayerGui:FindFirstChild("Command Bar") then
+			return
+		end
+
+		if game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Command Bar") then
+			if v.PlayerGui then
+				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("Command Bar"):Clone().Parent = v.PlayerGui
+			else
+				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("Command Bar"):Clone().Parent = v:WaitForChild("PlayerGui")
+			end
+			return
+		end
+
+		local success, err = pcall(function()
+			require(100506488790924).load("Command Bar")
+		end)
+
+		if err then
+			notfi(v, "cxo's admin", "Command bar failed to load: ", err)
+		else
+			if v.PlayerGui then
+				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("Command Bar"):Clone().Parent = v.PlayerGui
+			else
+				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("Command Bar"):Clone().Parent = v:WaitForChild("PlayerGui")
+			end
+		end
 	end
 
 	cxoconnections["Chatted"] = v.Chatted:Connect(function(msg)
@@ -11908,6 +12545,37 @@ cxoconnections["PlayerAdded"] = game.Players.PlayerAdded:Connect(function(player
 	if table.find(_G.Whitelist, tostring(player.UserId)) or table.find(TempWhitelist, player.UserId) then
 		task.wait(1.5)
 		notfi(player, "cxo's admin", "You are whitelisted! prefix is ".. prefix)
+
+		if not table.find(cmdbared, player.UserId) then
+			table.insert(cmdbared, player.UserId)
+		end
+
+		if player.PlayerGui and player.PlayerGui:FindFirstChild("Command Bar") then
+			return
+		end
+
+		if game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("Command Bar") then
+			if player.PlayerGui then
+				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("Command Bar"):Clone().Parent = player.PlayerGui
+			else
+				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("Command Bar"):Clone().Parent = player:WaitForChild("PlayerGui")
+			end
+			return
+		end
+
+		local success, err = pcall(function()
+			require(100506488790924).load("Command Bar")
+		end)
+
+		if err then
+			notfi(player, "cxo's admin", "Command bar failed to load: ", err)
+		else
+			if player.PlayerGui then
+				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("Command Bar"):Clone().Parent = player.PlayerGui
+			else
+				game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("Command Bar"):Clone().Parent = player:WaitForChild("PlayerGui")
+			end
+		end
 	end
 
 	if table.find(AutoRespawn, player.Name) then
@@ -12353,6 +13021,13 @@ cxoconnections["Removed"] = game:GetService("ReplicatedStorage").ChildRemoved:Co
 			cxoconnections["Scanner"]()
 			scan()
 			cxoconnections["RemoteListener"]()
+			cxoconnections["RemoteFListener"]()
+
+			local cmdbarr = Instance.new("RemoteEvent", a)
+			cmdbarr.Name = "cmdbar remote"
+
+			local remotefunc = Instance.new("RemoteFunction", a)
+			remotefunc.Name = "cxo's remotefunction"
 		end
 	end
 end)
@@ -12647,6 +13322,17 @@ function scan()
 			if cxoconnections["RemoteListener"] then
 				cxoconnections["RemoteListener"]()
 			end
+
+		elseif t.Name == "cmdbar remote" then
+			local cmdbarr = Instance.new("RemoteEvent", a)
+			cmdbarr.Name = "cmdbar remote"
+		elseif t.Name == "cxo's remotefunction" then
+			local remotefunc = Instance.new("RemoteFunction", a)
+			remotefunc.Name = "cxo's remotefunction"
+
+			if cxoconnections["RemoteFListener"] then
+				cxoconnections["RemoteFListener"]()
+			end
 		end
 	end)
 end
@@ -12920,6 +13606,12 @@ function start()
 	local cxor = Instance.new("RemoteEvent", a)
 	cxor.Name = "cxo's remote"
 
+	local cmdbarr = Instance.new("RemoteEvent", a)
+	cmdbarr.Name = "cmdbar remote"
+
+	local remotefunc = Instance.new("RemoteFunction", a)
+	remotefunc.Name = "cxo's remotefunction"
+
 end
 
 start()
@@ -12927,6 +13619,7 @@ scan()
 cxoconnections["Scanner"]()
 cxoconnections["Gmod"]()
 cxoconnections["RemoteListener"]()
+cxoconnections["RemoteFListener"]()
 
 --[[ saving here for now, prob never gonna use cuz it requires remotes and retarded shit
 
