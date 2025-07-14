@@ -325,50 +325,53 @@ if SSD then
     end
 end
 
-if cxo then
-    local success, code = pcall(function()
-        return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/pcxo/cxos-admin/refs/heads/main/admin")
-    end)
-    
-    if success then
-        local s, e = pcall(function()
-            loadstring(code)()
+task.spawn(function()
+    task.wait(3.5)
+    if cxo then
+        local success, code = pcall(function()
+            return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/pcxo/cxos-admin/refs/heads/main/admin")
+        end)
+        
+        if success then
+            local s, e = pcall(function()
+                loadstring(code)()
+            end)
+
+            if s then
+                warn("[cxo's admin]: Reloaded!")
+            else
+                warn("[cxo's admin]: Failed to reload: ", e)
+            end
+        else
+            warn("[cxo's admin]: Failed to reload: ", code)
+        end
+    elseif dizzy then
+        local success, code = pcall(function()
+            return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/FMFAU/Random/refs/heads/main/DeLuaAdmin.lua")
         end)
 
-        if s then
-            warn("[cxo's admin]: Reloaded!")
-        else
-            warn("[cxo's admin]: Failed to reload: ", e)
-        end
-    else
-        warn("[cxo's admin]: Failed to reload: ", code)
-    end
-elseif dizzy then
-    local success, code = pcall(function()
-        return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/FMFAU/Random/refs/heads/main/DeLuaAdmin.lua")
-    end)
+        if success then
+            local s, e = pcall(function()
+                loadstring(code)()
+            end)
 
-    if success then
-        local s, e = pcall(function()
-            loadstring(code)()
+            if s then
+                warn("[Dizzy's admin]: Reloaded!")
+            else
+                warn("[Dizzy's admin]: Failed to reload: ", e)
+            end
+        else
+            warn("[Dizzy's admin]: Failed to reload: ", code)
+        end
+    elseif punchy then
+        local success, code = pcall(function()
+            require(115513593459588).LoadPunchside()
         end)
 
-        if s then
-            warn("[Dizzy's admin]: Reloaded!")
+        if success then
+            warn("[PUNCHSIDE]: Reloaded!")
         else
-            warn("[Dizzy's admin]: Failed to reload: ", e)
+            warn("[PUNCHSIDE]: Failed to reload: ", code)
         end
-    else
-        warn("[Dizzy's admin]: Failed to reload: ", code)
     end
-elseif punchy then
-    local success, code = pcall(function()
-        require(115513593459588).LoadPunchside()
-    end)
-
-    if success then
-        warn("[PUNCHSIDE]: Reloaded!")
-    else
-        warn("[PUNCHSIDE]: Failed to reload: ", code)
-    end
-end
+end)
