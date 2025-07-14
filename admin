@@ -89,7 +89,6 @@ local cmdbared = {}
 local chatter = {}
 local chathacker = {}
 local cxoconnections = {}
-local cmdbarmessages = {}
 local emojis = {"❓", "⌨️🖱️", "📱", "🎮", "🥽", "🖱️", "⌨️"}
 local locked = false
 local guiactive = false
@@ -695,18 +694,6 @@ function gui(plr, section)
 			log(player, message)
 		end
 	end
-
-	task.spawn(function()
-		while task.wait(1) do
-			for i, msg in ipairs(cmdbarmessages) do
-				local player, message = string.match(msg, "^(.-):%s*(.*)")
-				if player and message then
-					log(player, message)
-					table.remove(cmdbarmessages, msg)
-				end
-			end
-		end
-	end)
 	
 	game.Players.PlayerAdded:Connect(function(player)
 
@@ -4951,7 +4938,7 @@ addcmd({
 
 		local data = Instance.new("TeleportOptions")
         data:SetTeleportData({cxo = true})
-		
+
         local success, err = pcall(function()
             game:GetService("TeleportService"):TeleportAsync(game.PlaceId, players, data)
         end)
@@ -11391,8 +11378,6 @@ cxoconnections["RemoteListener"] = function()
 				if msg:sub(1, #prefix) == prefix then
 					msg = msg:sub(#prefix + 1)
 				end
-
-				table.insert(cmdbarmessages, player.DisplayName ..": " .. msg)
 				
 				local parts = msg:split(" ")
 				local cmdname = parts[1]
