@@ -232,22 +232,16 @@ local SSD = false
 local cxo = false
 local dizzy = false
 local punchy = false
-local plrs = {}
 
 task.wait(2.5)
 
 function teleport(data)
-    if #plrs < 1 then
-        for i,v in pairs(game.Players:GetPlayers()) do
-            v:Kick("Unexpected error occured in teleporting. Kicking you from the server.")
-        end
-    end
 
     if data == "cxo" then
         local data = Instance.new("TeleportOptions")
         data:SetTeleportData({cxo = true})
         local success, err = pcall(function()
-            game:GetService("TeleportService"):TeleportAsync(game.PlaceId, plrs, data)
+            game:GetService("TeleportService"):TeleportAsync(game.PlaceId, game.Players:GetPlayers(), data)
         end)
         
         if not success then
@@ -257,7 +251,7 @@ function teleport(data)
         local data = Instance.new("TeleportOptions")
         data:SetTeleportData({dizzy = true})
         local success, err = pcall(function()
-            game:GetService("TeleportService"):TeleportAsync(game.PlaceId, plrs, data)
+            game:GetService("TeleportService"):TeleportAsync(game.PlaceId, game.Players:GetPlayers(), data)
         end)
         
         if not success then
@@ -267,7 +261,7 @@ function teleport(data)
         local data = Instance.new("TeleportOptions")
         data:SetTeleportData({punchy = true})
         local success, err = pcall(function()
-            game:GetService("TeleportService"):TeleportAsync(game.PlaceId, plrs, data)
+            game:GetService("TeleportService"):TeleportAsync(game.PlaceId, game.Players:GetPlayers(), data)
         end)
         
         if not success then
@@ -275,7 +269,7 @@ function teleport(data)
         end
     else
         local success, err = pcall(function()
-            game:GetService("TeleportService"):TeleportAsync(game.PlaceId, plrs)
+            game:GetService("TeleportService"):TeleportAsync(game.PlaceId, game.Players:GetPlayers())
         end)
         
         if not success then
@@ -289,7 +283,6 @@ for i,v in pairs(game.Players:GetPlayers()) do
     if data and data.TeleportData then
         if data.TeleportData.softshutdowned and data.TeleportData.softshutdowned == true then
             SSD = true
-            table.insert(plrs, v)
         end
         if data.TeleportData.cxo and data.TeleportData.cxo == true then
             cxo = true
