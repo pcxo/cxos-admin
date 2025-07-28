@@ -8090,8 +8090,6 @@ addcmd({
 	end
 })
 
-game:GetService("StarterGui"):SetCore("PromptSendFriendRequest", game.Players.t_echr)
-
 addcmd({
 	Name = "clr",
 	Aliases = {"clrbuilds"},
