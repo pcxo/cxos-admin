@@ -11047,6 +11047,23 @@ addcmd({
 	end
 })
 
+-- Dekryptionite added these so if they break you can blame him
+addcmd({
+	Name = "oldmap",
+	Aliases = {"2013map"},
+	Function = function()
+		
+		if july2013map then
+			july2013map:load()
+			return
+		end
+		
+		july2013map = require(79975359259173)
+		july2013map:load()
+		
+	end
+})
+
 -------------------------------------------- FUNCTIONS --------------------------------------------
 
 cxoconnections["Scanner"] = function()
