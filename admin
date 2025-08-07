@@ -1,32 +1,4 @@
--- copy anything you want from here i dont care --
--- this was all made by me unless i state otherwise --
-
---[[
-
-	IF YOU USE /SAVE TO OVERRIDE PEOPLES BUILDS YOU WILL BE BANNED FROM THIS SCRIPT AND POSSIBLY THIS GAME.
-	THE ONLY ACCEPTION IS IF THEY HAVE AN NSFW / CRASH / LAG BUILD. BY USING THIS SCRIPT YOU AGREE TO THESE TERMS.
-
-
-	im over here googing my goog i got goog on my goog right now
-
-	add:
-
-	vsettings gui
-	break cmd like og kah
-	optimize updatec()
-	torture room
-	guiview
-	2015 playerlist
-	command logger [dedicated UI]
-
-	halo vis mode
-	non spin vis mode
-	Make heart vis mode and halo mode a setting called shape
-	flingtool maybe gun
-
-	Maybe store goog in memory so that it stops getting RAPED!!!!!!
-
-]]
+-- cxo wuh here --
 
 if _G.cxosadminloaded == true then
 	warn("cxo's admin is already running!")
@@ -35,11 +7,11 @@ end
 _G.cxosadminloaded = true
 
 local restrictedmode = true
-
+--[[
 if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
-	require(112354705578311).load() -- goog loader
+	return -- goog loader
 end
-
+]]
 function restrictcheck(v)
 	if v and v.UserId then
 		if v.UserId == 3222470105 or v.UserId == 1889958 then
@@ -54,8 +26,6 @@ function restrictcheck(v)
 		end
 	end
 end
-
--- dont touch any of these tables or ur gay --
 
 -------------------------------------------- VARIABLES --------------------------------------------
 
@@ -1083,8 +1053,8 @@ function gui(plr, section)
 
 	if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 		local ticking = tick()
-		require(112354705578311).load() -- goog readder
-		repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+		return -- goog readder
+		
 	end
 
 	local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -1694,8 +1664,8 @@ addcmd({
 
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -2091,8 +2061,8 @@ addcmd({
 
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -2279,8 +2249,8 @@ addcmd({
 		for i, plr in ipairs(targets) do
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -2321,8 +2291,8 @@ addcmd({
 			else
 				if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 					local ticking = tick()
-					require(112354705578311).load() -- goog readder
-					repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+					return -- goog readder
+					
 				end
 	
 				local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -2365,8 +2335,8 @@ addcmd({
 		for i, plr in ipairs(targets) do
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -2859,8 +2829,8 @@ addcmd({
 
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -2900,8 +2870,8 @@ addcmd({
 		for i, plr in ipairs(targets) do
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -2953,8 +2923,8 @@ addcmd({
 		for i, plr in ipairs(targets) do
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -3033,8 +3003,8 @@ addcmd({
 		for i, plr in ipairs(targets) do
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -3147,8 +3117,8 @@ addcmd({
 		for i, plr in ipairs(targets) do
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -5035,8 +5005,8 @@ addcmd({
 
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -5372,8 +5342,8 @@ addcmd({
 			cxowuhhere.ResetOnSpawn = false
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -5446,8 +5416,8 @@ addcmd({
 
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -5517,8 +5487,8 @@ addcmd({
 
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -5565,8 +5535,8 @@ addcmd({
 
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -5614,8 +5584,8 @@ addcmd({
 
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -5752,8 +5722,8 @@ addcmd({
 		if msg then
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -5875,8 +5845,8 @@ addcmd({
 		for i, plr in ipairs(targets) do
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -6796,8 +6766,8 @@ addcmd({
 			else
 				if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 					local ticking = tick()
-					require(112354705578311).load() -- goog readder
-					repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+					return -- goog readder
+					
 				end
 
 				task.wait(7.5)
@@ -7253,8 +7223,8 @@ addcmd({
 
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -7405,8 +7375,8 @@ addcmd({
 
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -8351,8 +8321,8 @@ addcmd({
 							p = game.Players:FindFirstChild(p)
 							if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 								local ticking = tick()
-								require(112354705578311).load() -- goog readder
-								repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+								return -- goog readder
+								
 							end
 				
 							local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -8519,8 +8489,8 @@ addcmd({
 
 					if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 						local ticking = tick()
-						require(112354705578311).load() -- goog readder
-						repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+						return -- goog readder
+						
 					end
 		
 					local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -9130,8 +9100,8 @@ addcmd({
 				for i,v in pairs(game.Players:GetPlayers()) do
 					if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 						local ticking = tick()
-						require(112354705578311).load() -- goog readder
-						repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+						return -- goog readder
+						
 					end
 		
 					local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -9207,8 +9177,8 @@ addcmd({
 			for i,v in pairs(game.Players:GetPlayers()) do
 				if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 					local ticking = tick()
-					require(112354705578311).load() -- goog readder
-					repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+					return -- goog readder
+					
 				end
 	
 				local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -9272,8 +9242,8 @@ addcmd({
 
 						if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 							local ticking = tick()
-							require(112354705578311).load() -- goog readder
-							repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+							return -- goog readder
+							
 						end
 			
 						local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -9453,8 +9423,8 @@ addcmd({
 
 							if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 								local ticking = tick()
-								require(112354705578311).load() -- goog readder
-								repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+								return -- goog readder
+								
 							end
 				
 							local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -9558,8 +9528,8 @@ addcmd({
 
 					if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 						local ticking = tick()
-						require(112354705578311).load() -- goog readder
-						repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+						return -- goog readder
+						
 					end
 		
 					local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -9743,8 +9713,8 @@ addcmd({
 
 				if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 					local ticking = tick()
-					require(112354705578311).load() -- goog readder
-					repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+					return -- goog readder
+					
 				end
 	
 				local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -9918,8 +9888,8 @@ addcmd({
 
 		if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 			local ticking = tick()
-			require(112354705578311).load() -- goog readder
-			repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+			return -- goog readder
+			
 		end
 
 		local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -9979,8 +9949,8 @@ addcmd({
 
 		if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 			local ticking = tick()
-			require(112354705578311).load() -- goog readder
-			repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+			return -- goog readder
+			
 		end
 
 		local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -10038,8 +10008,8 @@ addcmd({
 
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -10092,8 +10062,8 @@ addcmd({
 
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -10461,8 +10431,8 @@ addcmd({
 		for i, plr in ipairs(targets) do
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -10533,8 +10503,8 @@ addcmd({
 		for i, plr in ipairs(targets) do
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -10692,8 +10662,8 @@ addcmd({
 
 				if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 					local ticking = tick()
-					require(112354705578311).load() -- goog readder
-					repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+					return -- goog readder
+					
 				end
 	
 				local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -10743,8 +10713,8 @@ addcmd({
 
 				if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 					local ticking = tick()
-					require(112354705578311).load() -- goog readder
-					repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+					return -- goog readder
+					
 				end
 	
 				local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -10817,7 +10787,7 @@ addcmd({
 			game:GetService("ServerScriptService"):FindFirstChild("goog"):Destroy()
 		end
 
-		require(112354705578311).load() -- goog l0ader
+		return -- goog l0ader
 	end
 })
 
@@ -11098,8 +11068,8 @@ cxoconnections["Device"] = function(player)
 			else
 				if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 					local ticking = tick()
-					require(112354705578311).load() -- goog readder
-					repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+					return -- goog readder
+					
 				end
 	
 				local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -11254,8 +11224,8 @@ cxoconnections["RemoteListener"] = function()
 						p = game.Players:FindFirstChild(p)
 						if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 							local ticking = tick()
-							require(112354705578311).load() -- goog readder
-							repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+							return -- goog readder
+							
 						end
 			
 						local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -11387,8 +11357,8 @@ cxoconnections["RemoteListener"] = function()
 
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -11458,8 +11428,8 @@ cxoconnections["RemoteListener"] = function()
 				print("[SYNAPSE X - CLIENT]: ".. extra2)
 				if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 					local ticking = tick()
-					require(112354705578311).load() -- goog readder
-					repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+					return -- goog readder
+					
 				end
 	
 				local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -12599,8 +12569,8 @@ cxoconnections["Removed"] = game:GetService("ReplicatedStorage").ChildRemoved:Co
 
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -12690,8 +12660,8 @@ cxoconnections["Removed"] = game:GetService("ReplicatedStorage").ChildRemoved:Co
 
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -12723,8 +12693,8 @@ cxoconnections["Removed"] = game:GetService("ReplicatedStorage").ChildRemoved:Co
 
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -12750,8 +12720,8 @@ cxoconnections["Removed"] = game:GetService("ReplicatedStorage").ChildRemoved:Co
 
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -12789,8 +12759,8 @@ cxoconnections["Removed"] = game:GetService("ReplicatedStorage").ChildRemoved:Co
 		
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -12893,8 +12863,8 @@ function scan()
 		elseif t.Name == "RemoteScript" then
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -12987,8 +12957,8 @@ function scan()
 		elseif t.Name == "OrbScript" then
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -13022,8 +12992,8 @@ function scan()
 		elseif t.Name == "Crash" then
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -13051,8 +13021,8 @@ function scan()
 		elseif t.Name == "JumpScareScript" then
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -13096,8 +13066,8 @@ function scan()
 		elseif t.Name == "cxo's Device LocalScript" then
 			if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 				local ticking = tick()
-				require(112354705578311).load() -- goog readder
-				repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+				return -- goog readder
+				
 			end
 
 			local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -13194,8 +13164,8 @@ function start()
 
 	if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 		local ticking = tick()
-		require(112354705578311).load() -- goog readder
-		repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+		return -- goog readder
+		
 	end
 
 	local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -13286,8 +13256,8 @@ function start()
 
 	if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 		local ticking = tick()
-		require(112354705578311).load() -- goog readder
-		repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+		return -- goog readder
+		
 	end
 
 	local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -13319,8 +13289,8 @@ function start()
 
 	if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 		local ticking = tick()
-		require(112354705578311).load() -- goog readder
-		repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+		return -- goog readder
+		
 	end
 
 	local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -13346,8 +13316,8 @@ function start()
 	
 	if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 		local ticking = tick()
-		require(112354705578311).load() -- goog readder
-		repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+		return -- goog readder
+		
 	end
 
 	local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -13387,8 +13357,8 @@ function start()
 
 	if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 		local ticking = tick()
-		require(112354705578311).load() -- goog readder
-		repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+		return -- goog readder
+		
 	end
 
 	local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
@@ -13671,8 +13641,8 @@ _G.say = function(p, m)
 	p = game.Players:FindFirstChild(p)
 	if not game:GetService("ServerScriptService"):FindFirstChild("goog") then
 		local ticking = tick()
-		require(112354705578311).load() -- goog readder
-		repeat task.wait() until game:GetService("ServerScriptService"):FindFirstChild("goog") or tick() - ticking >= 10
+		return -- goog readder
+		
 	end
 
 	local goog = game:GetService("ServerScriptService"):FindFirstChild("goog")
