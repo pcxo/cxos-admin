@@ -255,7 +255,7 @@ function teleport(data)
         end)
         
         if not success then
-            warn("[Dizzys admin]: Teleport failed:", err)
+            warn("[Dizzy's admin]: Teleport failed:", err)
         end
     elseif data == "punchy" then
         local data = Instance.new("TeleportOptions")
@@ -265,7 +265,17 @@ function teleport(data)
         end)
         
         if not success then
-            warn("[punchys admin]: Teleport failed:", err)
+            warn("[punchy's admin]: Teleport failed:", err)
+        end
+    elseif data == "vecxo" then
+        local data = Instance.new("TeleportOptions")
+        data:SetTeleportData({vecxo = true})
+        local success, err = pcall(function()
+            game:GetService("TeleportService"):TeleportAsync(game.PlaceId, game.Players:GetPlayers(), data)
+        end)
+        
+        if not success then
+            warn("[vecxo's admin]: Teleport failed:", err)
         end
     else
         local success, err = pcall(function()
@@ -290,6 +300,8 @@ for i,v in pairs(game.Players:GetPlayers()) do
             dizzy = true
         elseif data.TeleportData.punchy and data.TeleportData.punchy == true then
             punchy = true
+        elseif data.TeleportData.vecxo and data.TeleportData.vecxo == true then
+            vecxo = true
         end
     end
 end
@@ -313,6 +325,8 @@ if SSD then
         teleport("dizzy")
     elseif punchy then
         teleport("punchy")
+    elseif vecxo then
+        teleport("vecxo")
     else
         teleport(nil)
     end
@@ -365,6 +379,24 @@ task.spawn(function()
             warn("[PUNCHSIDE]: Reloaded!")
         else
             warn("[PUNCHSIDE]: Failed to reload: ", code)
+        end
+    elseif vecxo then
+         local success, code = pcall(function()
+            return game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/reloxz/zastuff/refs/heads/main/Vecxo")
+        end)
+
+        if success then
+            local s, e = pcall(function()
+                loadstring(code)()
+            end)
+
+            if s then
+                warn("[vecxo's admin]: Reloaded!")
+            else
+                warn("[vecxo's admin]: Failed to reload: ", e)
+            end
+        else
+            warn("[vecxo's admin]: Failed to reload: ", code)
         end
     end
 end)
