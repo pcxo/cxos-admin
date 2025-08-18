@@ -7019,14 +7019,12 @@ addcmd({
 	Name = "bhop",
 	Aliases = {},
 	Function = function(sender, targets, arguments)
-		for i, plr in ipairs(targets) do
-			local success, fail = pcall(function()
-				return -- require(115021406772544).r(plr.Name,"bhop")
-			end)
+		if not dekBhop then
+			dekBhop = require(138730865884801)
+		end
 
-			if fail then
-				notfi(sender, "cxo's admin", "ben failed to load: ".. fail)
-			end
+		for _,plr in targets do
+			dekBhop(plr)
 		end
 	end
 })
