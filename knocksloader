@@ -310,7 +310,7 @@ task.spawn(function()
     if SSD == true then
         local m = Instance.new("Message", workspace)
         m.Name = "cxo notification"
-        for i = 10, 1, -1 do
+        for i = 30, 1, -1 do
             m.Text = "cxo: You are being teleported to a fresh server in ".. i
             task.wait(1)
         end
